@@ -11,6 +11,7 @@ interface ResultCardsProps {
   laufzeit: number;
   twrPa: number;
   irrPa: number;
+  stufe?: string;
   sticky?: boolean;
 }
 
@@ -22,6 +23,7 @@ export default function ResultCards({
   laufzeit,
   twrPa,
   irrPa,
+  stufe,
   sticky = false,
 }: ResultCardsProps) {
   const formatCurrency = (value: number) =>
@@ -47,6 +49,9 @@ export default function ResultCards({
 
   return (
     <div className={`space-y-4 ${containerClass}`}>
+      {sticky && stufe && (
+        <p className="text-xs text-ds-neutral-70 font-medium">Stufe: {stufe}</p>
+      )}
       {/* Hauptbetrag mit Gesamtrendite */}
       <div className="flex flex-wrap items-center gap-2 md:gap-3">
         <span className="text-2xl md:text-3xl font-bold text-ds-neutral-100">
@@ -82,8 +87,8 @@ export default function ResultCards({
         </div>
       </div>
 
-      {/* Erwartete jährliche Rendite (TWR) – Haupt-Info, react-tooltip, IRR darunter */}
-      <div>
+      {/* Erwartete jährliche Rendite (TWR) – Haupt-Info; IRR im Tooltip */}
+      <div className="flex items-center gap-2 flex-wrap">
         <p
           data-tooltip-id="twr-tooltip"
           className="font-semibold text-ds-neutral-100 text-base md:text-lg cursor-help"
@@ -91,9 +96,13 @@ export default function ResultCards({
           Erwartete jährliche Rendite: {twrPa >= 0 ? "+" : ""}{twrPa.toFixed(2)}%
         </p>
         <Tooltip id="twr-tooltip" content="Zeitgewichtete Rendite – konsistent zur Strategie" />
-        <p className="text-xs md:text-sm text-ds-orange-60 mt-0.5">
-          Effektiv (IRR): {irrPa >= 0 ? "+" : ""}{irrPa.toFixed(2)}% – variiert durch Sparpläne
-        </p>
+        <span
+          data-tooltip-id="irr-tooltip"
+          className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-ds-neutral-20 text-ds-neutral-70 text-xs font-medium cursor-help hover:bg-ds-orange-30 hover:text-ds-orange-80 transition-colors"
+        >
+          i
+        </span>
+        <Tooltip id="irr-tooltip" content={`Effektiv (IRR): ${irrPa >= 0 ? "+" : ""}${irrPa.toFixed(2)}% – variiert durch Sparpläne`} />
       </div>
 
       {/* Drei Kennzahlen – Ertrag mit Info-Icon & Tooltip */}

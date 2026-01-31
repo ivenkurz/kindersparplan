@@ -9,7 +9,7 @@ import NumberInput from "@/components/NumberInput";
 import SliderInput from "@/components/SliderInput";
 import ResultCards from "@/components/ResultCards";
 import ValidationAlert from "@/components/ValidationAlert";
-import { strategies } from "@/data/strategies";
+import { stageGroups } from "@/data/strategies";
 import { calculateIRR } from "@/lib/irr";
 
 const ValueChart = dynamic(() => import("@/components/ValueChart"), {
@@ -35,12 +35,11 @@ export default function SparplanRechnerPage() {
   const [einmalig, setEinmalig] = useState(1000);
   const [monatlich, setMonatlich] = useState(100);
   const [laufzeit, setLaufzeit] = useState(42);
-  const [strategieIndex, setStrategieIndex] = useState(5); // 0–10 → index = position → strategy = strategies[position]
+  const [sliderPosition, setSliderPosition] = useState<0 | 5 | 10>(5); // 3 Stufen: 0=Niedrig, 5=Ausgewogen, 10=Hoch
 
-  const selectedStrategy = strategies[strategieIndex];
-  const rendite = selectedStrategy.return;
-  const schwankungenApi = selectedStrategy.volatility * 100; // % für Anzeige
-  const renditeProzent = Math.round(rendite * 100);
+  const selectedStage = stageGroups.find((g) => g.position === sliderPosition) ?? stageGroups[1];
+  const rendite = selectedStage.return;
+  const schwankungenApi = selectedStage.volatility * 100; // % für Anzeige
   const isInvalid = einmalig < MIN_EINZAHLUNG || monatlich < MIN_EINZAHLUNG;
 
   const { chartData, gesamtEinzahlungen, ertrag, endwert, schwankungen, twrPa, irrPa } =
@@ -79,11 +78,11 @@ export default function SparplanRechnerPage() {
       const endwertRounded = Math.round(wert);
       const ertrag = Math.round(wert - gesamtEinzahlungen);
 
-      // TWR p.a.: (Math.pow(1 + strategy.return, 1 / laufzeit) - 1) * 100
+      // TWR p.a.: clamp >= 0, ds-neutral-100
       const twrPa =
         laufzeit > 0
-          ? (Math.pow(1 + rendite, 1 / laufzeit) - 1) * 100
-          : rendite * 100;
+          ? Math.max(0, Math.pow(1 + rendite, 1 / laufzeit) - 1) * 100
+          : Math.max(0, rendite) * 100;
 
       // IRR (effektive Rendite) – variiert durch Sparpläne
       const irrPa = calculateIRR(einmalig, monatlich, laufzeit, endwertRounded) * 100;
@@ -112,6 +111,7 @@ export default function SparplanRechnerPage() {
             laufzeit={laufzeit}
             twrPa={twrPa}
             irrPa={irrPa}
+            stufe={selectedStage.name}
             sticky
           />
         </div>
@@ -163,23 +163,20 @@ export default function SparplanRechnerPage() {
                     Strategie
                   </h3>
                   <div className="flex items-start gap-2">
-                    <button
-                      type="button"
-                      title={selectedStrategy.beschreibung}
+                    <span
+                      data-tooltip-id="stufe-tooltip"
                       className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-ds-neutral-20 text-ds-neutral-70 text-xs font-medium shrink-0 mt-0.5 cursor-help hover:bg-ds-orange-30 hover:text-ds-orange-80 transition-colors"
-                      aria-label={selectedStrategy.beschreibung}
+                      aria-label={selectedStage.beschreibung}
                     >
                       i
-                    </button>
+                    </span>
+                    <Tooltip id="stufe-tooltip" content={selectedStage.beschreibung} />
                     <div>
-                      <p
-                        className="font-semibold text-ds-neutral-100"
-                        title={selectedStrategy.beschreibung}
-                      >
-                        {selectedStrategy.name}
+                      <p className="font-semibold text-ds-neutral-100">
+                        {selectedStage.name}
                       </p>
-                      <p className="text-sm font-semibold text-ds-neutral-100">
-                        {selectedStrategy.beschreibung}
+                      <p className="text-sm text-ds-neutral-70">
+                        {selectedStage.beschreibung}
                       </p>
                     </div>
                   </div>
@@ -196,18 +193,24 @@ export default function SparplanRechnerPage() {
                     >
                       i
                     </span>
-                    <Tooltip id="risiko-tooltip" content={selectedStrategy.beschreibung} />
+                    <Tooltip id="risiko-tooltip" content={selectedStage.beschreibung} />
                   </div>
                   <SliderInput
                     label=""
-                    value={strategieIndex}
-                    onChange={setStrategieIndex}
+                    value={sliderPosition}
+                    onChange={(v) => setSliderPosition(v as 0 | 5 | 10)}
                     min={0}
                     max={10}
-                    formatValue={() => selectedStrategy.name}
-                    leftLabel={strategies[0].name}
-                    rightLabel={strategies[10].name}
+                    step={5}
+                    formatValue={() => selectedStage.name}
+                    leftLabel="Niedrig"
+                    rightLabel="Hoch"
                   />
+                  <div className="flex justify-between mt-1 text-xs text-ds-neutral-70">
+                    <span>Niedrig</span>
+                    <span>Ausgewogen</span>
+                    <span>Hoch</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -283,6 +286,7 @@ export default function SparplanRechnerPage() {
                   laufzeit={laufzeit}
                   twrPa={twrPa}
                   irrPa={irrPa}
+                  stufe={selectedStage.name}
                 />
               )}
             </div>

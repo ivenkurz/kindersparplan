@@ -1,5 +1,5 @@
 /**
- * IRR (Internal Rate of Return) – numerische Lösung für NPV=0
+ * IRR (Internal Rate of Return) – Newton-Methode für NPV=0
  * Cash flows: -einmalig (t=0), -monatlich (t=1..N-1), +endwert (t=N)
  */
 export function calculateIRR(
@@ -21,18 +21,29 @@ export function calculateIRR(
     return pv;
   }
 
-  // Bisection: NPV > 0 bei niedrigem r, NPV < 0 bei hohem r
-  let rLow = -0.99;
-  let rHigh = 2;
-  const tol = 1e-9;
-  const maxIter = 100;
-
-  for (let i = 0; i < maxIter; i++) {
-    const rMid = (rLow + rHigh) / 2;
-    const val = npv(rMid);
-    if (Math.abs(val) < tol) return rMid;
-    if (val > 0) rLow = rMid;
-    else rHigh = rMid;
+  function npvDerivative(annualRate: number): number {
+    const monthlyRate = Math.pow(1 + annualRate, 1 / 12) - 1;
+    const dr_dmonthly = (1 / 12) * Math.pow(1 + annualRate, -11 / 12);
+    let sum = 0;
+    for (let m = 1; m <= nMonths; m++) {
+      sum += (monatlich * m) / Math.pow(1 + monthlyRate, m + 1);
+    }
+    sum -= (endwert * nMonths) / Math.pow(1 + monthlyRate, nMonths + 1);
+    return sum * dr_dmonthly;
   }
-  return (rLow + rHigh) / 2;
+
+  // Newton-Raphson
+  let r = 0.05;
+  const tol = 1e-9;
+  const maxIter = 50;
+  for (let i = 0; i < maxIter; i++) {
+    const val = npv(r);
+    if (Math.abs(val) < tol) return r;
+    const deriv = npvDerivative(r);
+    if (Math.abs(deriv) < 1e-12) break;
+    r = r - val / deriv;
+    if (r < -0.99) r = -0.99;
+    if (r > 2) r = 2;
+  }
+  return r;
 }
