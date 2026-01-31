@@ -34,8 +34,6 @@ function CustomTooltip({
       wert: number;
       einzahlungen: number;
       ertrag: number;
-      confLow?: number;
-      confRange?: number;
     };
   }[];
   label?: number;
@@ -47,11 +45,6 @@ function CustomTooltip({
   const einzahlungen = point?.einzahlungen ?? 0;
   const ertrag = point?.ertrag ?? 0;
   const isPositive = ertrag >= 0;
-  const confLow = point?.confLow;
-  const confHigh =
-    typeof confLow === "number" && typeof point?.confRange === "number"
-      ? confLow + point.confRange
-      : undefined;
 
   const formatCurrency = (v: number) =>
     new Intl.NumberFormat("de-DE", {
@@ -77,11 +70,6 @@ function CustomTooltip({
         {isPositive ? "+" : ""}
         {formatCurrency(ertrag)} Ertrag
       </p>
-      {typeof confLow === "number" && typeof confHigh === "number" && (
-        <p className="text-ds-neutral-70 text-[11px] mt-1">
-          Spanne (95%): {formatCurrency(confLow)} – {formatCurrency(confHigh)}
-        </p>
-      )}
     </div>
   );
 }
@@ -99,12 +87,13 @@ export default function ValueChart({ data }: ValueChartProps) {
   });
 
   return (
-    <div className="w-full h-[260px] sm:h-[300px] md:h-[260px] lg:h-[280px]">
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart
-          data={chartData}
-          margin={{ top: 10, right: 10, left: 0, bottom: 22 }}
-        >
+    <div className="w-full">
+      <div className="h-[240px] sm:h-[260px] md:h-[240px] lg:h-[260px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart
+            data={chartData}
+            margin={{ top: 10, right: 10, left: 0, bottom: 22 }}
+          >
           <defs>
             <linearGradient id="colorConf" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#fdd1a2" stopOpacity={0.65} />
@@ -180,19 +169,25 @@ export default function ValueChart({ data }: ValueChartProps) {
             fill="transparent"
             activeDot={{ r: 6, stroke: "#fd8f18", strokeWidth: 2, fill: "#fff" }}
           />
-        </AreaChart>
-      </ResponsiveContainer>
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
 
-      {/* Legende (inkl. Konfidenz) */}
-      <div className="mt-3 flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ds-neutral-90">
-        <div className="flex items-center gap-2">
-          <span className="w-4 h-[3px] rounded-full bg-ds-orange-60" />
-          Erwarteter Verlauf
+      {/* Legende + Erklärung – innerhalb der Chart-Card, immer sichtbar */}
+      <div className="mt-4 pt-3 border-t border-ds-neutral-10">
+        <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ds-neutral-90">
+          <div className="flex items-center gap-2">
+            <span className="w-4 h-[3px] rounded-full bg-ds-orange-60" />
+            Erwarteter Verlauf
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-sm bg-[#fdd1a2]/70 border border-ds-neutral-20" />
+            Spanne (95%)
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-sm bg-[#fdd1a2]/70 border border-ds-neutral-20" />
-          Spanne (95%)
-        </div>
+        <p className="mt-2 text-[11px] text-ds-neutral-70 text-center max-w-md mx-auto">
+          Die Spanne zeigt den Bereich, in dem der Wert typischerweise liegen kann.
+        </p>
       </div>
     </div>
   );

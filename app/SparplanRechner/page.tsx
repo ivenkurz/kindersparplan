@@ -14,7 +14,7 @@ import { strategies, sliderLegendTooltips } from "@/data/strategies";
 const ValueChart = dynamic(() => import("@/components/ValueChart"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-[260px] sm:h-[320px] md:h-[380px]">
+    <div className="w-full h-[240px] sm:h-[260px] md:h-[240px] lg:h-[260px]">
       <div className="w-full h-full rounded-ds-16 bg-ds-neutral-10 animate-pulse" />
     </div>
   ),
