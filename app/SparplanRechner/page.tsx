@@ -114,7 +114,7 @@ export default function SparplanRechnerPage() {
       {/* Sticky Ergebnis oben – mobile-first, full-width (nur Mobile) */}
       {!isInvalid && (
         <div className="md:hidden fixed top-0 left-0 right-0 z-20 bg-ds-neutral-0 border-b border-ds-neutral-10">
-          <div className="max-w-4xl mx-auto px-4 py-1.5">
+          <div className="max-w-6xl mx-auto px-4 py-1.5">
             <ResultCards
               gesamtEinzahlungen={gesamtEinzahlungen}
               ertrag={ertrag}
@@ -129,7 +129,7 @@ export default function SparplanRechnerPage() {
         </div>
       )}
       <div
-        className={`max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 sm:pb-10 ${
+        className={`max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 sm:pb-10 ${
           !isInvalid ? "pt-24 md:pt-8" : "pt-8"
         }`}
       >

@@ -38,17 +38,17 @@ body {
   @apply bg-ds-neutral-0 text-ds-neutral-100 antialiased font-saans;
 }
 
-/* CDS Tooltip (react-tooltip) */
+/* CDS Tooltip (react-tooltip) – kompakt, nicht übertrieben */
 .react-tooltip {
   background-color: #fff !important;
   color: #022011 !important;
   border: 1px solid #d1d4d2 !important;
-  border-radius: 12px !important;
-  box-shadow: 0 8px 20px rgba(2, 32, 17, 0.1) !important;
-  padding: 8px 10px !important;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 8px rgba(2, 32, 17, 0.08) !important;
+  padding: 5px 8px !important;
   font-family: Saans, Helvetica, sans-serif !important;
   font-size: 11px !important;
-  line-height: 1.2 !important;
-  max-width: 220px !important;
+  line-height: 1.3 !important;
+  max-width: 180px !important;
 }
 
