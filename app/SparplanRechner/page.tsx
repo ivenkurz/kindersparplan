@@ -9,7 +9,7 @@ import NumberInput from "@/components/NumberInput";
 import SliderInput from "@/components/SliderInput";
 import ResultCards from "@/components/ResultCards";
 import ValidationAlert from "@/components/ValidationAlert";
-import { stageGroups } from "@/data/strategies";
+import { strategies, sliderLegendTooltips } from "@/data/strategies";
 import { calculateIRR } from "@/lib/irr";
 
 const ValueChart = dynamic(() => import("@/components/ValueChart"), {
@@ -23,6 +23,13 @@ const ValueChart = dynamic(() => import("@/components/ValueChart"), {
 
 const MIN_EINZAHLUNG = 0;
 
+/** Stufe-Name für Slider-Position 0, 5, 10 */
+const STUFE_NAMES: Record<number, string> = {
+  0: "Niedrig",
+  5: "Ausgewogen",
+  10: "Hoch",
+};
+
 function CardBadge({ number }: { number: number }) {
   return (
     <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-ds-orange-60 text-white font-bold text-sm shrink-0">
@@ -35,12 +42,16 @@ export default function SparplanRechnerPage() {
   const [einmalig, setEinmalig] = useState(1000);
   const [monatlich, setMonatlich] = useState(100);
   const [laufzeit, setLaufzeit] = useState(42);
-  const [sliderPosition, setSliderPosition] = useState<0 | 5 | 10>(5); // 3 Stufen: 0=Niedrig, 5=Ausgewogen, 10=Hoch
+  const [strategieIndex, setStrategieIndex] = useState(5); // 0–10
 
-  const selectedStage = stageGroups.find((g) => g.position === sliderPosition) ?? stageGroups[1];
-  const rendite = selectedStage.return;
-  const schwankungenApi = selectedStage.volatility * 100; // % für Anzeige
+  const selectedStrategy = strategies[strategieIndex];
+  const rendite = selectedStrategy.return;
+  const schwankungenApi = selectedStrategy.volatility * 100;
   const isInvalid = einmalig < MIN_EINZAHLUNG || monatlich < MIN_EINZAHLUNG;
+
+  const stufeName =
+    STUFE_NAMES[strategieIndex] ??
+    (strategieIndex <= 2 ? "Niedrig" : strategieIndex <= 6 ? "Ausgewogen" : "Hoch");
 
   const { chartData, gesamtEinzahlungen, ertrag, endwert, schwankungen, twrPa, irrPa } =
     useMemo(() => {
@@ -58,14 +69,11 @@ export default function SparplanRechnerPage() {
 
       const data: { jahr: number; wert: number; einzahlungen: number }[] = [];
       let wert = einmalig;
-      let totalEinzahlungen = einmalig;
-
       const monatlicheRendite = Math.pow(1 + rendite, 1 / 12) - 1;
 
       for (let jahr = 1; jahr <= laufzeit; jahr++) {
         for (let monat = 0; monat < 12; monat++) {
           wert = (wert + monatlich) * (1 + monatlicheRendite);
-          totalEinzahlungen += monatlich;
         }
         data.push({
           jahr,
@@ -78,13 +86,11 @@ export default function SparplanRechnerPage() {
       const endwertRounded = Math.round(wert);
       const ertrag = Math.round(wert - gesamtEinzahlungen);
 
-      // TWR p.a.: clamp >= 0, ds-neutral-100
       const twrPa =
         laufzeit > 0
           ? Math.max(0, Math.pow(1 + rendite, 1 / laufzeit) - 1) * 100
           : Math.max(0, rendite) * 100;
 
-      // IRR (effektive Rendite) – variiert durch Sparpläne
       const irrPa = calculateIRR(einmalig, monatlich, laufzeit, endwertRounded) * 100;
 
       return {
@@ -100,9 +106,9 @@ export default function SparplanRechnerPage() {
 
   return (
     <main className="min-h-screen bg-ds-neutral-0 font-saans">
-      {/* Mobile: Sticky Werte-Anzeige (Endbetrag, Ertrag, Schwankungen) */}
+      {/* Sticky Ergebnis oben – mobile-first, full-width (nur Mobile) */}
       {!isInvalid && (
-        <div className="md:hidden">
+        <div className="md:hidden w-full">
           <ResultCards
             gesamtEinzahlungen={gesamtEinzahlungen}
             ertrag={ertrag}
@@ -111,44 +117,31 @@ export default function SparplanRechnerPage() {
             laufzeit={laufzeit}
             twrPa={twrPa}
             irrPa={irrPa}
-            stufe={selectedStage.name}
+            stufe={stufeName}
             sticky
           />
         </div>
       )}
       <div
         className={`max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 sm:pb-10 ${
-          !isInvalid ? "pt-36 md:pt-8" : "pt-8"
+          !isInvalid ? "pt-40 md:pt-8" : "pt-8"
         }`}
       >
-        {/* Header */}
         <header className="mb-6 sm:mb-8">
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-ds-neutral-100 hover:text-ds-orange-60 font-semibold mb-4 transition-colors"
           >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Zurück
           </Link>
         </header>
 
-        {/* Zwei-Spalten-Layout: flex-col Mobile, flex-row Desktop */}
         <div className="flex flex-col md:flex-row gap-6">
-          {/* Linke Spalte: Eingaben */}
           <div className="flex-1 min-w-0 space-y-6">
-            {/* Karte 1: Strategie & Risiko */}
+            {/* Karte 1: Dein Risiko */}
             <div className="bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10">
               <div className="flex items-center gap-3 mb-6">
                 <CardBadge number={1} />
@@ -159,58 +152,65 @@ export default function SparplanRechnerPage() {
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-sm font-medium text-ds-neutral-100 mb-2">
-                    Strategie
-                  </h3>
+                  <h3 className="text-sm font-medium text-ds-neutral-100 mb-2">Strategie</h3>
                   <div className="flex items-start gap-2">
                     <span
                       data-tooltip-id="stufe-tooltip"
                       className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-ds-neutral-20 text-ds-neutral-70 text-xs font-medium shrink-0 mt-0.5 cursor-help hover:bg-ds-orange-30 hover:text-ds-orange-80 transition-colors"
-                      aria-label={selectedStage.beschreibung}
                     >
                       i
                     </span>
-                    <Tooltip id="stufe-tooltip" content={selectedStage.beschreibung} />
+                    <Tooltip id="stufe-tooltip" content={selectedStrategy.beschreibung} />
                     <div>
-                      <p className="font-semibold text-ds-neutral-100">
-                        {selectedStage.name}
-                      </p>
-                      <p className="text-sm text-ds-neutral-70">
-                        {selectedStage.beschreibung}
-                      </p>
+                      <p className="font-semibold text-ds-neutral-100">{selectedStrategy.name}</p>
+                      <p className="text-sm text-ds-neutral-70">{selectedStrategy.beschreibung}</p>
                     </div>
                   </div>
                 </div>
 
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    <h3 className="text-sm font-medium text-ds-neutral-100">
-                      Risiko & Ertrag
-                    </h3>
+                    <h3 className="text-sm font-medium text-ds-neutral-100">Dein Risiko</h3>
                     <span
                       data-tooltip-id="risiko-tooltip"
                       className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-ds-orange-30 text-ds-orange-80 text-xs font-semibold shrink-0 cursor-help hover:bg-ds-orange-60 hover:text-white transition-colors"
                     >
                       i
                     </span>
-                    <Tooltip id="risiko-tooltip" content={selectedStage.beschreibung} />
+                    <Tooltip id="risiko-tooltip" content={selectedStrategy.beschreibung} />
                   </div>
                   <SliderInput
                     label=""
-                    value={sliderPosition}
-                    onChange={(v) => setSliderPosition(v as 0 | 5 | 10)}
+                    value={strategieIndex}
+                    onChange={setStrategieIndex}
                     min={0}
                     max={10}
-                    step={5}
-                    formatValue={() => selectedStage.name}
+                    step={1}
+                    formatValue={() => selectedStrategy.name}
                     leftLabel="Niedrig"
                     rightLabel="Hoch"
                   />
-                  <div className="flex justify-between mt-1 text-xs text-ds-neutral-70">
-                    <span>Niedrig</span>
-                    <span>Ausgewogen</span>
-                    <span>Hoch</span>
+                  {/* Slider-Legende: Markierungen bei 0, 5, 10 mit Tooltips */}
+                  <div className="flex justify-between mt-2 text-xs">
+                    {([0, 5, 10] as const).map((pos) => (
+                      <span
+                        key={pos}
+                        data-tooltip-id={`legend-${pos}`}
+                        className={`cursor-help font-medium ${
+                          strategieIndex === pos ? "text-ds-orange-60" : "text-ds-neutral-70"
+                        }`}
+                      >
+                        {STUFE_NAMES[pos]}
+                      </span>
+                    ))}
                   </div>
+                  {([0, 5, 10] as const).map((pos) => (
+                    <Tooltip
+                      key={pos}
+                      id={`legend-${pos}`}
+                      content={sliderLegendTooltips[pos] ?? ""}
+                    />
+                  ))}
                 </div>
               </div>
             </div>
@@ -219,9 +219,7 @@ export default function SparplanRechnerPage() {
             <div className="bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10">
               <div className="flex items-center gap-3 mb-6">
                 <CardBadge number={2} />
-                <h2 className="text-lg font-bold text-ds-neutral-100">
-                  Sparplan einrichten
-                </h2>
+                <h2 className="text-lg font-bold text-ds-neutral-100">Sparplan einrichten</h2>
               </div>
 
               <div className="space-y-5">
@@ -261,9 +259,8 @@ export default function SparplanRechnerPage() {
             </div>
           </div>
 
-          {/* Rechte Spalte: Ergebnisse */}
           <div className="flex-1 min-w-0 space-y-6">
-            {/* Karte: Ergebnis-Zusammenfassung (Desktop; Mobile: sticky oben) */}
+            {/* Desktop: Ergebnis-Karte (Mobile: sticky oben) */}
             <div
               className={`hidden md:block bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10 transition-opacity ${
                 isInvalid ? "opacity-50 pointer-events-none" : ""
@@ -274,8 +271,7 @@ export default function SparplanRechnerPage() {
               </h2>
               {isInvalid ? (
                 <p className="text-ds-neutral-70 text-sm">
-                  Bitte gib gültige Werte (≥ 0 €) bei Einmalzahlung und
-                  monatlichem Sparplan ein.
+                  Bitte gib gültige Werte (≥ 0 €) bei Einmalzahlung und monatlichem Sparplan ein.
                 </p>
               ) : (
                 <ResultCards
@@ -286,26 +282,28 @@ export default function SparplanRechnerPage() {
                   laufzeit={laufzeit}
                   twrPa={twrPa}
                   irrPa={irrPa}
-                  stufe={selectedStage.name}
+                  stufe={stufeName}
                 />
               )}
             </div>
 
-            {/* Karte: Wertentwicklung */}
+            {/* Wertentwicklung – Chart zoombar (overflow-x auf Mobile) */}
             <div
               className={`bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10 transition-opacity ${
                 isInvalid ? "opacity-50 pointer-events-none" : ""
               }`}
             >
-              <h2 className="text-lg font-bold text-ds-neutral-100 mb-6">
-                Wertentwicklung
-              </h2>
+              <h2 className="text-lg font-bold text-ds-neutral-100 mb-6">Wertentwicklung</h2>
               {isInvalid ? (
                 <p className="text-ds-neutral-70 text-sm">
                   Chart wird angezeigt, sobald die Eingaben gültig sind.
                 </p>
               ) : (
-                <ValueChart data={chartData} />
+                <div className="overflow-x-auto -mx-2 px-2 md:mx-0 md:px-0">
+                  <div className="min-w-[400px] md:min-w-0">
+                    <ValueChart data={chartData} />
+                  </div>
+                </div>
               )}
             </div>
           </div>

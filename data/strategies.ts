@@ -39,7 +39,7 @@ export const stageGroups: StageGroup[] = [
   {
     position: 0,
     name: "Niedrig",
-    beschreibung: "Sicherheitsorientiert. Variable Aktienquote bis zu 35%. Geringe Schwankungen, moderate Rendite.",
+    beschreibung: "Niedrig: Sichere Rendite, niedrige Schwankungen.",
     return: (0.045 + 0.05 + 0.055 + 0.059) / 4,
     volatility: (0.03 + 0.0387 + 0.0493 + 0.0608) / 4,
     ids: [72, 73, 74, 75],
@@ -47,7 +47,7 @@ export const stageGroups: StageGroup[] = [
   {
     position: 5,
     name: "Ausgewogen",
-    beschreibung: "Ausgewogenes Verhältnis zwischen Aktien und Anleihen. Moderate Schwankungen, ausgewogene Rendite.",
+    beschreibung: "Ausgewogen: Balance zwischen Sicherheit und Wachstum.",
     return: (0.064 + 0.069 + 0.074 + 0.078) / 4,
     volatility: (0.0728 + 0.085 + 0.0974 + 0.1098) / 4,
     ids: [76, 77, 78, 79],
@@ -55,12 +55,19 @@ export const stageGroups: StageGroup[] = [
   {
     position: 10,
     name: "Hoch",
-    beschreibung: "Stark wachstumsorientiert mit 80–100% Aktien. Höhere Schwankungen, höhere Renditechance.",
+    beschreibung: "Hoch: Höhere Renditechance, höhere Schwankungen.",
     return: (0.082 + 0.086 + 0.09) / 3,
     volatility: (0.1227 + 0.1361 + 0.15) / 3,
     ids: [80, 81, 82],
   },
 ];
 
-/** Legacy: alle Strategien (für Referenz) */
+/** Alle Strategien (Slider 0–10) */
 export const strategies = rawStrategies;
+
+/** Slider-Legende: Tooltips für Markierungen bei 0, 5, 10 */
+export const sliderLegendTooltips: Record<number, string> = {
+  0: "Niedrig: Sichere Rendite, niedrige Schwankungen.",
+  5: "Ausgewogen: Balance zwischen Sicherheit und Wachstum.",
+  10: "Hoch: Höhere Renditechance, höhere Schwankungen.",
+};

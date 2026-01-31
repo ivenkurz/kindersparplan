@@ -43,59 +43,43 @@ export default function ResultCards({
     maximumFractionDigits: 1,
   }).format(schwankungen);
 
+  const isPositive = prozentSteigerung >= 0;
+  const renditeColor = isPositive ? "text-ds-seagreen" : "text-ds-crimson";
+  const ertragColor = ertrag >= 0 ? "text-ds-seagreen" : "text-ds-crimson";
+
   const containerClass = sticky
-    ? "fixed top-0 left-0 right-0 z-10 bg-ds-neutral-0 shadow-md rounded-b-[24px] px-4 py-3 md:relative md:top-auto md:left-auto md:right-auto md:z-auto md:shadow-none md:rounded-ds-lg md:bg-transparent"
+    ? "fixed top-0 left-0 right-0 z-10 w-full bg-ds-neutral-0 shadow-md rounded-b-[24px] px-4 py-4 md:relative md:top-auto md:left-auto md:right-auto md:z-auto md:w-auto md:shadow-none md:rounded-ds-lg md:bg-transparent"
     : "";
 
   return (
     <div className={`space-y-4 ${containerClass}`}>
       {sticky && stufe && (
-        <p className="text-xs text-ds-neutral-70 font-medium">Stufe: {stufe}</p>
+        <p className="text-xs text-ds-neutral-70 font-semibold">Stufe: {stufe}</p>
       )}
-      {/* Hauptbetrag mit Gesamtrendite */}
-      <div className="flex flex-wrap items-center gap-2 md:gap-3">
-        <span className="text-2xl md:text-3xl font-bold text-ds-neutral-100">
+      {/* Endwert – große Fonts, ds-neutral-100, Saans SemiBold */}
+      <div>
+        <p className="text-xs md:text-sm text-ds-neutral-70 mb-0.5 font-medium">
+          Voraussichtlicher Endwert
+        </p>
+        <p className="text-3xl md:text-4xl font-semibold text-ds-neutral-100">
           {formatCurrency(endwert)}
-        </span>
-        <div className="flex items-center gap-2">
-          <span
-            className={
-              prozentSteigerung >= 0
-                ? "inline-flex items-center justify-center w-6 h-6 md:w-8 md:h-8 rounded-ds-16 bg-[#008542]/20 text-ds-seagreen"
-                : "inline-flex items-center justify-center w-6 h-6 md:w-8 md:h-8 rounded-ds-16 bg-[#8a551d]/20 text-ds-orange-90"
-            }
-          >
-            <svg
-              className={`w-4 h-4 md:w-5 md:h-5 ${prozentSteigerung < 0 ? "rotate-180" : ""}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 10l7-7m0 0l7 7m-7-7v18"
-              />
-            </svg>
-          </span>
-          <span
-            className={`font-semibold text-sm md:text-base ${prozentSteigerung >= 0 ? "text-ds-seagreen" : "text-ds-orange-90"}`}
-          >
-            {prozentSteigerung >= 0 ? "+" : ""}{prozentSteigerung.toFixed(2)}% Gesamtrendite
-          </span>
-        </div>
+        </p>
       </div>
 
-      {/* Erwartete jährliche Rendite (TWR) – Haupt-Info; IRR im Tooltip */}
-      <div className="flex items-center gap-2 flex-wrap">
-        <p
-          data-tooltip-id="twr-tooltip"
-          className="font-semibold text-ds-neutral-100 text-base md:text-lg cursor-help"
+      {/* Gesamtrendite + p.a. nebeneinander – grün/rot für +/– */}
+      <div className="flex flex-wrap items-center gap-2">
+        <span
+          className={`text-lg md:text-xl font-semibold ${renditeColor}`}
         >
-          Erwartete jährliche Rendite: {twrPa >= 0 ? "+" : ""}{twrPa.toFixed(2)}%
-        </p>
-        <Tooltip id="twr-tooltip" content="Zeitgewichtete Rendite – konsistent zur Strategie" />
+          {isPositive ? "+" : ""}{prozentSteigerung.toFixed(2)}% Gesamtrendite
+        </span>
+        <span
+          data-tooltip-id="pa-tooltip"
+          className={`text-lg md:text-xl font-semibold ${renditeColor} cursor-help`}
+        >
+          + {twrPa.toFixed(2)}% p.a.
+        </span>
+        <Tooltip id="pa-tooltip" content="Erwartete jährliche Rendite" />
         <span
           data-tooltip-id="irr-tooltip"
           className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-ds-neutral-20 text-ds-neutral-70 text-xs font-medium cursor-help hover:bg-ds-orange-30 hover:text-ds-orange-80 transition-colors"
@@ -105,36 +89,35 @@ export default function ResultCards({
         <Tooltip id="irr-tooltip" content={`Effektiv (IRR): ${irrPa >= 0 ? "+" : ""}${irrPa.toFixed(2)}% – variiert durch Sparpläne`} />
       </div>
 
-      {/* Drei Kennzahlen – Ertrag mit Info-Icon & Tooltip */}
-      <div className="grid grid-cols-3 gap-2 md:gap-4">
+      {/* Ertrag & Schwankungen – große Fonts, Tooltips */}
+      <div className="grid grid-cols-2 gap-4">
         <div>
-          <p className="text-xs md:text-sm text-ds-neutral-70 mb-0.5 md:mb-1">
-            Gesamteinzahlungen
-          </p>
-          <p className="text-base md:text-lg font-bold text-ds-neutral-100">
-            {formatCurrency(gesamtEinzahlungen)}
-          </p>
-        </div>
-        <div>
-          <div className="flex items-center gap-1 mb-0.5 md:mb-1">
-            <p className="text-xs md:text-sm text-ds-neutral-70">Ertrag</p>
+          <div className="flex items-center gap-1 mb-0.5">
+            <p className="text-xs md:text-sm text-ds-neutral-70 font-medium">Ertrag</p>
             <span
               data-tooltip-id="ertrag-tooltip"
               className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-ds-neutral-20 text-ds-neutral-70 text-[10px] font-medium cursor-help"
             >
               i
             </span>
-            <Tooltip id="ertrag-tooltip" content="Ertrag basierend auf TWR und Sparplan" />
+            <Tooltip id="ertrag-tooltip" content="Ertrag = Endwert minus Einzahlungen" />
           </div>
-          <p className={`text-base md:text-lg font-bold ${ertrag >= 0 ? "text-ds-seagreen" : "text-ds-orange-90"}`}>
+          <p className={`text-xl md:text-2xl font-semibold ${ertragColor}`}>
             {ertrag >= 0 ? "+" : ""}{formatCurrency(ertrag)}
           </p>
         </div>
         <div>
-          <p className="text-xs md:text-sm text-ds-neutral-70 mb-0.5 md:mb-1">
-            Schwankungen
-          </p>
-          <p className="text-base md:text-lg font-bold text-ds-neutral-100">
+          <div className="flex items-center gap-1 mb-0.5">
+            <p className="text-xs md:text-sm text-ds-neutral-70 font-medium">Schwankungen</p>
+            <span
+              data-tooltip-id="schwankungen-tooltip"
+              className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-ds-neutral-20 text-ds-neutral-70 text-[10px] font-medium cursor-help"
+            >
+              i
+            </span>
+            <Tooltip id="schwankungen-tooltip" content="Typische jährliche Schwankungsbreite der Strategie" />
+          </div>
+          <p className="text-xl md:text-2xl font-semibold text-ds-neutral-100">
             ±{schwankungenFormatted}%
           </p>
         </div>
