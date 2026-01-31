@@ -38,3 +38,17 @@ body {
   @apply bg-ds-neutral-0 text-ds-neutral-100 antialiased font-saans;
 }
 
+/* CDS Tooltip (react-tooltip) */
+.react-tooltip {
+  background-color: #fff !important;
+  color: #022011 !important;
+  border: 1px solid #d1d4d2 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 10px 30px rgba(2, 32, 17, 0.12) !important;
+  padding: 10px 12px !important;
+  font-family: Saans, Helvetica, sans-serif !important;
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+  max-width: 280px !important;
+}
+

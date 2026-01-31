@@ -52,9 +52,9 @@ export default function ResultCards(props: ResultCardsProps) {
   const renditeColor = isPositive ? "text-ds-seagreen" : "text-ds-orange-90";
   const ertragColor = ertrag >= 0 ? "text-ds-seagreen" : "text-ds-orange-90";
   const renditePrefix = isPositive ? "+" : "";
-  const renditeLine = `${renditePrefix}${formatPercent(prozentSteigerung)}% (${formatPercent(
-    twrPa
-  )}% p.a.)`;
+  const gesamtRenditeText = `${renditePrefix}${formatPercent(prozentSteigerung)}%`;
+  const paText = `${formatPercent(twrPa)}% p.a.`;
+  const paColor = twrPa > 0 ? "text-ds-seagreen" : "text-ds-neutral-100";
 
   const spacingClass = sticky ? "space-y-3" : "space-y-4";
 
@@ -68,14 +68,19 @@ export default function ResultCards(props: ResultCardsProps) {
           <div className="min-w-0 flex items-end gap-3 flex-wrap">
             <p
               className={`font-semibold text-ds-neutral-100 leading-none ${
-                sticky ? "text-2xl sm:text-3xl md:text-4xl" : "text-3xl md:text-4xl"
+                sticky ? "text-xl sm:text-2xl md:text-4xl" : "text-3xl md:text-4xl"
               }`}
             >
               {formatCurrency(endwert)}
             </p>
-            <p className={`text-base md:text-lg font-semibold ${renditeColor} leading-none`}>
-              {renditeLine}
-            </p>
+            <div className={`flex items-baseline gap-2 ${renditeColor}`}>
+              <span className="text-base md:text-lg font-semibold leading-none">
+                {gesamtRenditeText}
+              </span>
+              <span className={`font-semibold leading-none ${paColor} text-2xl md:text-3xl`}>
+                ({paText})
+              </span>
+            </div>
           </div>
         </div>
       </div>

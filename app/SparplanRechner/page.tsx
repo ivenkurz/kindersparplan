@@ -14,8 +14,8 @@ import { strategies, sliderLegendTooltips } from "@/data/strategies";
 const ValueChart = dynamic(() => import("@/components/ValueChart"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-[300px] flex items-center justify-center text-ds-neutral-70">
-      Chart wird geladen…
+    <div className="w-full h-[260px] sm:h-[320px] md:h-[380px]">
+      <div className="w-full h-full rounded-ds-16 bg-ds-neutral-10 animate-pulse" />
     </div>
   ),
 });
@@ -101,7 +101,7 @@ export default function SparplanRechnerPage() {
       {/* Sticky Ergebnis oben – mobile-first, full-width (nur Mobile) */}
       {!isInvalid && (
         <div className="md:hidden fixed top-0 left-0 right-0 z-20 bg-ds-neutral-0 border-b border-ds-neutral-10">
-          <div className="max-w-4xl mx-auto px-4 py-2">
+          <div className="max-w-4xl mx-auto px-4 py-1.5">
             <ResultCards
               gesamtEinzahlungen={gesamtEinzahlungen}
               ertrag={ertrag}
@@ -117,10 +117,10 @@ export default function SparplanRechnerPage() {
       )}
       <div
         className={`max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 sm:pb-10 ${
-          !isInvalid ? "pt-28 md:pt-8" : "pt-8"
+          !isInvalid ? "pt-24 md:pt-8" : "pt-8"
         }`}
       >
-        <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex flex-col md:flex-row gap-6 pt-8">
           <div className="flex-1 min-w-0 space-y-6">
             {/* Karte 1: Dein Risiko */}
             <div className="bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10">
@@ -166,18 +166,31 @@ export default function SparplanRechnerPage() {
                     max={10}
                     step={1}
                     hideValue
+                    thumbLabel={selectedStrategy.name}
+                    thumbLabelClassName="absolute -top-8 px-2 py-1 rounded-ds-16 bg-ds-neutral-0 border border-ds-neutral-10 text-xs font-semibold text-ds-neutral-100 shadow-sm whitespace-nowrap pointer-events-none"
                   />
                   {/* Slider-Legende: Markierungen bei 0, 5, 10 mit Tooltips */}
-                  <div className="flex justify-between mt-2 text-xs">
-                    {([0, 5, 10] as const).map((pos) => (
-                      <span
-                        key={pos}
-                        data-tooltip-id={`legend-${pos}`}
-                        className="cursor-help font-medium text-ds-neutral-70"
-                      >
-                        {STUFE_NAMES[pos]}
+                  <div className="mt-3 text-xs">
+                    <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center text-ds-neutral-100 font-semibold">
+                      <span data-tooltip-id="legend-0" className="cursor-help justify-self-start">
+                        Niedrig
                       </span>
-                    ))}
+                      <span className="text-ds-neutral-40 px-2">·</span>
+                      <span data-tooltip-id="legend-5" className="cursor-help justify-self-center">
+                        Ausgewogen
+                      </span>
+                      <span className="text-ds-neutral-40 px-2">·</span>
+                      <span data-tooltip-id="legend-10" className="cursor-help justify-self-end">
+                        Hoch
+                      </span>
+                    </div>
+                    <div className="mt-2 grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center">
+                      <span className="h-px bg-ds-neutral-20 w-full" />
+                      <span />
+                      <span className="h-px bg-ds-neutral-20 w-full" />
+                      <span />
+                      <span className="h-px bg-ds-neutral-20 w-full" />
+                    </div>
                   </div>
                   {([0, 5, 10] as const).map((pos) => (
                     <Tooltip
