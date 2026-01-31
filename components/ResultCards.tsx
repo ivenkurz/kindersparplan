@@ -33,6 +33,12 @@ export default function ResultCards(props: ResultCardsProps) {
       maximumFractionDigits: 0,
     }).format(value);
 
+  const formatPercent = (value: number) =>
+    new Intl.NumberFormat("de-DE", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+
   const prozentSteigerung =
     gesamtEinzahlungen > 0
       ? ((endwert - gesamtEinzahlungen) / gesamtEinzahlungen) * 100
@@ -46,8 +52,10 @@ export default function ResultCards(props: ResultCardsProps) {
   const isPositive = prozentSteigerung >= 0;
   const renditeColor = isPositive ? "text-ds-seagreen" : "text-ds-orange-90";
   const ertragColor = ertrag >= 0 ? "text-ds-seagreen" : "text-ds-orange-90";
-  const renditePaColor = twrPa > 0 ? "text-ds-seagreen" : "text-ds-neutral-70";
-  const renditePaPrefix = twrPa > 0 ? "+" : "";
+  const renditePrefix = isPositive ? "+" : "";
+  const renditeLine = `${renditePrefix}${formatPercent(prozentSteigerung)}% (${formatPercent(
+    twrPa
+  )}% p.a.)`;
 
   const containerClass = sticky
     ? "fixed top-0 left-0 right-0 z-10 w-full bg-ds-neutral-0 shadow-md rounded-b-[24px] px-4 py-4 md:relative md:top-auto md:left-auto md:right-auto md:z-auto md:w-auto md:shadow-none md:rounded-ds-lg md:bg-transparent"
@@ -55,79 +63,72 @@ export default function ResultCards(props: ResultCardsProps) {
 
   return (
     <div className={`space-y-4 ${containerClass}`}>
-      {sticky && (
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <p className="text-xs text-ds-neutral-70 font-semibold">
-              Ergebnis nach {laufzeit} Jahren
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-xs md:text-sm text-ds-neutral-70 font-semibold">
+            Voraussichtliches Ergebnis nach {laufzeit} Jahren
+          </p>
+          {sticky && stufe && (
+            <p className="text-[11px] md:text-xs text-ds-neutral-50 font-medium truncate">
+              Gewähltes Risiko: {stufe}
             </p>
-            {stufe && (
-              <p className="text-[11px] text-ds-neutral-50 font-medium truncate">
-                Risiko: {stufe}
-              </p>
-            )}
-          </div>
+          )}
         </div>
-      )}
-      {/* Endwert – große Fonts, ds-neutral-100, Saans SemiBold */}
-      <div>
-        <p className="text-xs md:text-sm text-ds-neutral-70 mb-0.5 font-medium">
-          Voraussichtlicher Endwert
-        </p>
-        <p className="text-3xl md:text-4xl font-semibold text-ds-neutral-100">
-          {formatCurrency(endwert)}
-        </p>
       </div>
 
-      {/* Gesamtrendite + p.a. nebeneinander – grün/rot für +/– */}
-      <div className="flex flex-wrap items-center gap-2">
-        <span className={`text-lg md:text-xl font-semibold ${renditeColor}`}>
-          {isPositive ? "+" : ""}{prozentSteigerung.toFixed(2)}% Gesamtrendite
-        </span>
-        <span
-          data-tooltip-id="pa-tooltip"
-          className={`text-lg md:text-xl font-semibold ${renditePaColor} cursor-help`}
-        >
-          {renditePaPrefix} {twrPa.toFixed(2)}% pro Jahr
-        </span>
-        <Tooltip
-          id="pa-tooltip"
-          content="p.a. = pro Jahr. Das ist die zeitgewichtete Rendite (TWR) der Strategie. Einzahlungen-Zeitpunkte spielen dabei keine Rolle."
-        />
+      <div className="flex items-end justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-xs text-ds-neutral-70 mb-0.5 font-medium">Gesamtergebnis</p>
+          <p className="text-3xl md:text-4xl font-semibold text-ds-neutral-100 leading-none">
+            {formatCurrency(endwert)}
+          </p>
+        </div>
+        <div className="text-right">
+          <p className={`text-base md:text-lg font-semibold ${renditeColor} leading-tight`}>
+            {renditeLine}
+          </p>
+          <span
+            data-tooltip-id="pa-tooltip"
+            className="text-[11px] md:text-xs text-ds-neutral-70 cursor-help"
+          >
+            Was heißt p.a.?
+          </span>
+          <Tooltip
+            id="pa-tooltip"
+            content="p.a. = pro Jahr. Das ist die zeitgewichtete Rendite (TWR) der Strategie (positiv geklemmt)."
+          />
+        </div>
       </div>
 
-      {/* Ertrag & Schwankungen – große Fonts, Tooltips */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-3 md:gap-4">
         <div>
-          <div className="flex items-center gap-1 mb-0.5">
-            <p className="text-xs md:text-sm text-ds-neutral-70 font-medium">Ertrag</p>
-            <span
-              data-tooltip-id="ertrag-tooltip"
-              className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-ds-neutral-20 text-ds-neutral-70 text-[10px] font-medium cursor-help"
-            >
-              i
-            </span>
-            <Tooltip id="ertrag-tooltip" content="Ertrag = Endwert minus Einzahlungen" />
-          </div>
-          <p className={`text-xl md:text-2xl font-semibold ${ertragColor}`}>
-            {ertrag >= 0 ? "+" : ""}{formatCurrency(ertrag)}
+          <p className="text-xs text-ds-neutral-70 font-medium mb-1">Eingezahlt</p>
+          <p className="text-base md:text-lg font-semibold text-ds-neutral-100">
+            {formatCurrency(gesamtEinzahlungen)}
           </p>
         </div>
         <div>
-          <div className="flex items-center gap-1 mb-0.5">
-            <p className="text-xs md:text-sm text-ds-neutral-70 font-medium">Schwankungen</p>
+          <p className="text-xs text-ds-neutral-70 font-medium mb-1">Ertrag</p>
+          <p className={`text-base md:text-lg font-semibold ${ertragColor}`}>
+            {ertrag >= 0 ? "+" : ""}
+            {formatCurrency(ertrag)}
+          </p>
+        </div>
+        <div>
+          <div className="flex items-center gap-1 mb-1">
+            <p className="text-xs text-ds-neutral-70 font-medium">Schwankungen</p>
             <span
-              data-tooltip-id="schwankungen-tooltip"
+              data-tooltip-id="vola-tooltip"
               className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-ds-neutral-20 text-ds-neutral-70 text-[10px] font-medium cursor-help"
             >
               i
             </span>
             <Tooltip
-              id="schwankungen-tooltip"
-              content="Schwankungen = wie stark der Wert typischerweise pro Jahr hoch und runter geht."
+              id="vola-tooltip"
+              content="Volatilität (Schwankungen): So stark kann der Wert typischerweise in einem Jahr hoch und runter gehen. Mehr Risiko = meist mehr Schwankung."
             />
           </div>
-          <p className="text-xl md:text-2xl font-semibold text-ds-neutral-100">
+          <p className="text-base md:text-lg font-semibold text-ds-neutral-100">
             ±{schwankungenFormatted}%
           </p>
         </div>

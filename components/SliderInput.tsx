@@ -12,6 +12,7 @@ interface SliderInputProps {
   leftLabel?: string;
   rightLabel?: string;
   showValueRight?: boolean;
+  hideValue?: boolean;
   id?: string;
 }
 
@@ -27,6 +28,7 @@ export default function SliderInput({
   leftLabel,
   rightLabel,
   showValueRight = false,
+  hideValue = false,
   id,
 }: SliderInputProps) {
   const displayValue = formatValue ? formatValue(value) : `${value}${unit}`;
@@ -79,7 +81,7 @@ export default function SliderInput({
           </span>
         )}
       </div>
-      {!showValueRight && (
+      {!showValueRight && !hideValue && (
         <span className="text-sm font-semibold text-ds-orange-60 font-saans">
           {displayValue}
         </span>

@@ -40,7 +40,7 @@ function CardBadge({ number }: { number: number }) {
 export default function SparplanRechnerPage() {
   const [einmalig, setEinmalig] = useState(1000);
   const [monatlich, setMonatlich] = useState(100);
-  const [laufzeit, setLaufzeit] = useState(42);
+  const [laufzeit, setLaufzeit] = useState(10);
   const [strategieIndex, setStrategieIndex] = useState(5); // 0–10
 
   const selectedStrategy = strategies[strategieIndex];
@@ -143,10 +143,14 @@ export default function SparplanRechnerPage() {
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-sm font-medium text-ds-neutral-100 mb-2">Strategie</h3>
-                  <div>
-                    <p className="font-semibold text-ds-neutral-100">{selectedStrategy.name}</p>
-                    <p className="text-sm text-ds-neutral-70">{selectedStrategy.beschreibung}</p>
+                  <div className="bg-ds-neutral-0 border border-ds-neutral-10 rounded-ds-16 p-4 sm:p-5 shadow-sm">
+                    <h3 className="text-sm font-semibold text-ds-neutral-100 mb-2">Strategie</h3>
+                    <p className="font-semibold text-ds-neutral-100">
+                      {selectedStrategy.name}
+                    </p>
+                    <p className="text-sm text-ds-neutral-70 mt-1">
+                      {selectedStrategy.beschreibung}
+                    </p>
                   </div>
                 </div>
 
@@ -171,9 +175,7 @@ export default function SparplanRechnerPage() {
                     min={0}
                     max={10}
                     step={1}
-                    formatValue={() => selectedStrategy.name}
-                    leftLabel="Niedrig"
-                    rightLabel="Hoch"
+                    hideValue
                   />
                   {/* Slider-Legende: Markierungen bei 0, 5, 10 mit Tooltips */}
                   <div className="flex justify-between mt-2 text-xs">
@@ -181,9 +183,7 @@ export default function SparplanRechnerPage() {
                       <span
                         key={pos}
                         data-tooltip-id={`legend-${pos}`}
-                        className={`cursor-help font-medium ${
-                          strategieIndex === pos ? "text-ds-orange-60" : "text-ds-neutral-70"
-                        }`}
+                        className="cursor-help font-medium text-ds-neutral-70"
                       >
                         {STUFE_NAMES[pos]}
                       </span>
@@ -251,9 +251,6 @@ export default function SparplanRechnerPage() {
                 isInvalid ? "opacity-50 pointer-events-none" : ""
               }`}
             >
-              <h2 className="text-lg font-bold text-ds-neutral-100 mb-6">
-                Nach {laufzeit} Jahren hast du voraussichtlich
-              </h2>
               {isInvalid ? (
                 <p className="text-ds-neutral-70 text-sm">
                   Bitte gib gültige Werte (≥ 0 €) bei Einmalzahlung und monatlichem Sparplan ein.
