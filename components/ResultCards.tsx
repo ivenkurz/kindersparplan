@@ -99,7 +99,7 @@ export default function ResultCards(props: ResultCardsProps) {
             <p className="text-xs text-ds-neutral-70 font-medium">Schwankungen</p>
             <span
               data-tooltip-id="vola-tooltip"
-              className="inline-flex items-center justify-center p-3 -m-3 rounded-full bg-ds-neutral-20 text-ds-neutral-70 text-[10px] font-medium cursor-help"
+              className="inline-flex items-center justify-center w-11 h-11 rounded-full bg-ds-neutral-20 text-ds-neutral-70 text-[10px] font-medium cursor-help hover:bg-ds-orange-30 hover:text-ds-orange-80 transition-colors shrink-0"
             >
               i
             </span>

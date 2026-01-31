@@ -133,10 +133,28 @@ export default function SparplanRechnerPage() {
           !isInvalid ? "pt-24 md:pt-8" : "pt-8"
         }`}
       >
+        {/* Header: Zurück-Link außerhalb des Rechner-Containers */}
+        <header className="mb-4 md:mb-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-ds-neutral-100 hover:text-ds-orange-60 font-semibold transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            Zurück
+          </Link>
+        </header>
+
         {/* Desktop: klarer, begrenzter Gesamt-Container (Mobile unverändert) */}
         <div className="pt-8 md:pt-0 md:bg-ds-neutral-0 md:border md:border-ds-neutral-20 md:rounded-ds-lg md:shadow-sm md:p-6">
-          <div className="flex flex-col md:flex-row gap-6 pt-8 md:pt-0">
-            <div className="flex-1 min-w-0 space-y-6">
+          <div className="flex flex-col md:flex-row md:items-stretch gap-6 pt-8 md:pt-0">
+            <div className="flex-1 min-w-0 flex flex-col gap-6">
               {/* Karte 1: Dein Risiko */}
               <div className="bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10">
                 <div className="flex items-center gap-3 mb-6">
@@ -149,12 +167,12 @@ export default function SparplanRechnerPage() {
                 <div className="space-y-6">
                   <div>
                     <h3 className="text-sm font-semibold text-ds-neutral-100 mb-2">Strategie</h3>
-                    <div className="relative bg-ds-neutral-10 border border-ds-neutral-20 rounded-ds-16 p-4 sm:p-5 shadow-sm overflow-hidden">
+                    <div className="relative bg-ds-neutral-10 border border-ds-neutral-20 rounded-ds-16 p-4 sm:p-5 shadow-sm overflow-hidden min-h-[112px]">
                       <div className="absolute left-0 top-0 bottom-0 w-1 bg-ds-orange-60" />
-                      <p className="font-semibold text-ds-neutral-100">
+                      <p className="font-semibold text-ds-neutral-100 truncate pr-1">
                         {selectedStrategy.name}
                       </p>
-                      <p className="text-sm text-ds-neutral-70 mt-1">
+                      <p className="text-sm text-ds-neutral-70 mt-1 overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">
                         {selectedStrategy.beschreibung}
                       </p>
                     </div>
@@ -165,7 +183,7 @@ export default function SparplanRechnerPage() {
                       <h3 className="text-sm font-medium text-ds-neutral-100">Dein Risiko</h3>
                       <span
                         data-tooltip-id="risiko-tooltip"
-                        className="inline-flex items-center justify-center p-3 -m-3 rounded-full bg-ds-orange-30 text-ds-orange-80 text-xs font-semibold shrink-0 cursor-help hover:bg-ds-orange-60 hover:text-white transition-colors"
+                        className="inline-flex items-center justify-center w-11 h-11 rounded-full bg-ds-neutral-20 text-ds-neutral-70 text-xs font-semibold shrink-0 cursor-help hover:bg-ds-orange-30 hover:text-ds-orange-80 transition-colors"
                       >
                         i
                       </span>
@@ -227,7 +245,7 @@ export default function SparplanRechnerPage() {
               </div>
 
               {/* Karte 2: Sparplan einrichten */}
-              <div className="bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10">
+              <div className="bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10 flex-1 flex flex-col">
                 <div className="flex items-center gap-3 mb-6">
                   <CardBadge number={2} />
                   <h2 className="text-lg font-bold text-ds-neutral-100">Sparplan einrichten</h2>
@@ -239,25 +257,29 @@ export default function SparplanRechnerPage() {
                   )}
 
                   {/* Desktop: Einmalig + monatlich nebeneinander, Mobile: untereinander */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <NumberInput
-                      label="Einmalige Einzahlung"
-                      value={einmalig}
-                      onChange={setEinmalig}
-                      min={MIN_EINZAHLUNG}
-                      max={1000000}
-                      step={500}
-                      unit="€"
-                    />
-                    <NumberInput
-                      label="Monatlicher Sparplan"
-                      value={monatlich}
-                      onChange={setMonatlich}
-                      min={MIN_EINZAHLUNG}
-                      max={5000}
-                      step={25}
-                      unit="€"
-                    />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-4">
+                    <div className="min-w-0">
+                      <NumberInput
+                        label="Einmalige Einzahlung"
+                        value={einmalig}
+                        onChange={setEinmalig}
+                        min={MIN_EINZAHLUNG}
+                        max={1000000}
+                        step={500}
+                        unit="€"
+                      />
+                    </div>
+                    <div className="min-w-0">
+                      <NumberInput
+                        label="Monatlicher Sparplan"
+                        value={monatlich}
+                        onChange={setMonatlich}
+                        min={MIN_EINZAHLUNG}
+                        max={5000}
+                        step={25}
+                        unit="€"
+                      />
+                    </div>
                     <div className="md:col-span-2">
                       <SliderInput
                         label="Laufzeit"
@@ -277,10 +299,10 @@ export default function SparplanRechnerPage() {
               </div>
             </div>
 
-            <div className="flex-1 min-w-0 space-y-6">
+            <div className="flex-1 min-w-0 flex flex-col gap-6">
               {/* Desktop: Ergebnis + Chart in einem gemeinsamen Block */}
               <div
-                className={`hidden md:block bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10 transition-opacity ${
+                className={`hidden md:flex bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10 transition-opacity flex-1 flex-col ${
                   isInvalid ? "opacity-50 pointer-events-none" : ""
                 }`}
               >
@@ -322,23 +344,6 @@ export default function SparplanRechnerPage() {
                 ) : (
                   <ValueChart data={chartData} />
                 )}
-              </div>
-
-              <div className="mt-8">
-                <Link
-                  href="/"
-                  className="inline-flex items-center gap-2 text-ds-neutral-100 hover:text-ds-orange-60 font-semibold transition-colors"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
-                  Zurück
-                </Link>
               </div>
             </div>
           </div>
