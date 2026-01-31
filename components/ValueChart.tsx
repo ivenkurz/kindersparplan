@@ -8,6 +8,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  ReferenceDot,
 } from "recharts";
 
 interface ChartDataPoint {
@@ -18,6 +19,7 @@ interface ChartDataPoint {
 
 interface ValueChartProps {
   data: ChartDataPoint[];
+  selectedYear?: number;
 }
 
 function CustomTooltip({
@@ -26,15 +28,15 @@ function CustomTooltip({
   label,
 }: {
   active?: boolean;
-  payload?: { value: number; payload?: { wert: number; einzahlungen: number } }[];
+  payload?: { value: number; payload?: { wert: number; einzahlungen: number; ertrag: number } }[];
   label?: number;
 }) {
   if (!active || !payload?.length || label == null) return null;
 
   const point = payload[0]?.payload;
-  const wert = point?.wert ?? payload[0]?.value ?? 0;
+  const wert = point?.wert ?? 0;
   const einzahlungen = point?.einzahlungen ?? 0;
-  const ertrag = wert - einzahlungen;
+  const ertrag = point?.ertrag ?? 0;
   const isPositive = ertrag >= 0;
 
   const formatCurrency = (v: number) =>
@@ -45,13 +47,16 @@ function CustomTooltip({
     }).format(v);
 
   return (
-    <div className="bg-ds-neutral-0 rounded-ds-pill shadow-lg border border-ds-neutral-10 px-4 py-3 min-w-[180px]">
-      <p className="text-ds-neutral-100 text-sm mb-1">Jahr {label}</p>
-      <p className="text-ds-neutral-100 font-bold text-lg mb-1">
+    <div className="px-1 py-0.5">
+      <p className="text-ds-neutral-100 text-sm">Jahr {label}</p>
+      <p className="text-ds-neutral-100 font-semibold text-base">
         {formatCurrency(wert)}
       </p>
+      <p className="text-ds-neutral-70 text-xs">
+        Eingezahlt: {formatCurrency(einzahlungen)}
+      </p>
       <p
-        className={`font-medium text-sm ${
+        className={`font-medium text-xs ${
           isPositive ? "text-ds-seagreen" : "text-ds-orange-90"
         }`}
       >
@@ -62,18 +67,35 @@ function CustomTooltip({
   );
 }
 
-export default function ValueChart({ data }: ValueChartProps) {
+export default function ValueChart({ data, selectedYear }: ValueChartProps) {
+  const stackedData = data.map((d) => {
+    const eingezahlt = d.einzahlungen ?? 0;
+    const ertrag = (d.wert ?? 0) - eingezahlt;
+    return {
+      ...d,
+      eingezahlt,
+      ertrag,
+    };
+  });
+
+  const selectedPoint =
+    selectedYear != null ? stackedData.find((d) => d.jahr === selectedYear) : undefined;
+
   return (
     <div className="w-full h-[300px] sm:h-[350px] md:h-[400px]">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
-          data={data}
+          data={stackedData}
           margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
         >
           <defs>
-            <linearGradient id="colorWertPositive" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#008542" />
-              <stop offset="100%" stopColor="#008542" stopOpacity={0.1} />
+            <linearGradient id="colorEinzahlung" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#616a65" stopOpacity={0.35} />
+              <stop offset="100%" stopColor="#616a65" stopOpacity={0.08} />
+            </linearGradient>
+            <linearGradient id="colorErtrag" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#008542" stopOpacity={0.55} />
+              <stop offset="100%" stopColor="#008542" stopOpacity={0.12} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="#d1d4d2" />
@@ -89,14 +111,48 @@ export default function ValueChart({ data }: ValueChartProps) {
             tickLine={false}
             axisLine={false}
           />
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip
+            content={<CustomTooltip />}
+            cursor={{ stroke: "#fd8f18", strokeWidth: 1, strokeDasharray: "4 4" }}
+            wrapperStyle={{ outline: "none" }}
+          />
           <Area
             type="monotone"
-            dataKey="wert"
+            dataKey="eingezahlt"
+            stackId="a"
+            stroke="#616a65"
+            strokeWidth={2}
+            fill="url(#colorEinzahlung)"
+            activeDot={{ r: 5, stroke: "#fd8f18", strokeWidth: 2, fill: "#fff" }}
+          />
+          <Area
+            type="monotone"
+            dataKey="ertrag"
+            stackId="a"
             stroke="#008542"
             strokeWidth={3}
-            fill="url(#colorWertPositive)"
+            fill="url(#colorErtrag)"
+            activeDot={{ r: 6, stroke: "#fd8f18", strokeWidth: 2, fill: "#fff" }}
           />
+
+          {selectedPoint && (
+            <ReferenceDot
+              x={selectedPoint.jahr}
+              y={selectedPoint.wert}
+              r={7}
+              fill="#fd8f18"
+              stroke="#022011"
+              strokeWidth={2}
+              label={{
+                value: `${selectedPoint.jahr} Jahre`,
+                position: "top",
+                fill: "#022011",
+                fontSize: 12,
+                fontWeight: 700,
+              }}
+              isFront
+            />
+          )}
         </AreaChart>
       </ResponsiveContainer>
       <p className="text-ds-neutral-50 text-xs mt-4">

@@ -282,7 +282,7 @@ export default function SparplanRechnerPage() {
               ) : (
                 <div className="overflow-x-auto -mx-2 px-2 md:mx-0 md:px-0">
                   <div className="min-w-[400px] md:min-w-0">
-                    <ValueChart data={chartData} />
+                    <ValueChart data={chartData} selectedYear={laufzeit} />
                   </div>
                 </div>
               )}

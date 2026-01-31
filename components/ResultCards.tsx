@@ -63,40 +63,31 @@ export default function ResultCards(props: ResultCardsProps) {
 
   return (
     <div className={`space-y-4 ${containerClass}`}>
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="text-xs md:text-sm text-ds-neutral-70 font-semibold">
-            Voraussichtliches Ergebnis nach {laufzeit} Jahren
-          </p>
-          {sticky && stufe && (
-            <p className="text-[11px] md:text-xs text-ds-neutral-50 font-medium truncate">
-              Gewähltes Risiko: {stufe}
+      <div className="min-w-0">
+        <p className="text-xs md:text-sm text-ds-neutral-70 font-semibold mb-2">
+          Vorraussichtliches Ergebnis nach {laufzeit} Jahren
+        </p>
+        <div className="flex items-end justify-between gap-4">
+          <div className="min-w-0 flex items-end gap-3 flex-wrap">
+            <p className="text-3xl md:text-4xl font-semibold text-ds-neutral-100 leading-none">
+              {formatCurrency(endwert)}
             </p>
-          )}
-        </div>
-      </div>
-
-      <div className="flex items-end justify-between gap-4">
-        <div className="min-w-0">
-          <p className="text-xs text-ds-neutral-70 mb-0.5 font-medium">Gesamtergebnis</p>
-          <p className="text-3xl md:text-4xl font-semibold text-ds-neutral-100 leading-none">
-            {formatCurrency(endwert)}
-          </p>
-        </div>
-        <div className="text-right">
-          <p className={`text-base md:text-lg font-semibold ${renditeColor} leading-tight`}>
-            {renditeLine}
-          </p>
-          <span
-            data-tooltip-id="pa-tooltip"
-            className="text-[11px] md:text-xs text-ds-neutral-70 cursor-help"
-          >
-            Was heißt p.a.?
-          </span>
-          <Tooltip
-            id="pa-tooltip"
-            content="p.a. = pro Jahr. Das ist die zeitgewichtete Rendite (TWR) der Strategie (positiv geklemmt)."
-          />
+            <p className={`text-base md:text-lg font-semibold ${renditeColor} leading-none`}>
+              {renditeLine}
+            </p>
+          </div>
+          <div className="text-right shrink-0">
+            <span
+              data-tooltip-id="pa-tooltip"
+              className="text-[11px] md:text-xs text-ds-neutral-70 cursor-help"
+            >
+              Was heißt p.a.?
+            </span>
+            <Tooltip
+              id="pa-tooltip"
+              content="p.a. = pro Jahr. Das ist die zeitgewichtete Rendite (TWR) der Strategie (positiv geklemmt)."
+            />
+          </div>
         </div>
       </div>
 
