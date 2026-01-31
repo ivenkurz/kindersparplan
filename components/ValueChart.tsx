@@ -87,12 +87,11 @@ function CustomTooltip({
 }
 
 export default function ValueChart({ data }: ValueChartProps) {
-  const stackedData = data.map((d) => {
+  const chartData = data.map((d) => {
     const eingezahlt = d.einzahlungen ?? 0;
     const ertrag = (d.wert ?? 0) - eingezahlt;
     return {
       ...d,
-      eingezahlt,
       ertrag,
       confLow: typeof d.confLow === "number" ? d.confLow : undefined,
       confRange: typeof d.confRange === "number" ? d.confRange : undefined,
@@ -103,21 +102,13 @@ export default function ValueChart({ data }: ValueChartProps) {
     <div className="w-full h-[260px] sm:h-[320px] md:h-[380px]">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
-          data={stackedData}
+          data={chartData}
           margin={{ top: 10, right: 10, left: 0, bottom: 22 }}
         >
           <defs>
-            <linearGradient id="colorEinzahlung" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#616a65" stopOpacity={0.35} />
-              <stop offset="100%" stopColor="#616a65" stopOpacity={0.08} />
-            </linearGradient>
-            <linearGradient id="colorErtrag" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#008542" stopOpacity={0.55} />
-              <stop offset="100%" stopColor="#008542" stopOpacity={0.12} />
-            </linearGradient>
             <linearGradient id="colorConf" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#d1d4d2" stopOpacity={0.55} />
-              <stop offset="100%" stopColor="#d1d4d2" stopOpacity={0.18} />
+              <stop offset="0%" stopColor="#fdd1a2" stopOpacity={0.65} />
+              <stop offset="100%" stopColor="#fdd1a2" stopOpacity={0.18} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="#d1d4d2" />
@@ -166,6 +157,7 @@ export default function ValueChart({ data }: ValueChartProps) {
             fill="transparent"
             isAnimationActive={false}
             legendType="none"
+            activeDot={false}
           />
           <Area
             type="monotone"
@@ -176,26 +168,16 @@ export default function ValueChart({ data }: ValueChartProps) {
             fillOpacity={0.9}
             isAnimationActive={false}
             legendType="none"
+            activeDot={false}
           />
 
+          {/* Mittlerer Verlauf (prominent). Eingezahlt entfernen, damit die Spanne besser sichtbar ist. */}
           <Area
             type="monotone"
-            dataKey="eingezahlt"
-            stackId="a"
-            name="Eingezahlt"
-            stroke="#616a65"
-            strokeWidth={2}
-            fill="url(#colorEinzahlung)"
-            activeDot={{ r: 5, stroke: "#fd8f18", strokeWidth: 2, fill: "#fff" }}
-          />
-          <Area
-            type="monotone"
-            dataKey="ertrag"
-            stackId="a"
-            name="Ertrag"
-            stroke="#008542"
+            dataKey="wert"
+            stroke="#fd8f18"
             strokeWidth={3}
-            fill="url(#colorErtrag)"
+            fill="transparent"
             activeDot={{ r: 6, stroke: "#fd8f18", strokeWidth: 2, fill: "#fff" }}
           />
         </AreaChart>
@@ -204,15 +186,11 @@ export default function ValueChart({ data }: ValueChartProps) {
       {/* Legende (inkl. Konfidenz) */}
       <div className="mt-3 flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ds-neutral-90">
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-sm bg-[#616a65]/40 border border-ds-neutral-20" />
-          Eingezahlt
+          <span className="w-4 h-[3px] rounded-full bg-ds-orange-60" />
+          Erwarteter Verlauf
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-sm bg-[#008542]/40 border border-ds-neutral-20" />
-          Ertrag
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-sm bg-[#d1d4d2]/70 border border-ds-neutral-20" />
+          <span className="w-3 h-3 rounded-sm bg-[#fdd1a2]/70 border border-ds-neutral-20" />
           Spanne (95%)
         </div>
       </div>
