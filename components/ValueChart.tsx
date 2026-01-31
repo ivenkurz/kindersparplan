@@ -8,6 +8,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  Legend,
 } from "recharts";
 
 interface ChartDataPoint {
@@ -77,11 +78,11 @@ export default function ValueChart({ data }: ValueChartProps) {
   });
 
   return (
-    <div className="w-full h-[300px] sm:h-[350px] md:h-[400px]">
+    <div className="w-full h-[260px] sm:h-[320px] md:h-[380px]">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           data={stackedData}
-          margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+          margin={{ top: 10, right: 10, left: 0, bottom: 22 }}
         >
           <defs>
             <linearGradient id="colorEinzahlung" x1="0" y1="0" x2="0" y2="1">
@@ -96,7 +97,7 @@ export default function ValueChart({ data }: ValueChartProps) {
           <CartesianGrid strokeDasharray="3 3" stroke="#d1d4d2" />
           <XAxis
             dataKey="jahr"
-            tick={{ fill: "#616a65", fontSize: 12 }}
+            tick={{ fill: "#022011", fontSize: 14, fontWeight: 600 }}
             tickLine={false}
             axisLine={{ stroke: "#d1d4d2" }}
             label={{
@@ -112,7 +113,7 @@ export default function ValueChart({ data }: ValueChartProps) {
             tickFormatter={(v) =>
               new Intl.NumberFormat("de-DE", { maximumFractionDigits: 0 }).format(Number(v))
             }
-            tick={{ fill: "#616a65", fontSize: 12 }}
+            tick={{ fill: "#3b403d", fontSize: 12 }}
             tickLine={false}
             axisLine={false}
             label={{
@@ -133,6 +134,7 @@ export default function ValueChart({ data }: ValueChartProps) {
             type="monotone"
             dataKey="eingezahlt"
             stackId="a"
+            name="Eingezahlt"
             stroke="#616a65"
             strokeWidth={2}
             fill="url(#colorEinzahlung)"
@@ -142,17 +144,20 @@ export default function ValueChart({ data }: ValueChartProps) {
             type="monotone"
             dataKey="ertrag"
             stackId="a"
+            name="Ertrag"
             stroke="#008542"
             strokeWidth={3}
             fill="url(#colorErtrag)"
             activeDot={{ r: 6, stroke: "#fd8f18", strokeWidth: 2, fill: "#fff" }}
           />
+          <Legend
+            verticalAlign="bottom"
+            align="center"
+            iconType="square"
+            wrapperStyle={{ paddingTop: 8, fontSize: 12, color: "#3b403d" }}
+          />
         </AreaChart>
       </ResponsiveContainer>
-      <p className="text-ds-neutral-50 text-xs mt-4">
-        Risikohinweis: Der Verlauf kann zwischendurch deutlich fallen oder steigen. Je höher das
-        gewählte Risiko, desto stärker sind diese Schwankungen typischerweise.
-      </p>
     </div>
   );
 }

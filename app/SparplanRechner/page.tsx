@@ -100,36 +100,26 @@ export default function SparplanRechnerPage() {
     <main className="min-h-screen bg-ds-neutral-0 font-saans">
       {/* Sticky Ergebnis oben – mobile-first, full-width (nur Mobile) */}
       {!isInvalid && (
-        <div className="md:hidden w-full">
-          <ResultCards
-            gesamtEinzahlungen={gesamtEinzahlungen}
-            ertrag={ertrag}
-            schwankungen={schwankungen}
-            endwert={endwert}
-            laufzeit={laufzeit}
-            twrPa={twrPa}
-            stufe={stufeName}
-            sticky
-          />
+        <div className="md:hidden fixed top-0 left-0 right-0 z-20 bg-ds-neutral-0 border-b border-ds-neutral-10">
+          <div className="max-w-4xl mx-auto px-4 py-2">
+            <ResultCards
+              gesamtEinzahlungen={gesamtEinzahlungen}
+              ertrag={ertrag}
+              schwankungen={schwankungen}
+              endwert={endwert}
+              laufzeit={laufzeit}
+              twrPa={twrPa}
+              sticky
+            />
+          </div>
+          <div className="h-px bg-gradient-to-r from-transparent via-ds-neutral-20 to-transparent" />
         </div>
       )}
       <div
         className={`max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 sm:pb-10 ${
-          !isInvalid ? "pt-40 md:pt-8" : "pt-8"
+          !isInvalid ? "pt-28 md:pt-8" : "pt-8"
         }`}
       >
-        <header className="mb-6 sm:mb-8">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-ds-neutral-100 hover:text-ds-orange-60 font-semibold mb-4 transition-colors"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Zurück
-          </Link>
-        </header>
-
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1 min-w-0 space-y-6">
             {/* Karte 1: Dein Risiko */}
@@ -280,12 +270,25 @@ export default function SparplanRechnerPage() {
                   Chart wird angezeigt, sobald die Eingaben gültig sind.
                 </p>
               ) : (
-                <div className="overflow-x-auto -mx-2 px-2 md:mx-0 md:px-0">
-                  <div className="min-w-[400px] md:min-w-0">
-                    <ValueChart data={chartData} />
-                  </div>
-                </div>
+                <ValueChart data={chartData} />
               )}
+            </div>
+
+            <div className="mt-8">
+              <Link
+                href="/"
+                className="inline-flex items-center gap-2 text-ds-neutral-100 hover:text-ds-orange-60 font-semibold transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+                Zurück
+              </Link>
             </div>
           </div>
         </div>
