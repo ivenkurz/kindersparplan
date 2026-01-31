@@ -186,7 +186,7 @@ export default function ValueChart({ data }: ValueChartProps) {
           </div>
         </div>
         <p className="mt-2 text-[11px] text-ds-neutral-70 text-center max-w-md mx-auto">
-          Die Spanne zeigt den Bereich, in dem der Wert typischerweise liegen kann.
+          Die Spanne zeigt den Bereich, in dem der Ertrag mit hoher Wahrscheinlichkeit liegen wird.
         </p>
       </div>
     </div>
