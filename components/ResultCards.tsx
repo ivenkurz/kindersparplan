@@ -1,8 +1,5 @@
 "use client";
 
-import { Tooltip } from "react-tooltip";
-import "react-tooltip/dist/react-tooltip.css";
-
 export interface ResultCardsProps {
   gesamtEinzahlungen: number;
   ertrag: number;
@@ -97,16 +94,6 @@ export default function ResultCards(props: ResultCardsProps) {
         <div>
           <div className="flex items-center gap-1 mb-1">
             <p className="text-xs text-ds-neutral-70 font-medium">Schwankungen</p>
-            <span
-              data-tooltip-id="vola-tooltip"
-              className="inline-flex items-center justify-center w-11 h-11 rounded-full bg-ds-neutral-20 text-ds-neutral-70 text-[10px] font-medium cursor-help hover:bg-ds-orange-30 hover:text-ds-orange-80 transition-colors shrink-0"
-            >
-              i
-            </span>
-            <Tooltip
-              id="vola-tooltip"
-              content="Schwankungen: So stark kann der Wert typischerweise in einem Jahr hoch und runter gehen. Mehr Risiko = meist mehr Schwankung."
-            />
           </div>
           <p className="text-lg md:text-lg font-semibold text-ds-neutral-100">
             ±{schwankungenFormatted}%

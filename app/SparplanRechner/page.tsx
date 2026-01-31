@@ -167,7 +167,7 @@ export default function SparplanRechnerPage() {
                 <div className="space-y-6">
                   <div>
                     <h3 className="text-sm font-semibold text-ds-neutral-100 mb-2">Strategie</h3>
-                    <div className="relative bg-evergreen-50 border border-evergreen-100 rounded-ds-16 p-4 sm:p-5 shadow-sm overflow-hidden min-h-[112px]">
+                    <div className="relative bg-ds-neutral-10 border border-ds-neutral-20 rounded-ds-16 p-4 sm:p-5 shadow-sm overflow-hidden min-h-[112px]">
                       <div className="absolute left-0 top-0 bottom-0 w-1 bg-ds-seagreen" />
                       <p className="font-semibold text-ds-neutral-100 truncate pr-1">
                         {selectedStrategy.name}
@@ -180,17 +180,9 @@ export default function SparplanRechnerPage() {
 
                   <div>
                     <div className="flex items-center gap-2 mb-3">
-                      <h3 className="text-sm font-medium text-ds-neutral-100">Dein Risiko</h3>
-                      <span
-                        data-tooltip-id="risiko-tooltip"
-                        className="inline-flex items-center justify-center w-11 h-11 rounded-full bg-ds-neutral-20 text-ds-neutral-70 text-xs font-semibold shrink-0 cursor-help hover:bg-ds-orange-30 hover:text-ds-orange-80 transition-colors"
-                      >
-                        i
-                      </span>
-                      <Tooltip
-                        id="risiko-tooltip"
-                        content="Risiko = wie stark der Wert zwischendurch schwanken kann. Höheres Risiko bedeutet meist größere Schwankungen."
-                      />
+                      <h3 className="text-sm font-medium text-ds-neutral-100">
+                        Risiko/Ertrag wählen
+                      </h3>
                     </div>
                     <SliderInput
                       label=""
