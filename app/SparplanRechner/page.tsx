@@ -133,197 +133,213 @@ export default function SparplanRechnerPage() {
           !isInvalid ? "pt-24 md:pt-8" : "pt-8"
         }`}
       >
-        <div className="flex flex-col md:flex-row gap-6 pt-8">
-          <div className="flex-1 min-w-0 space-y-6">
-            {/* Karte 1: Dein Risiko */}
-            <div className="bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10">
-              <div className="flex items-center gap-3 mb-6">
-                <CardBadge number={1} />
-                <h2 className="text-lg font-bold text-ds-neutral-100">
-                  Strategie & Risiko wählen
-                </h2>
-              </div>
-
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-sm font-semibold text-ds-neutral-100 mb-2">Strategie</h3>
-                  <div className="relative bg-ds-neutral-10 border border-ds-neutral-20 rounded-ds-16 p-4 sm:p-5 shadow-sm overflow-hidden">
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-ds-orange-60" />
-                    <p className="font-semibold text-ds-neutral-100">
-                      {selectedStrategy.name}
-                    </p>
-                    <p className="text-sm text-ds-neutral-70 mt-1">
-                      {selectedStrategy.beschreibung}
-                    </p>
-                  </div>
+        {/* Desktop: klarer, begrenzter Gesamt-Container (Mobile unverändert) */}
+        <div className="pt-8 md:pt-0 md:bg-ds-neutral-0 md:border md:border-ds-neutral-20 md:rounded-ds-lg md:shadow-sm md:p-6">
+          <div className="flex flex-col md:flex-row gap-6 pt-8 md:pt-0">
+            <div className="flex-1 min-w-0 space-y-6">
+              {/* Karte 1: Dein Risiko */}
+              <div className="bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10">
+                <div className="flex items-center gap-3 mb-6">
+                  <CardBadge number={1} />
+                  <h2 className="text-lg font-bold text-ds-neutral-100">
+                    Strategie & Risiko wählen
+                  </h2>
                 </div>
 
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <h3 className="text-sm font-medium text-ds-neutral-100">Dein Risiko</h3>
-                    <span
-                      data-tooltip-id="risiko-tooltip"
-                      className="inline-flex items-center justify-center p-3 -m-3 rounded-full bg-ds-orange-30 text-ds-orange-80 text-xs font-semibold shrink-0 cursor-help hover:bg-ds-orange-60 hover:text-white transition-colors"
-                    >
-                      i
-                    </span>
-                    <Tooltip
-                      id="risiko-tooltip"
-                      content="Risiko = wie stark der Wert zwischendurch schwanken kann. Höheres Risiko bedeutet meist größere Schwankungen."
-                    />
-                  </div>
-                  <SliderInput
-                    label=""
-                    value={strategieIndex}
-                    onChange={setStrategieIndex}
-                    min={0}
-                    max={10}
-                    step={1}
-                    hideValue
-                  />
-                  {/* Slider-Legende: Markierungen bei 0, 5, 10 mit Tooltips */}
-                  <div className="mt-3 text-xs">
-                    <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center text-ds-neutral-100 font-semibold">
-                      <span
-                        data-tooltip-id="legend-0"
-                        className="relative cursor-help justify-self-start after:content-[''] after:absolute after:-inset-3"
-                      >
-                        Niedrig
-                      </span>
-                      <span className="text-ds-neutral-40 px-2">·</span>
-                      <span
-                        data-tooltip-id="legend-5"
-                        className="relative cursor-help justify-self-center after:content-[''] after:absolute after:-inset-3"
-                      >
-                        Ausgewogen
-                      </span>
-                      <span className="text-ds-neutral-40 px-2">·</span>
-                      <span
-                        data-tooltip-id="legend-10"
-                        className="relative cursor-help justify-self-end after:content-[''] after:absolute after:-inset-3"
-                      >
-                        Hoch
-                      </span>
-                    </div>
-                    <div className="mt-2 grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center">
-                      <span className="h-px bg-ds-neutral-20 w-full" />
-                      <span />
-                      <span className="h-px bg-ds-neutral-20 w-full" />
-                      <span />
-                      <span className="h-px bg-ds-neutral-20 w-full" />
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-sm font-semibold text-ds-neutral-100 mb-2">Strategie</h3>
+                    <div className="relative bg-ds-neutral-10 border border-ds-neutral-20 rounded-ds-16 p-4 sm:p-5 shadow-sm overflow-hidden">
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-ds-orange-60" />
+                      <p className="font-semibold text-ds-neutral-100">
+                        {selectedStrategy.name}
+                      </p>
+                      <p className="text-sm text-ds-neutral-70 mt-1">
+                        {selectedStrategy.beschreibung}
+                      </p>
                     </div>
                   </div>
-                  {([0, 5, 10] as const).map((pos) => (
-                    <Tooltip
-                      key={pos}
-                      id={`legend-${pos}`}
-                      content={sliderLegendTooltips[pos] ?? ""}
+
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <h3 className="text-sm font-medium text-ds-neutral-100">Dein Risiko</h3>
+                      <span
+                        data-tooltip-id="risiko-tooltip"
+                        className="inline-flex items-center justify-center p-3 -m-3 rounded-full bg-ds-orange-30 text-ds-orange-80 text-xs font-semibold shrink-0 cursor-help hover:bg-ds-orange-60 hover:text-white transition-colors"
+                      >
+                        i
+                      </span>
+                      <Tooltip
+                        id="risiko-tooltip"
+                        content="Risiko = wie stark der Wert zwischendurch schwanken kann. Höheres Risiko bedeutet meist größere Schwankungen."
+                      />
+                    </div>
+                    <SliderInput
+                      label=""
+                      value={strategieIndex}
+                      onChange={setStrategieIndex}
+                      min={0}
+                      max={10}
+                      step={1}
+                      hideValue
                     />
-                  ))}
+                    {/* Slider-Legende: Markierungen bei 0, 5, 10 mit Tooltips */}
+                    <div className="mt-3 text-xs">
+                      <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center text-ds-neutral-100 font-semibold">
+                        <span
+                          data-tooltip-id="legend-0"
+                          className="relative cursor-help justify-self-start after:content-[''] after:absolute after:-inset-3"
+                        >
+                          Niedrig
+                        </span>
+                        <span className="text-ds-neutral-40 px-2">·</span>
+                        <span
+                          data-tooltip-id="legend-5"
+                          className="relative cursor-help justify-self-center after:content-[''] after:absolute after:-inset-3"
+                        >
+                          Ausgewogen
+                        </span>
+                        <span className="text-ds-neutral-40 px-2">·</span>
+                        <span
+                          data-tooltip-id="legend-10"
+                          className="relative cursor-help justify-self-end after:content-[''] after:absolute after:-inset-3"
+                        >
+                          Hoch
+                        </span>
+                      </div>
+                      <div className="mt-2 grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center">
+                        <span className="h-px bg-ds-neutral-20 w-full" />
+                        <span />
+                        <span className="h-px bg-ds-neutral-20 w-full" />
+                        <span />
+                        <span className="h-px bg-ds-neutral-20 w-full" />
+                      </div>
+                    </div>
+                    {([0, 5, 10] as const).map((pos) => (
+                      <Tooltip
+                        key={pos}
+                        id={`legend-${pos}`}
+                        content={sliderLegendTooltips[pos] ?? ""}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Karte 2: Sparplan einrichten */}
+              <div className="bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10">
+                <div className="flex items-center gap-3 mb-6">
+                  <CardBadge number={2} />
+                  <h2 className="text-lg font-bold text-ds-neutral-100">Sparplan einrichten</h2>
+                </div>
+
+                <div className="space-y-5">
+                  {isInvalid && (
+                    <ValidationAlert message="Einmalige Einzahlung und monatlicher Sparplan dürfen nicht negativ sein." />
+                  )}
+
+                  {/* Desktop: Einmalig + monatlich nebeneinander, Mobile: untereinander */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <NumberInput
+                      label="Einmalige Einzahlung"
+                      value={einmalig}
+                      onChange={setEinmalig}
+                      min={MIN_EINZAHLUNG}
+                      max={1000000}
+                      step={500}
+                      unit="€"
+                    />
+                    <NumberInput
+                      label="Monatlicher Sparplan"
+                      value={monatlich}
+                      onChange={setMonatlich}
+                      min={MIN_EINZAHLUNG}
+                      max={5000}
+                      step={25}
+                      unit="€"
+                    />
+                    <div className="md:col-span-2">
+                      <SliderInput
+                        label="Laufzeit"
+                        value={laufzeit}
+                        onChange={setLaufzeit}
+                        min={1}
+                        max={50}
+                        unit=" Jahre"
+                        leftLabel="1 Jahr"
+                        rightLabel="50 Jahre"
+                        showValueRight
+                        valueClassName="text-lg sm:text-xl font-semibold text-ds-orange-60 font-saans tracking-tight"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Karte 2: Sparplan einrichten */}
-            <div className="bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10">
-              <div className="flex items-center gap-3 mb-6">
-                <CardBadge number={2} />
-                <h2 className="text-lg font-bold text-ds-neutral-100">Sparplan einrichten</h2>
-              </div>
-
-              <div className="space-y-5">
-                {isInvalid && (
-                  <ValidationAlert message="Einmalige Einzahlung und monatlicher Sparplan dürfen nicht negativ sein." />
-                )}
-                <NumberInput
-                  label="Einmalige Einzahlung"
-                  value={einmalig}
-                  onChange={setEinmalig}
-                  min={MIN_EINZAHLUNG}
-                  max={1000000}
-                  step={500}
-                  unit="€"
-                />
-                <NumberInput
-                  label="Monatlicher Sparplan"
-                  value={monatlich}
-                  onChange={setMonatlich}
-                  min={MIN_EINZAHLUNG}
-                  max={5000}
-                  step={25}
-                  unit="€"
-                />
-                <SliderInput
-                  label="Laufzeit"
-                  value={laufzeit}
-                  onChange={setLaufzeit}
-                  min={1}
-                  max={50}
-                  unit=" Jahre"
-                  leftLabel="1 Jahr"
-                  rightLabel="50 Jahre"
-                  showValueRight
-                  valueClassName="text-lg sm:text-xl font-semibold text-ds-orange-60 font-saans tracking-tight"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex-1 min-w-0 space-y-6">
-            {/* Desktop: Ergebnis-Karte (Mobile: sticky oben) */}
-            <div
-              className={`hidden md:block bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10 transition-opacity ${
-                isInvalid ? "opacity-50 pointer-events-none" : ""
-              }`}
-            >
-              {isInvalid ? (
-                <p className="text-ds-neutral-70 text-sm">
-                  Bitte gib gültige Werte (≥ 0 €) bei Einmalzahlung und monatlichem Sparplan ein.
-                </p>
-              ) : (
-                <ResultCards
-                  gesamtEinzahlungen={gesamtEinzahlungen}
-                  ertrag={ertrag}
-                  schwankungen={schwankungen}
-                  endwert={endwert}
-                  laufzeit={laufzeit}
-                  twrPa={twrPa}
-                  stufe={stufeName}
-                />
-              )}
-            </div>
-
-            {/* Wertentwicklung – Chart zoombar (overflow-x auf Mobile) */}
-            <div
-              className={`bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10 transition-opacity ${
-                isInvalid ? "opacity-50 pointer-events-none" : ""
-              }`}
-            >
-              <h2 className="text-lg font-bold text-ds-neutral-100 mb-6">Wertentwicklung</h2>
-              {isInvalid ? (
-                <p className="text-ds-neutral-70 text-sm">
-                  Chart wird angezeigt, sobald die Eingaben gültig sind.
-                </p>
-              ) : (
-                <ValueChart data={chartData} />
-              )}
-            </div>
-
-            <div className="mt-8">
-              <Link
-                href="/"
-                className="inline-flex items-center gap-2 text-ds-neutral-100 hover:text-ds-orange-60 font-semibold transition-colors"
+            <div className="flex-1 min-w-0 space-y-6">
+              {/* Desktop: Ergebnis + Chart in einem gemeinsamen Block */}
+              <div
+                className={`hidden md:block bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10 transition-opacity ${
+                  isInvalid ? "opacity-50 pointer-events-none" : ""
+                }`}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-                Zurück
-              </Link>
+                {isInvalid ? (
+                  <p className="text-ds-neutral-70 text-sm">
+                    Bitte gib gültige Werte (≥ 0 €) bei Einmalzahlung und monatlichem Sparplan ein.
+                  </p>
+                ) : (
+                  <div className="space-y-6">
+                    <ResultCards
+                      gesamtEinzahlungen={gesamtEinzahlungen}
+                      ertrag={ertrag}
+                      schwankungen={schwankungen}
+                      endwert={endwert}
+                      laufzeit={laufzeit}
+                      twrPa={twrPa}
+                      stufe={stufeName}
+                    />
+                    <div className="h-px bg-ds-neutral-20" />
+                    <div>
+                      <h2 className="text-lg font-bold text-ds-neutral-100 mb-4">Wertentwicklung</h2>
+                      <ValueChart data={chartData} />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Mobile: Chart bleibt unverändert als eigene Karte */}
+              <div
+                className={`md:hidden bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10 transition-opacity ${
+                  isInvalid ? "opacity-50 pointer-events-none" : ""
+                }`}
+              >
+                <h2 className="text-lg font-bold text-ds-neutral-100 mb-6">Wertentwicklung</h2>
+                {isInvalid ? (
+                  <p className="text-ds-neutral-70 text-sm">
+                    Chart wird angezeigt, sobald die Eingaben gültig sind.
+                  </p>
+                ) : (
+                  <ValueChart data={chartData} />
+                )}
+              </div>
+
+              <div className="mt-8">
+                <Link
+                  href="/"
+                  className="inline-flex items-center gap-2 text-ds-neutral-100 hover:text-ds-orange-60 font-semibold transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 19l-7-7 7-7"
+                    />
+                  </svg>
+                  Zurück
+                </Link>
+              </div>
             </div>
           </div>
         </div>

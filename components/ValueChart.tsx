@@ -99,7 +99,7 @@ export default function ValueChart({ data }: ValueChartProps) {
   });
 
   return (
-    <div className="w-full h-[260px] sm:h-[320px] md:h-[380px]">
+    <div className="w-full h-[260px] sm:h-[300px] md:h-[260px] lg:h-[280px]">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           data={chartData}
