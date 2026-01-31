@@ -163,7 +163,7 @@ export default function SparplanRechnerPage() {
                     <h3 className="text-sm font-medium text-ds-neutral-100">Dein Risiko</h3>
                     <span
                       data-tooltip-id="risiko-tooltip"
-                      className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-ds-orange-30 text-ds-orange-80 text-xs font-semibold shrink-0 cursor-help hover:bg-ds-orange-60 hover:text-white transition-colors"
+                      className="inline-flex items-center justify-center p-3 -m-3 rounded-full bg-ds-orange-30 text-ds-orange-80 text-xs font-semibold shrink-0 cursor-help hover:bg-ds-orange-60 hover:text-white transition-colors"
                     >
                       i
                     </span>
@@ -184,15 +184,24 @@ export default function SparplanRechnerPage() {
                   {/* Slider-Legende: Markierungen bei 0, 5, 10 mit Tooltips */}
                   <div className="mt-3 text-xs">
                     <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center text-ds-neutral-100 font-semibold">
-                      <span data-tooltip-id="legend-0" className="cursor-help justify-self-start">
+                      <span
+                        data-tooltip-id="legend-0"
+                        className="relative cursor-help justify-self-start after:content-[''] after:absolute after:-inset-3"
+                      >
                         Niedrig
                       </span>
                       <span className="text-ds-neutral-40 px-2">·</span>
-                      <span data-tooltip-id="legend-5" className="cursor-help justify-self-center">
+                      <span
+                        data-tooltip-id="legend-5"
+                        className="relative cursor-help justify-self-center after:content-[''] after:absolute after:-inset-3"
+                      >
                         Ausgewogen
                       </span>
                       <span className="text-ds-neutral-40 px-2">·</span>
-                      <span data-tooltip-id="legend-10" className="cursor-help justify-self-end">
+                      <span
+                        data-tooltip-id="legend-10"
+                        className="relative cursor-help justify-self-end after:content-[''] after:absolute after:-inset-3"
+                      >
                         Hoch
                       </span>
                     </div>

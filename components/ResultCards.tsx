@@ -80,16 +80,16 @@ export default function ResultCards(props: ResultCardsProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-3 md:gap-4">
+      <div className="grid grid-cols-3 gap-4 sm:gap-5 md:gap-4">
         <div>
           <p className="text-xs text-ds-neutral-70 font-medium mb-1">Eingezahlt</p>
-          <p className="text-base md:text-lg font-semibold text-ds-neutral-100">
+          <p className="text-lg md:text-lg font-semibold text-ds-neutral-100">
             {formatCurrency(gesamtEinzahlungen)}
           </p>
         </div>
         <div>
           <p className="text-xs text-ds-neutral-70 font-medium mb-1">Ertrag</p>
-          <p className={`text-base md:text-lg font-semibold ${ertragColor}`}>
+          <p className={`text-lg md:text-lg font-semibold ${ertragColor}`}>
             {ertrag >= 0 ? "+" : ""}
             {formatCurrency(ertrag)}
           </p>
@@ -99,16 +99,16 @@ export default function ResultCards(props: ResultCardsProps) {
             <p className="text-xs text-ds-neutral-70 font-medium">Schwankungen</p>
             <span
               data-tooltip-id="vola-tooltip"
-              className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-ds-neutral-20 text-ds-neutral-70 text-[10px] font-medium cursor-help"
+              className="inline-flex items-center justify-center p-3 -m-3 rounded-full bg-ds-neutral-20 text-ds-neutral-70 text-[10px] font-medium cursor-help"
             >
               i
             </span>
             <Tooltip
               id="vola-tooltip"
-              content="Volatilität (Schwankungen): So stark kann der Wert typischerweise in einem Jahr hoch und runter gehen. Mehr Risiko = meist mehr Schwankung."
+              content="Schwankungen: So stark kann der Wert typischerweise in einem Jahr hoch und runter gehen. Mehr Risiko = meist mehr Schwankung."
             />
           </div>
-          <p className="text-base md:text-lg font-semibold text-ds-neutral-100">
+          <p className="text-lg md:text-lg font-semibold text-ds-neutral-100">
             ±{schwankungenFormatted}%
           </p>
         </div>
