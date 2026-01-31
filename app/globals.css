@@ -43,12 +43,12 @@ body {
   background-color: #fff !important;
   color: #022011 !important;
   border: 1px solid #d1d4d2 !important;
-  border-radius: 16px !important;
-  box-shadow: 0 10px 30px rgba(2, 32, 17, 0.12) !important;
-  padding: 10px 12px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 20px rgba(2, 32, 17, 0.1) !important;
+  padding: 8px 10px !important;
   font-family: Saans, Helvetica, sans-serif !important;
-  font-size: 12px !important;
+  font-size: 11px !important;
   line-height: 1.2 !important;
-  max-width: 280px !important;
+  max-width: 220px !important;
 }
 

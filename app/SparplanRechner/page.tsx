@@ -152,11 +152,11 @@ export default function SparplanRechnerPage() {
         </header>
 
         {/* Desktop: klarer, begrenzter Gesamt-Container (Mobile unverändert) */}
-        <div className="pt-8 md:pt-0 md:bg-ds-neutral-0 md:border md:border-ds-neutral-20 md:rounded-ds-lg md:shadow-sm md:p-6">
+        <div className="bg-ds-yellow-10 border border-ds-neutral-20 rounded-ds-lg shadow-sm p-4 sm:p-6">
           <div className="flex flex-col md:flex-row md:items-stretch gap-6 pt-8 md:pt-0">
             <div className="flex-1 min-w-0 flex flex-col gap-6">
               {/* Karte 1: Dein Risiko */}
-              <div className="bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10">
+              <div className="bg-ds-neutral-0 rounded-ds-lg shadow-sm p-6 sm:p-8 border border-ds-neutral-20">
                 <div className="flex items-center gap-3 mb-6">
                   <CardBadge number={1} />
                   <h2 className="text-lg font-bold text-ds-neutral-100">
@@ -167,8 +167,8 @@ export default function SparplanRechnerPage() {
                 <div className="space-y-6">
                   <div>
                     <h3 className="text-sm font-semibold text-ds-neutral-100 mb-2">Strategie</h3>
-                    <div className="relative bg-ds-neutral-10 border border-ds-neutral-20 rounded-ds-16 p-4 sm:p-5 shadow-sm overflow-hidden min-h-[112px]">
-                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-ds-orange-60" />
+                    <div className="relative bg-evergreen-50 border border-evergreen-100 rounded-ds-16 p-4 sm:p-5 shadow-sm overflow-hidden min-h-[112px]">
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-ds-seagreen" />
                       <p className="font-semibold text-ds-neutral-100 truncate pr-1">
                         {selectedStrategy.name}
                       </p>
@@ -245,7 +245,7 @@ export default function SparplanRechnerPage() {
               </div>
 
               {/* Karte 2: Sparplan einrichten */}
-              <div className="bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10 flex-1 flex flex-col">
+              <div className="bg-ds-neutral-0 rounded-ds-lg shadow-sm p-6 sm:p-8 border border-ds-neutral-20 flex-1 flex flex-col">
                 <div className="flex items-center gap-3 mb-6">
                   <CardBadge number={2} />
                   <h2 className="text-lg font-bold text-ds-neutral-100">Sparplan einrichten</h2>
@@ -302,7 +302,7 @@ export default function SparplanRechnerPage() {
             <div className="flex-1 min-w-0 flex flex-col gap-6">
               {/* Desktop: Ergebnis + Chart in einem gemeinsamen Block */}
               <div
-                className={`hidden md:flex bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10 transition-opacity flex-1 flex-col ${
+                className={`hidden md:flex bg-ds-neutral-0 rounded-ds-lg shadow-sm p-6 sm:p-8 border border-ds-neutral-20 transition-opacity flex-1 flex-col ${
                   isInvalid ? "opacity-50 pointer-events-none" : ""
                 }`}
               >
@@ -332,7 +332,7 @@ export default function SparplanRechnerPage() {
 
               {/* Mobile: Chart bleibt unverändert als eigene Karte */}
               <div
-                className={`md:hidden bg-ds-yellow-10 rounded-ds-lg shadow-lg p-6 sm:p-8 border border-ds-neutral-10 transition-opacity ${
+                className={`md:hidden bg-ds-neutral-0 rounded-ds-lg shadow-sm p-6 sm:p-8 border border-ds-neutral-20 transition-opacity ${
                   isInvalid ? "opacity-50 pointer-events-none" : ""
                 }`}
               >
