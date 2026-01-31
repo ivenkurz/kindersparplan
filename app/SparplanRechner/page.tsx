@@ -64,18 +64,31 @@ export default function SparplanRechnerPage() {
         };
       }
 
-      const data: { jahr: number; wert: number; einzahlungen: number }[] = [];
+      const data: {
+        jahr: number;
+        wert: number;
+        einzahlungen: number;
+        confLow: number;
+        confRange: number;
+      }[] = [];
       let wert = einmalig;
       const monatlicheRendite = Math.pow(1 + rendite, 1 / 12) - 1;
+      const z95 = 1.96; // übliche Konfidenz: 95%
+      const sigma = Math.max(0, selectedStrategy.volatility); // jährliche Volatilität (0..)
 
       for (let jahr = 1; jahr <= laufzeit; jahr++) {
         for (let monat = 0; monat < 12; monat++) {
           wert = (wert + monatlich) * (1 + monatlicheRendite);
         }
+        const faktor = Math.exp(z95 * sigma * Math.sqrt(jahr));
+        const confLow = Math.round(wert / faktor);
+        const confHigh = Math.round(wert * faktor);
         data.push({
           jahr,
           wert: Math.round(wert),
           einzahlungen: einmalig + monatlich * 12 * jahr,
+          confLow,
+          confRange: Math.max(0, confHigh - confLow),
         });
       }
 
@@ -166,8 +179,6 @@ export default function SparplanRechnerPage() {
                     max={10}
                     step={1}
                     hideValue
-                    thumbLabel={selectedStrategy.name}
-                    thumbLabelClassName="absolute -top-8 px-2 py-1 rounded-ds-16 bg-ds-neutral-0 border border-ds-neutral-10 text-xs font-semibold text-ds-neutral-100 shadow-sm whitespace-nowrap pointer-events-none"
                   />
                   {/* Slider-Legende: Markierungen bei 0, 5, 10 mit Tooltips */}
                   <div className="mt-3 text-xs">

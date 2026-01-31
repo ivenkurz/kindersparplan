@@ -8,13 +8,14 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Legend,
 } from "recharts";
 
 interface ChartDataPoint {
   jahr: number;
   wert: number;
   einzahlungen: number;
+  confLow?: number;
+  confRange?: number;
 }
 
 interface ValueChartProps {
@@ -27,7 +28,16 @@ function CustomTooltip({
   label,
 }: {
   active?: boolean;
-  payload?: { value: number; payload?: { wert: number; einzahlungen: number; ertrag: number } }[];
+  payload?: {
+    value: number;
+    payload?: {
+      wert: number;
+      einzahlungen: number;
+      ertrag: number;
+      confLow?: number;
+      confRange?: number;
+    };
+  }[];
   label?: number;
 }) {
   if (!active || !payload?.length || label == null) return null;
@@ -37,6 +47,11 @@ function CustomTooltip({
   const einzahlungen = point?.einzahlungen ?? 0;
   const ertrag = point?.ertrag ?? 0;
   const isPositive = ertrag >= 0;
+  const confLow = point?.confLow;
+  const confHigh =
+    typeof confLow === "number" && typeof point?.confRange === "number"
+      ? confLow + point.confRange
+      : undefined;
 
   const formatCurrency = (v: number) =>
     new Intl.NumberFormat("de-DE", {
@@ -62,6 +77,11 @@ function CustomTooltip({
         {isPositive ? "+" : ""}
         {formatCurrency(ertrag)} Ertrag
       </p>
+      {typeof confLow === "number" && typeof confHigh === "number" && (
+        <p className="text-ds-neutral-70 text-[11px] mt-1">
+          Spanne (95%): {formatCurrency(confLow)} – {formatCurrency(confHigh)}
+        </p>
+      )}
     </div>
   );
 }
@@ -74,6 +94,8 @@ export default function ValueChart({ data }: ValueChartProps) {
       ...d,
       eingezahlt,
       ertrag,
+      confLow: typeof d.confLow === "number" ? d.confLow : undefined,
+      confRange: typeof d.confRange === "number" ? d.confRange : undefined,
     };
   });
 
@@ -92,6 +114,10 @@ export default function ValueChart({ data }: ValueChartProps) {
             <linearGradient id="colorErtrag" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#008542" stopOpacity={0.55} />
               <stop offset="100%" stopColor="#008542" stopOpacity={0.12} />
+            </linearGradient>
+            <linearGradient id="colorConf" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#d1d4d2" stopOpacity={0.55} />
+              <stop offset="100%" stopColor="#d1d4d2" stopOpacity={0.18} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="#d1d4d2" />
@@ -130,6 +156,28 @@ export default function ValueChart({ data }: ValueChartProps) {
             cursor={{ stroke: "#fd8f18", strokeWidth: 1, strokeDasharray: "4 4" }}
             wrapperStyle={{ outline: "none" }}
           />
+
+          {/* Konfidenzband (95%) um den erwarteten Gesamtwert (lognormal, üblich) */}
+          <Area
+            type="monotone"
+            dataKey="confLow"
+            stackId="conf"
+            stroke="none"
+            fill="transparent"
+            isAnimationActive={false}
+            legendType="none"
+          />
+          <Area
+            type="monotone"
+            dataKey="confRange"
+            stackId="conf"
+            stroke="none"
+            fill="url(#colorConf)"
+            fillOpacity={0.9}
+            isAnimationActive={false}
+            legendType="none"
+          />
+
           <Area
             type="monotone"
             dataKey="eingezahlt"
@@ -150,14 +198,24 @@ export default function ValueChart({ data }: ValueChartProps) {
             fill="url(#colorErtrag)"
             activeDot={{ r: 6, stroke: "#fd8f18", strokeWidth: 2, fill: "#fff" }}
           />
-          <Legend
-            verticalAlign="bottom"
-            align="center"
-            iconType="square"
-            wrapperStyle={{ paddingTop: 8, fontSize: 12, color: "#3b403d" }}
-          />
         </AreaChart>
       </ResponsiveContainer>
+
+      {/* Legende (inkl. Konfidenz) */}
+      <div className="mt-3 flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ds-neutral-90">
+        <div className="flex items-center gap-2">
+          <span className="w-3 h-3 rounded-sm bg-[#616a65]/40 border border-ds-neutral-20" />
+          Eingezahlt
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="w-3 h-3 rounded-sm bg-[#008542]/40 border border-ds-neutral-20" />
+          Ertrag
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="w-3 h-3 rounded-sm bg-[#d1d4d2]/70 border border-ds-neutral-20" />
+          Spanne (95%)
+        </div>
+      </div>
     </div>
   );
 }
