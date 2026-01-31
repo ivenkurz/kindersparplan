@@ -51,3 +51,4 @@ npm start
 - Tailwind CSS
 - Recharts
 # Test nach Sync-Fix
+# Vercel läuft jetzt sync
