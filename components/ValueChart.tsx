@@ -8,7 +8,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  ReferenceDot,
 } from "recharts";
 
 interface ChartDataPoint {
@@ -19,7 +18,6 @@ interface ChartDataPoint {
 
 interface ValueChartProps {
   data: ChartDataPoint[];
-  selectedYear?: number;
 }
 
 function CustomTooltip({
@@ -47,9 +45,9 @@ function CustomTooltip({
     }).format(v);
 
   return (
-    <div className="px-1 py-0.5">
-      <p className="text-ds-neutral-100 text-sm">Jahr {label}</p>
-      <p className="text-ds-neutral-100 font-semibold text-base">
+    <div className="bg-ds-neutral-0 border border-ds-neutral-10 rounded-ds-16 shadow-sm px-3 py-2">
+      <p className="text-ds-neutral-100 text-sm font-semibold">Jahr {label}</p>
+      <p className="text-ds-neutral-100 font-semibold text-base leading-tight">
         {formatCurrency(wert)}
       </p>
       <p className="text-ds-neutral-70 text-xs">
@@ -67,7 +65,7 @@ function CustomTooltip({
   );
 }
 
-export default function ValueChart({ data, selectedYear }: ValueChartProps) {
+export default function ValueChart({ data }: ValueChartProps) {
   const stackedData = data.map((d) => {
     const eingezahlt = d.einzahlungen ?? 0;
     const ertrag = (d.wert ?? 0) - eingezahlt;
@@ -77,9 +75,6 @@ export default function ValueChart({ data, selectedYear }: ValueChartProps) {
       ertrag,
     };
   });
-
-  const selectedPoint =
-    selectedYear != null ? stackedData.find((d) => d.jahr === selectedYear) : undefined;
 
   return (
     <div className="w-full h-[300px] sm:h-[350px] md:h-[400px]">
@@ -104,12 +99,30 @@ export default function ValueChart({ data, selectedYear }: ValueChartProps) {
             tick={{ fill: "#616a65", fontSize: 12 }}
             tickLine={false}
             axisLine={{ stroke: "#d1d4d2" }}
+            label={{
+              value: "Jahre",
+              position: "insideBottomRight",
+              offset: -4,
+              fill: "#616a65",
+              fontSize: 12,
+              fontWeight: 600,
+            }}
           />
           <YAxis
-            tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
+            tickFormatter={(v) =>
+              new Intl.NumberFormat("de-DE", { maximumFractionDigits: 0 }).format(Number(v))
+            }
             tick={{ fill: "#616a65", fontSize: 12 }}
             tickLine={false}
             axisLine={false}
+            label={{
+              value: "Euro",
+              angle: -90,
+              position: "insideLeft",
+              fill: "#616a65",
+              fontSize: 12,
+              fontWeight: 600,
+            }}
           />
           <Tooltip
             content={<CustomTooltip />}
@@ -134,25 +147,6 @@ export default function ValueChart({ data, selectedYear }: ValueChartProps) {
             fill="url(#colorErtrag)"
             activeDot={{ r: 6, stroke: "#fd8f18", strokeWidth: 2, fill: "#fff" }}
           />
-
-          {selectedPoint && (
-            <ReferenceDot
-              x={selectedPoint.jahr}
-              y={selectedPoint.wert}
-              r={7}
-              fill="#fd8f18"
-              stroke="#022011"
-              strokeWidth={2}
-              label={{
-                value: `${selectedPoint.jahr} Jahre`,
-                position: "top",
-                fill: "#022011",
-                fontSize: 12,
-                fontWeight: 700,
-              }}
-              isFront
-            />
-          )}
         </AreaChart>
       </ResponsiveContainer>
       <p className="text-ds-neutral-50 text-xs mt-4">

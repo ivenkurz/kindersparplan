@@ -143,8 +143,8 @@ export default function SparplanRechnerPage() {
 
               <div className="space-y-6">
                 <div>
+                  <h3 className="text-sm font-semibold text-ds-neutral-100 mb-2">Strategie</h3>
                   <div className="bg-ds-neutral-0 border border-ds-neutral-10 rounded-ds-16 p-4 sm:p-5 shadow-sm">
-                    <h3 className="text-sm font-semibold text-ds-neutral-100 mb-2">Strategie</h3>
                     <p className="font-semibold text-ds-neutral-100">
                       {selectedStrategy.name}
                     </p>
@@ -282,7 +282,7 @@ export default function SparplanRechnerPage() {
               ) : (
                 <div className="overflow-x-auto -mx-2 px-2 md:mx-0 md:px-0">
                   <div className="min-w-[400px] md:min-w-0">
-                    <ValueChart data={chartData} selectedYear={laufzeit} />
+                    <ValueChart data={chartData} />
                   </div>
                 </div>
               )}

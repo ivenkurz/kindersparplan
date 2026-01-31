@@ -23,7 +23,6 @@ export default function ResultCards(props: ResultCardsProps) {
     endwert,
     laufzeit,
     twrPa,
-    stufe,
     sticky = false,
   } = props;
   const formatCurrency = (value: number) =>
@@ -57,19 +56,25 @@ export default function ResultCards(props: ResultCardsProps) {
     twrPa
   )}% p.a.)`;
 
+  const spacingClass = sticky ? "space-y-3" : "space-y-4";
+
   const containerClass = sticky
-    ? "fixed top-0 left-0 right-0 z-10 w-full bg-ds-neutral-0 shadow-md rounded-b-[24px] px-4 py-4 md:relative md:top-auto md:left-auto md:right-auto md:z-auto md:w-auto md:shadow-none md:rounded-ds-lg md:bg-transparent"
+    ? "fixed top-0 left-0 right-0 z-10 w-full bg-ds-neutral-0 shadow-md rounded-b-[24px] px-3 py-2 md:relative md:top-auto md:left-auto md:right-auto md:z-auto md:w-auto md:shadow-none md:rounded-ds-lg md:bg-transparent"
     : "";
 
   return (
-    <div className={`space-y-4 ${containerClass}`}>
+    <div className={`${spacingClass} ${containerClass}`}>
       <div className="min-w-0">
         <p className="text-xs md:text-sm text-ds-neutral-70 font-semibold mb-2">
-          Vorraussichtliches Ergebnis nach {laufzeit} Jahren
+          Voraussichtliches Ergebnis nach {laufzeit} Jahren
         </p>
         <div className="flex items-end justify-between gap-4">
           <div className="min-w-0 flex items-end gap-3 flex-wrap">
-            <p className="text-3xl md:text-4xl font-semibold text-ds-neutral-100 leading-none">
+            <p
+              className={`font-semibold text-ds-neutral-100 leading-none ${
+                sticky ? "text-2xl sm:text-3xl md:text-4xl" : "text-3xl md:text-4xl"
+              }`}
+            >
               {formatCurrency(endwert)}
             </p>
             <p className={`text-base md:text-lg font-semibold ${renditeColor} leading-none`}>
