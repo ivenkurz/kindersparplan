@@ -99,7 +99,10 @@ export default function ValueChart({ data }: ValueChartProps) {
           />
         </AreaChart>
       </ResponsiveContainer>
-      <p className="text-ds-neutral-50 text-xs mt-4">Risikohinweis</p>
+      <p className="text-ds-neutral-50 text-xs mt-4">
+        Risikohinweis: Der Verlauf kann zwischendurch deutlich fallen oder steigen. Je höher das
+        gewählte Risiko, desto stärker sind diese Schwankungen typischerweise.
+      </p>
     </div>
   );
 }

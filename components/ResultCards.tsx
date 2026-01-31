@@ -3,29 +3,29 @@
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 
-interface ResultCardsProps {
+export interface ResultCardsProps {
   gesamtEinzahlungen: number;
   ertrag: number;
   schwankungen: number;
   endwert: number;
   laufzeit: number;
+  // interner Name bleibt "twrPa", Anzeige ist laienfreundlich ("pro Jahr")
   twrPa: number;
-  irrPa: number;
   stufe?: string;
   sticky?: boolean;
 }
 
-export default function ResultCards({
-  gesamtEinzahlungen,
-  ertrag,
-  schwankungen,
-  endwert,
-  laufzeit,
-  twrPa,
-  irrPa,
-  stufe,
-  sticky = false,
-}: ResultCardsProps) {
+export default function ResultCards(props: ResultCardsProps) {
+  const {
+    gesamtEinzahlungen,
+    ertrag,
+    schwankungen,
+    endwert,
+    laufzeit,
+    twrPa,
+    stufe,
+    sticky = false,
+  } = props;
   const formatCurrency = (value: number) =>
     new Intl.NumberFormat("de-DE", {
       style: "currency",
@@ -44,8 +44,10 @@ export default function ResultCards({
   }).format(schwankungen);
 
   const isPositive = prozentSteigerung >= 0;
-  const renditeColor = isPositive ? "text-ds-seagreen" : "text-ds-crimson";
-  const ertragColor = ertrag >= 0 ? "text-ds-seagreen" : "text-ds-crimson";
+  const renditeColor = isPositive ? "text-ds-seagreen" : "text-ds-orange-90";
+  const ertragColor = ertrag >= 0 ? "text-ds-seagreen" : "text-ds-orange-90";
+  const renditePaColor = twrPa > 0 ? "text-ds-seagreen" : "text-ds-neutral-70";
+  const renditePaPrefix = twrPa > 0 ? "+" : "";
 
   const containerClass = sticky
     ? "fixed top-0 left-0 right-0 z-10 w-full bg-ds-neutral-0 shadow-md rounded-b-[24px] px-4 py-4 md:relative md:top-auto md:left-auto md:right-auto md:z-auto md:w-auto md:shadow-none md:rounded-ds-lg md:bg-transparent"
@@ -53,8 +55,19 @@ export default function ResultCards({
 
   return (
     <div className={`space-y-4 ${containerClass}`}>
-      {sticky && stufe && (
-        <p className="text-xs text-ds-neutral-70 font-semibold">Stufe: {stufe}</p>
+      {sticky && (
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-xs text-ds-neutral-70 font-semibold">
+              Ergebnis nach {laufzeit} Jahren
+            </p>
+            {stufe && (
+              <p className="text-[11px] text-ds-neutral-50 font-medium truncate">
+                Risiko: {stufe}
+              </p>
+            )}
+          </div>
+        </div>
       )}
       {/* Endwert – große Fonts, ds-neutral-100, Saans SemiBold */}
       <div>
@@ -68,25 +81,19 @@ export default function ResultCards({
 
       {/* Gesamtrendite + p.a. nebeneinander – grün/rot für +/– */}
       <div className="flex flex-wrap items-center gap-2">
-        <span
-          className={`text-lg md:text-xl font-semibold ${renditeColor}`}
-        >
+        <span className={`text-lg md:text-xl font-semibold ${renditeColor}`}>
           {isPositive ? "+" : ""}{prozentSteigerung.toFixed(2)}% Gesamtrendite
         </span>
         <span
           data-tooltip-id="pa-tooltip"
-          className={`text-lg md:text-xl font-semibold ${renditeColor} cursor-help`}
+          className={`text-lg md:text-xl font-semibold ${renditePaColor} cursor-help`}
         >
-          + {twrPa.toFixed(2)}% p.a.
+          {renditePaPrefix} {twrPa.toFixed(2)}% pro Jahr
         </span>
-        <Tooltip id="pa-tooltip" content="Erwartete jährliche Rendite" />
-        <span
-          data-tooltip-id="irr-tooltip"
-          className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-ds-neutral-20 text-ds-neutral-70 text-xs font-medium cursor-help hover:bg-ds-orange-30 hover:text-ds-orange-80 transition-colors"
-        >
-          i
-        </span>
-        <Tooltip id="irr-tooltip" content={`Effektiv (IRR): ${irrPa >= 0 ? "+" : ""}${irrPa.toFixed(2)}% – variiert durch Sparpläne`} />
+        <Tooltip
+          id="pa-tooltip"
+          content="p.a. = pro Jahr. Das ist die zeitgewichtete Rendite (TWR) der Strategie. Einzahlungen-Zeitpunkte spielen dabei keine Rolle."
+        />
       </div>
 
       {/* Ertrag & Schwankungen – große Fonts, Tooltips */}
@@ -115,7 +122,10 @@ export default function ResultCards({
             >
               i
             </span>
-            <Tooltip id="schwankungen-tooltip" content="Typische jährliche Schwankungsbreite der Strategie" />
+            <Tooltip
+              id="schwankungen-tooltip"
+              content="Schwankungen = wie stark der Wert typischerweise pro Jahr hoch und runter geht."
+            />
           </div>
           <p className="text-xl md:text-2xl font-semibold text-ds-neutral-100">
             ±{schwankungenFormatted}%

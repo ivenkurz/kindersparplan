@@ -10,7 +10,6 @@ import SliderInput from "@/components/SliderInput";
 import ResultCards from "@/components/ResultCards";
 import ValidationAlert from "@/components/ValidationAlert";
 import { strategies, sliderLegendTooltips } from "@/data/strategies";
-import { calculateIRR } from "@/lib/irr";
 
 const ValueChart = dynamic(() => import("@/components/ValueChart"), {
   ssr: false,
@@ -53,8 +52,7 @@ export default function SparplanRechnerPage() {
     STUFE_NAMES[strategieIndex] ??
     (strategieIndex <= 2 ? "Niedrig" : strategieIndex <= 6 ? "Ausgewogen" : "Hoch");
 
-  const { chartData, gesamtEinzahlungen, ertrag, endwert, schwankungen, twrPa, irrPa } =
-    useMemo(() => {
+  const { chartData, gesamtEinzahlungen, ertrag, endwert, schwankungen, twrPa } = useMemo(() => {
       if (isInvalid) {
         return {
           chartData: [] as { jahr: number; wert: number; einzahlungen: number }[],
@@ -63,7 +61,6 @@ export default function SparplanRechnerPage() {
           endwert: 0,
           schwankungen: 0,
           twrPa: 0,
-          irrPa: 0,
         };
       }
 
@@ -86,12 +83,8 @@ export default function SparplanRechnerPage() {
       const endwertRounded = Math.round(wert);
       const ertrag = Math.round(wert - gesamtEinzahlungen);
 
-      const twrPa =
-        laufzeit > 0
-          ? Math.max(0, Math.pow(1 + rendite, 1 / laufzeit) - 1) * 100
-          : Math.max(0, rendite) * 100;
-
-      const irrPa = calculateIRR(einmalig, monatlich, laufzeit, endwertRounded) * 100;
+      // p.a.-Rendite: Zeitgewichtete Rendite (TWR) aus strategy.return, positiv clampen
+      const twrPa = Math.max(0, rendite) * 100;
 
       return {
         chartData: data,
@@ -100,7 +93,6 @@ export default function SparplanRechnerPage() {
         endwert: endwertRounded,
         schwankungen: Math.round(schwankungenApi * 10) / 10,
         twrPa,
-        irrPa,
       };
     }, [einmalig, monatlich, laufzeit, isInvalid, rendite, schwankungenApi]);
 
@@ -116,7 +108,6 @@ export default function SparplanRechnerPage() {
             endwert={endwert}
             laufzeit={laufzeit}
             twrPa={twrPa}
-            irrPa={irrPa}
             stufe={stufeName}
             sticky
           />
@@ -153,18 +144,9 @@ export default function SparplanRechnerPage() {
               <div className="space-y-6">
                 <div>
                   <h3 className="text-sm font-medium text-ds-neutral-100 mb-2">Strategie</h3>
-                  <div className="flex items-start gap-2">
-                    <span
-                      data-tooltip-id="stufe-tooltip"
-                      className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-ds-neutral-20 text-ds-neutral-70 text-xs font-medium shrink-0 mt-0.5 cursor-help hover:bg-ds-orange-30 hover:text-ds-orange-80 transition-colors"
-                    >
-                      i
-                    </span>
-                    <Tooltip id="stufe-tooltip" content={selectedStrategy.beschreibung} />
-                    <div>
-                      <p className="font-semibold text-ds-neutral-100">{selectedStrategy.name}</p>
-                      <p className="text-sm text-ds-neutral-70">{selectedStrategy.beschreibung}</p>
-                    </div>
+                  <div>
+                    <p className="font-semibold text-ds-neutral-100">{selectedStrategy.name}</p>
+                    <p className="text-sm text-ds-neutral-70">{selectedStrategy.beschreibung}</p>
                   </div>
                 </div>
 
@@ -177,7 +159,10 @@ export default function SparplanRechnerPage() {
                     >
                       i
                     </span>
-                    <Tooltip id="risiko-tooltip" content={selectedStrategy.beschreibung} />
+                    <Tooltip
+                      id="risiko-tooltip"
+                      content="Risiko = wie stark der Wert zwischendurch schwanken kann. Höheres Risiko bedeutet meist größere Schwankungen."
+                    />
                   </div>
                   <SliderInput
                     label=""
@@ -281,7 +266,6 @@ export default function SparplanRechnerPage() {
                   endwert={endwert}
                   laufzeit={laufzeit}
                   twrPa={twrPa}
-                  irrPa={irrPa}
                   stufe={stufeName}
                 />
               )}
