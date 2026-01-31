@@ -82,13 +82,13 @@ export default function ResultCards({
         </div>
       </div>
 
-      {/* Erwartete p.a. (TWR) – Haupt-Info, react-tooltip, IRR darunter */}
+      {/* Erwartete jährliche Rendite (TWR) – Haupt-Info, react-tooltip, IRR darunter */}
       <div>
         <p
           data-tooltip-id="twr-tooltip"
           className="font-semibold text-ds-neutral-100 text-base md:text-lg cursor-help"
         >
-          Erwartete p.a.: {twrPa >= 0 ? "+" : ""}{twrPa.toFixed(2)}%
+          Erwartete jährliche Rendite: {twrPa >= 0 ? "+" : ""}{twrPa.toFixed(2)}%
         </p>
         <Tooltip id="twr-tooltip" content="Zeitgewichtete Rendite – konsistent zur Strategie" />
         <p className="text-xs md:text-sm text-ds-orange-60 mt-0.5">
@@ -115,7 +115,7 @@ export default function ResultCards({
             >
               i
             </span>
-            <Tooltip id="ertrag-tooltip" content="Ertrag basierend auf TWR" />
+            <Tooltip id="ertrag-tooltip" content="Ertrag basierend auf TWR und Sparplan" />
           </div>
           <p className={`text-base md:text-lg font-bold ${ertrag >= 0 ? "text-ds-seagreen" : "text-ds-orange-90"}`}>
             {ertrag >= 0 ? "+" : ""}{formatCurrency(ertrag)}

@@ -79,9 +79,11 @@ export default function SparplanRechnerPage() {
       const endwertRounded = Math.round(wert);
       const ertrag = Math.round(wert - gesamtEinzahlungen);
 
-      // TWR (zeitgewichtete Rendite): np.prod(1 + strategy.return) ** (1/years) - 1
-      // Bei konstanter Strategie-Rendite: TWR = strategy.return
-      const twrPa = rendite * 100;
+      // TWR p.a.: (Math.pow(1 + strategy.return, 1 / laufzeit) - 1) * 100
+      const twrPa =
+        laufzeit > 0
+          ? (Math.pow(1 + rendite, 1 / laufzeit) - 1) * 100
+          : rendite * 100;
 
       // IRR (effektive Rendite) – variiert durch Sparpläne
       const irrPa = calculateIRR(einmalig, monatlich, laufzeit, endwertRounded) * 100;
