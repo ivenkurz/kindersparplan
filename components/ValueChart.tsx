@@ -96,8 +96,8 @@ export default function ValueChart({ data }: ValueChartProps) {
           >
           <defs>
             <linearGradient id="colorConf" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#fdd1a2" stopOpacity={0.65} />
-              <stop offset="100%" stopColor="#fdd1a2" stopOpacity={0.18} />
+                <stop offset="0%" stopColor="#008542" stopOpacity={0.35} />
+                <stop offset="100%" stopColor="#008542" stopOpacity={0.08} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="#d1d4d2" />
@@ -164,10 +164,10 @@ export default function ValueChart({ data }: ValueChartProps) {
           <Area
             type="monotone"
             dataKey="wert"
-            stroke="#fd8f18"
+              stroke="#008542"
             strokeWidth={3}
             fill="transparent"
-            activeDot={{ r: 6, stroke: "#fd8f18", strokeWidth: 2, fill: "#fff" }}
+              activeDot={{ r: 6, stroke: "#008542", strokeWidth: 2, fill: "#fff" }}
           />
           </AreaChart>
         </ResponsiveContainer>
@@ -177,11 +177,11 @@ export default function ValueChart({ data }: ValueChartProps) {
       <div className="mt-4 pt-3 border-t border-ds-neutral-10">
         <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ds-neutral-90">
           <div className="flex items-center gap-2">
-            <span className="w-4 h-[3px] rounded-full bg-ds-orange-60" />
+            <span className="w-4 h-[3px] rounded-full bg-ds-seagreen" />
             Erwarteter Verlauf
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-sm bg-[#fdd1a2]/70 border border-ds-neutral-20" />
+            <span className="w-3 h-3 rounded-sm bg-[#008542]/20 border border-ds-neutral-20" />
             Spanne (95%)
           </div>
         </div>
