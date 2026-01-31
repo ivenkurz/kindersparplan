@@ -229,6 +229,7 @@ export default function SparplanRechnerPage() {
                   leftLabel="1 Jahr"
                   rightLabel="50 Jahre"
                   showValueRight
+                  valueClassName="text-lg sm:text-xl font-semibold text-ds-orange-60 font-saans tracking-tight"
                 />
               </div>
             </div>

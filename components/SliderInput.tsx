@@ -13,6 +13,7 @@ interface SliderInputProps {
   rightLabel?: string;
   showValueRight?: boolean;
   hideValue?: boolean;
+  valueClassName?: string;
   id?: string;
 }
 
@@ -29,6 +30,7 @@ export default function SliderInput({
   rightLabel,
   showValueRight = false,
   hideValue = false,
+  valueClassName,
   id,
 }: SliderInputProps) {
   const displayValue = formatValue ? formatValue(value) : `${value}${unit}`;
@@ -43,7 +45,11 @@ export default function SliderInput({
             </label>
           )}
           {showValueRight && (
-            <span className="text-sm font-semibold text-ds-orange-60 font-saans">
+            <span
+              className={
+                valueClassName ?? "text-sm font-semibold text-ds-orange-60 font-saans"
+              }
+            >
               {displayValue}
             </span>
           )}
@@ -82,7 +88,7 @@ export default function SliderInput({
         )}
       </div>
       {!showValueRight && !hideValue && (
-        <span className="text-sm font-semibold text-ds-orange-60 font-saans">
+        <span className={valueClassName ?? "text-sm font-semibold text-ds-orange-60 font-saans"}>
           {displayValue}
         </span>
       )}
