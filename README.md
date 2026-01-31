@@ -50,3 +50,4 @@ npm start
 - TypeScript
 - Tailwind CSS
 - Recharts
+# Test nach Sync-Fix
