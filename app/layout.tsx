@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Evergreen Sparplan-Rechner",
   description: "Berechne deine Vermögensentwicklung mit dem Sparplan-Rechner",
 };
+
+const saans = localFont({
+  src: [
+    { path: "../public/fonts/SaansLight.otf", weight: "300", style: "normal" },
+    { path: "../public/fonts/SaansRegular.otf", weight: "400", style: "normal" },
+    { path: "../public/fonts/SaansSemiBold.otf", weight: "600", style: "normal" },
+  ],
+  display: "swap",
+});
 
 export default function RootLayout({
   children,
@@ -13,7 +23,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de">
-      <body className="min-h-screen bg-ds-neutral-0 text-ds-neutral-100 antialiased font-saans">
+      <body
+        className={`${saans.className} min-h-screen bg-ds-neutral-0 text-ds-neutral-100 antialiased font-saans`}
+      >
         {children}
       </body>
     </html>
