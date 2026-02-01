@@ -48,6 +48,7 @@ const config: Config = {
         "pocket-yellow": "#FCD34D",
         "zins-pocket-bg": "#FEE8B6",
         "zins-pocket-cream": "#FDF7E2",
+        "zins-pocket-icon": "#FFE6A5",
         "pocket-green": "#10B981",
         "pocket-accent": "#F97316",
         "pocket-dark": "#1E3A24",
