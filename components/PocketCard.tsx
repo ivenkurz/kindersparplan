@@ -28,22 +28,22 @@ export function PocketCard({
 }: PocketCardProps) {
   if (variant === "zins") {
     return (
-      <div className="rounded-xl border border-ds-neutral-20 bg-ds-neutral-0 p-5 shadow-md hover:shadow-lg transition-shadow font-saans">
-        {/* Top section: Icon links, Betrag + ZinsPocket rechts, horizontal */}
-        <div className="flex items-start gap-2">
-          {/* ZinsPocket-Icon: 32x32, #FFE6A5, radius 8px, padding 7px */}
+      <div className="box-border flex flex-col justify-between items-start p-4 gap-[10.5px] min-h-[120px] rounded-xl border border-zins-pocket-border bg-ds-neutral-0 shadow-md hover:shadow-lg transition-shadow font-saans">
+        {/* Top section: Icon + Betrag/Label, gap 7px */}
+        <div className="flex flex-row items-start gap-[7px] w-full">
+          {/* Icon: 32x32, #FFE6A5, radius 8px, padding 7px */}
           <div className="w-8 h-8 rounded-lg bg-zins-pocket-icon flex flex-row items-center justify-center p-[7px] shrink-0">
-            <div className="w-full h-full rounded border-2 border-pocket-dark flex items-center justify-center">
-              <Icon name="plus" size="sm" className="text-pocket-dark w-2.5 h-2.5" strokeWidth={1.5} />
+            <div className="w-[18px] h-[18px] flex items-center justify-center p-0.5">
+              <Icon name="plus" size="sm" className="text-ds-neutral-100 w-[14px] h-[14px]" strokeWidth={1.5} />
             </div>
           </div>
-          <div className="flex-1 min-w-0 pt-0.5">
-            <p className="text-lg md:text-xl font-bold text-black leading-tight tracking-tight tabular-nums">{formatCurrency(amount)}</p>
-            <p className="text-xs text-ds-neutral-70 mt-0.5 font-normal">{sublabel}</p>
+          <div className="flex-1 min-w-0 flex flex-col items-end text-right">
+            <p className="text-[18px] font-semibold text-black leading-[38px] tabular-nums">{formatCurrency(amount)}</p>
+            <p className="text-xs font-normal text-ds-neutral-70 leading-4">{sublabel}</p>
           </div>
         </div>
-        {/* Bottom section: Reisen – serif, reduzierter Abstand */}
-        <p className="text-xl md:text-2xl font-bold text-black font-serif mt-4">{title}</p>
+        {/* Bottom section: Reisen – 23px, bold */}
+        <p className="text-[23px] font-bold text-black leading-[38px] font-serif">{title}</p>
       </div>
     );
   }
