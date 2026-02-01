@@ -20,6 +20,7 @@ interface ChartDataPoint {
 
 interface ValueChartProps {
   data: ChartDataPoint[];
+  view?: "spanne" | "einzahlung_ertrag";
 }
 
 function CustomTooltip({
@@ -74,12 +75,13 @@ function CustomTooltip({
   );
 }
 
-export default function ValueChart({ data }: ValueChartProps) {
+export default function ValueChart({ data, view = "spanne" }: ValueChartProps) {
   const chartData = data.map((d) => {
     const eingezahlt = d.einzahlungen ?? 0;
     const ertrag = (d.wert ?? 0) - eingezahlt;
     return {
       ...d,
+      eingezahlt,
       ertrag,
       confLow: typeof d.confLow === "number" ? d.confLow : undefined,
       confRange: typeof d.confRange === "number" ? d.confRange : undefined,
@@ -94,100 +96,153 @@ export default function ValueChart({ data }: ValueChartProps) {
             data={chartData}
             margin={{ top: 10, right: 10, left: 0, bottom: 22 }}
           >
-          <defs>
-            <linearGradient id="colorConf" x1="0" y1="0" x2="0" y2="1">
+            <defs>
+              {/* Spanne (95%) */}
+              <linearGradient id="colorConf" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#008542" stopOpacity={0.35} />
                 <stop offset="100%" stopColor="#008542" stopOpacity={0.08} />
-            </linearGradient>
-          </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="#d1d4d2" />
-          <XAxis
-            dataKey="jahr"
-            tick={{ fill: "#022011", fontSize: 14, fontWeight: 600 }}
-            tickLine={false}
-            axisLine={{ stroke: "#d1d4d2" }}
-            label={{
-              value: "Jahre",
-              position: "insideBottomRight",
-              offset: -4,
-              fill: "#616a65",
-              fontSize: 12,
-              fontWeight: 600,
-            }}
-          />
-          <YAxis
-            tickFormatter={(v) =>
-              new Intl.NumberFormat("de-DE", { maximumFractionDigits: 0 }).format(Number(v))
-            }
-            tick={{ fill: "#3b403d", fontSize: 12 }}
-            tickLine={false}
-            axisLine={false}
-            label={{
-              value: "Euro",
-              angle: -90,
-              position: "insideLeft",
-              fill: "#616a65",
-              fontSize: 12,
-              fontWeight: 600,
-            }}
-          />
-          <Tooltip
-            content={<CustomTooltip />}
-            cursor={{ stroke: "#fd8f18", strokeWidth: 1, strokeDasharray: "4 4" }}
-            wrapperStyle={{ outline: "none" }}
-          />
+              </linearGradient>
+              {/* Einzahlung + Ertrag */}
+              <linearGradient id="colorEingezahlt" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#616a65" stopOpacity={0.30} />
+                <stop offset="100%" stopColor="#616a65" stopOpacity={0.08} />
+              </linearGradient>
+              <linearGradient id="colorErtrag" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#008542" stopOpacity={0.45} />
+                <stop offset="100%" stopColor="#008542" stopOpacity={0.12} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="#d1d4d2" />
+            <XAxis
+              dataKey="jahr"
+              tick={{ fill: "#022011", fontSize: 14, fontWeight: 600 }}
+              tickLine={false}
+              axisLine={{ stroke: "#d1d4d2" }}
+              label={{
+                value: "Jahre",
+                position: "insideBottomRight",
+                offset: -4,
+                fill: "#616a65",
+                fontSize: 12,
+                fontWeight: 600,
+              }}
+            />
+            <YAxis
+              tickFormatter={(v) =>
+                new Intl.NumberFormat("de-DE", { maximumFractionDigits: 0 }).format(Number(v))
+              }
+              tick={{ fill: "#3b403d", fontSize: 12 }}
+              tickLine={false}
+              axisLine={false}
+              label={{
+                value: "Euro",
+                angle: -90,
+                position: "insideLeft",
+                fill: "#616a65",
+                fontSize: 12,
+                fontWeight: 600,
+              }}
+            />
+            <Tooltip
+              content={<CustomTooltip />}
+              cursor={{ stroke: "#fd8f18", strokeWidth: 1, strokeDasharray: "4 4" }}
+              wrapperStyle={{ outline: "none" }}
+            />
 
-          {/* Konfidenzband (95%) um den erwarteten Gesamtwert (lognormal, üblich) */}
-          <Area
-            type="monotone"
-            dataKey="confLow"
-            stackId="conf"
-            stroke="none"
-            fill="transparent"
-            isAnimationActive={false}
-            legendType="none"
-            activeDot={false}
-          />
-          <Area
-            type="monotone"
-            dataKey="confRange"
-            stackId="conf"
-            stroke="none"
-            fill="url(#colorConf)"
-            fillOpacity={0.9}
-            isAnimationActive={false}
-            legendType="none"
-            activeDot={false}
-          />
+            {view === "spanne" ? (
+              <>
+                {/* Konfidenzband (95%) um den erwarteten Gesamtwert */}
+                <Area
+                  type="monotone"
+                  dataKey="confLow"
+                  stackId="conf"
+                  stroke="none"
+                  fill="transparent"
+                  isAnimationActive={false}
+                  legendType="none"
+                  activeDot={false}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="confRange"
+                  stackId="conf"
+                  stroke="none"
+                  fill="url(#colorConf)"
+                  fillOpacity={0.9}
+                  isAnimationActive={false}
+                  legendType="none"
+                  activeDot={false}
+                />
 
-          {/* Mittlerer Verlauf (prominent). Eingezahlt entfernen, damit die Spanne besser sichtbar ist. */}
-          <Area
-            type="monotone"
-            dataKey="wert"
-              stroke="#008542"
-            strokeWidth={3}
-            fill="transparent"
-              activeDot={{ r: 6, stroke: "#008542", strokeWidth: 2, fill: "#fff" }}
-          />
+                {/* Mittlerer Verlauf (prominent) */}
+                <Area
+                  type="monotone"
+                  dataKey="wert"
+                  stroke="#008542"
+                  strokeWidth={3}
+                  fill="transparent"
+                  activeDot={{ r: 6, stroke: "#008542", strokeWidth: 2, fill: "#fff" }}
+                />
+              </>
+            ) : (
+              <>
+                {/* Einzahlung + Ertrag (gestapelt) */}
+                <Area
+                  type="monotone"
+                  dataKey="eingezahlt"
+                  stackId="a"
+                  stroke="#616a65"
+                  strokeWidth={2}
+                  fill="url(#colorEingezahlt)"
+                  isAnimationActive={false}
+                  activeDot={false}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="ertrag"
+                  stackId="a"
+                  stroke="#008542"
+                  strokeWidth={3}
+                  fill="url(#colorErtrag)"
+                  isAnimationActive={false}
+                  activeDot={{ r: 6, stroke: "#008542", strokeWidth: 2, fill: "#fff" }}
+                />
+              </>
+            )}
           </AreaChart>
         </ResponsiveContainer>
       </div>
 
       {/* Legende + Erklärung – innerhalb der Chart-Card, immer sichtbar */}
       <div className="mt-4 pt-3 border-t border-ds-neutral-10">
-        <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ds-neutral-90">
-          <div className="flex items-center gap-2">
-            <span className="w-4 h-[3px] rounded-full bg-ds-seagreen" />
-            Erwarteter Verlauf
+        {view === "spanne" ? (
+          <>
+            <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ds-neutral-90">
+              <div className="flex items-center gap-2">
+                <span className="w-4 h-[3px] rounded-full bg-ds-seagreen" />
+                Erwarteter Verlauf
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 rounded-sm bg-[#008542]/20 border border-ds-neutral-20" />
+                Spanne (95%)
+              </div>
+            </div>
+            <p className="mt-2 text-[11px] text-ds-neutral-70 text-center max-w-md mx-auto">
+              Die Spanne zeigt den Bereich, in dem der Ertrag mit hoher Wahrscheinlichkeit liegen wird.
+            </p>
+          </>
+        ) : (
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ds-neutral-90">
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 rounded-sm bg-[#616a65]/25 border border-ds-neutral-20" />
+              Eingezahlt
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 rounded-sm bg-[#008542]/20 border border-ds-neutral-20" />
+              Ertrag
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-sm bg-[#008542]/20 border border-ds-neutral-20" />
-            Spanne (95%)
-          </div>
-        </div>
-        <p className="mt-2 text-[11px] text-ds-neutral-70 text-center max-w-md mx-auto">
-          Die Spanne zeigt den Bereich, in dem der Ertrag mit hoher Wahrscheinlichkeit liegen wird.
-        </p>
+        )}
       </div>
     </div>
   );

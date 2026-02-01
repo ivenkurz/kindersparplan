@@ -42,6 +42,7 @@ export default function SparplanRechnerPage() {
   const [monatlich, setMonatlich] = useState(100);
   const [laufzeit, setLaufzeit] = useState(10);
   const [strategieIndex, setStrategieIndex] = useState(5); // 0–10
+  const [chartView, setChartView] = useState<"spanne" | "einzahlung_ertrag">("spanne");
 
   const selectedStrategy = strategies[strategieIndex];
   const rendite = selectedStrategy.return;
@@ -160,7 +161,7 @@ export default function SparplanRechnerPage() {
                 <div className="flex items-center gap-3 mb-6">
                   <CardBadge number={1} />
                   <h2 className="text-lg font-bold text-ds-neutral-100">
-                    Strategie & Risiko wählen
+                    Risiko/Ertrag wählen
                   </h2>
                 </div>
 
@@ -240,7 +241,7 @@ export default function SparplanRechnerPage() {
               <div className="bg-ds-neutral-0 rounded-ds-lg shadow-sm p-6 sm:p-8 border border-ds-neutral-20 flex-1 flex flex-col">
                 <div className="flex items-center gap-3 mb-6">
                   <CardBadge number={2} />
-                  <h2 className="text-lg font-bold text-ds-neutral-100">Sparplan einrichten</h2>
+                  <h2 className="text-lg font-bold text-ds-neutral-100">Sparplan konfigurieren</h2>
                 </div>
 
                 <div className="space-y-5">
@@ -316,7 +317,33 @@ export default function SparplanRechnerPage() {
                     <div className="h-px bg-ds-neutral-20" />
                     <div>
                       <h2 className="text-lg font-bold text-ds-neutral-100 mb-4">Wertentwicklung</h2>
-                      <ValueChart data={chartData} />
+                      <div className="flex items-center justify-end mb-3">
+                        <div className="inline-flex rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 p-1">
+                          <button
+                            type="button"
+                            onClick={() => setChartView("spanne")}
+                            className={`px-3 py-2 rounded-ds-16 text-xs font-semibold min-w-[44px] ${
+                              chartView === "spanne"
+                                ? "bg-ds-neutral-0 text-ds-neutral-100 shadow-sm"
+                                : "text-ds-neutral-70 hover:text-ds-neutral-100"
+                            }`}
+                          >
+                            Spanne
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setChartView("einzahlung_ertrag")}
+                            className={`px-3 py-2 rounded-ds-16 text-xs font-semibold min-w-[44px] ${
+                              chartView === "einzahlung_ertrag"
+                                ? "bg-ds-neutral-0 text-ds-neutral-100 shadow-sm"
+                                : "text-ds-neutral-70 hover:text-ds-neutral-100"
+                            }`}
+                          >
+                            Einzahlung + Ertrag
+                          </button>
+                        </div>
+                      </div>
+                      <ValueChart data={chartData} view={chartView} />
                     </div>
                   </div>
                 )}
@@ -334,7 +361,35 @@ export default function SparplanRechnerPage() {
                     Chart wird angezeigt, sobald die Eingaben gültig sind.
                   </p>
                 ) : (
-                  <ValueChart data={chartData} />
+                  <>
+                    <div className="flex items-center justify-end mb-3">
+                      <div className="inline-flex rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 p-1">
+                        <button
+                          type="button"
+                          onClick={() => setChartView("spanne")}
+                          className={`px-3 py-2 rounded-ds-16 text-xs font-semibold min-w-[44px] ${
+                            chartView === "spanne"
+                              ? "bg-ds-neutral-0 text-ds-neutral-100 shadow-sm"
+                              : "text-ds-neutral-70 hover:text-ds-neutral-100"
+                          }`}
+                        >
+                          Spanne
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setChartView("einzahlung_ertrag")}
+                          className={`px-3 py-2 rounded-ds-16 text-xs font-semibold min-w-[44px] ${
+                            chartView === "einzahlung_ertrag"
+                              ? "bg-ds-neutral-0 text-ds-neutral-100 shadow-sm"
+                              : "text-ds-neutral-70 hover:text-ds-neutral-100"
+                          }`}
+                        >
+                          Einzahlung + Ertrag
+                        </button>
+                      </div>
+                    </div>
+                    <ValueChart data={chartData} view={chartView} />
+                  </>
                 )}
               </div>
             </div>
