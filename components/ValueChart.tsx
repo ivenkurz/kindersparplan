@@ -23,6 +23,62 @@ interface ValueChartProps {
   view?: "spanne" | "einzahlung_ertrag";
 }
 
+function getNiceYearStep(maxYear: number) {
+  if (!Number.isFinite(maxYear) || maxYear <= 0) return 1;
+  if (maxYear <= 10) return 1;
+
+  // Ziel: gleichmäßige, gut lesbare Ticks (ca. 5–7 Stück)
+  const desiredTicks = 6;
+  const rough = maxYear / desiredTicks;
+
+  const pow10 = Math.pow(10, Math.floor(Math.log10(rough)));
+  const fraction = rough / pow10;
+
+  let niceFraction: number;
+  if (fraction <= 1) niceFraction = 1;
+  else if (fraction <= 2) niceFraction = 2;
+  else if (fraction <= 5) niceFraction = 5;
+  else niceFraction = 10;
+
+  const step = niceFraction * pow10;
+  return Math.max(1, Math.round(step));
+}
+
+function buildYearTicks(maxYear: number) {
+  const step = getNiceYearStep(maxYear);
+  const ticks: number[] = [];
+  for (let t = 0; t <= maxYear; t += step) ticks.push(t);
+  return ticks.length ? ticks : [0];
+}
+
+function getNiceEuroStep(maxValue: number) {
+  if (!Number.isFinite(maxValue) || maxValue <= 0) return 10;
+
+  // Ziel: gleichmäßige Schritte mit klassischen Vielfachen:
+  // 5, 10, 50, 100, 500, 1000, ...
+  const desiredTicks = 6;
+  const rough = maxValue / desiredTicks;
+
+  // Kandidaten: 5×10^k und 10×10^k
+  const candidates: number[] = [];
+  for (let k = -2; k <= 10; k++) {
+    const p = Math.pow(10, k);
+    candidates.push(5 * p, 10 * p);
+  }
+  candidates.sort((a, b) => a - b);
+
+  const step = candidates.find((c) => c >= rough) ?? candidates[candidates.length - 1]!;
+  return Math.max(5, Math.round(step));
+}
+
+function buildEuroTicks(maxValue: number) {
+  const step = getNiceEuroStep(maxValue);
+  const niceMax = Math.ceil(maxValue / step) * step;
+  const ticks: number[] = [];
+  for (let t = 0; t <= niceMax; t += step) ticks.push(t);
+  return { ticks: ticks.length ? ticks : [0], max: niceMax };
+}
+
 function CustomTooltip({
   active,
   payload,
@@ -87,6 +143,20 @@ export default function ValueChart({ data, view = "spanne" }: ValueChartProps) {
       confRange: typeof d.confRange === "number" ? d.confRange : undefined,
     };
   });
+  const maxYear = Math.max(0, ...chartData.map((d) => d.jahr));
+  const yearTicks = buildYearTicks(maxYear);
+  const maxY = Math.max(
+    0,
+    ...chartData.map((d) =>
+      Math.max(
+        d.wert ?? 0,
+        typeof d.confLow === "number" && typeof d.confRange === "number"
+          ? d.confLow + d.confRange
+          : 0
+      )
+    )
+  );
+  const { ticks: euroTicks, max: euroMax } = buildEuroTicks(maxY);
 
   return (
     <div className="w-full flex flex-col h-[320px] sm:h-[336px] md:h-[320px] lg:h-[340px]">
@@ -116,6 +186,8 @@ export default function ValueChart({ data, view = "spanne" }: ValueChartProps) {
             <CartesianGrid strokeDasharray="3 3" stroke="#d1d4d2" />
             <XAxis
               dataKey="jahr"
+              ticks={yearTicks}
+              interval={0}
               tick={{ fill: "#022011", fontSize: 14, fontWeight: 600 }}
               tickLine={false}
               axisLine={{ stroke: "#d1d4d2" }}
@@ -129,6 +201,9 @@ export default function ValueChart({ data, view = "spanne" }: ValueChartProps) {
               }}
             />
             <YAxis
+              domain={[0, euroMax]}
+              ticks={euroTicks}
+              interval={0}
               tickFormatter={(v) =>
                 new Intl.NumberFormat("de-DE", { maximumFractionDigits: 0 }).format(Number(v))
               }
