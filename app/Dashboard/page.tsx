@@ -73,11 +73,11 @@ export default function DashboardPage() {
           <div className="rounded-ds-lg bg-ds-neutral-0 shadow-sm p-4">
             <div className="flex justify-between items-center py-3 border-b border-ds-neutral-10">
               <span className="text-base font-medium text-gray-600">Gesamtvermögen</span>
-              <span className="text-4xl md:text-5xl font-bold text-evergreen-dark leading-tight tracking-tight tabular-nums">{formatCurrency(8467.98)}</span>
+              <span className="text-2xl md:text-3xl font-bold text-evergreen-dark leading-tight tracking-tight tabular-nums">{formatCurrency(8467.98)}</span>
             </div>
             <div className="flex justify-between items-center py-3">
               <span className="text-base font-medium text-gray-600">Ertrag</span>
-              <span className="text-4xl md:text-5xl font-bold text-ds-seagreen leading-tight tracking-tight tabular-nums">{formatCurrency(317.44)}</span>
+              <span className="text-xl md:text-2xl font-bold text-ds-seagreen leading-tight tracking-tight tabular-nums">{formatCurrency(317.44)}</span>
             </div>
           </div>
         </section>

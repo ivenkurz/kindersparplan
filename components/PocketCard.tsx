@@ -28,12 +28,13 @@ export function PocketCard({
 }: PocketCardProps) {
   if (variant === "zins") {
     return (
-      <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 p-5 shadow-md hover:shadow-lg transition-shadow font-saans">
+      <div className="rounded-xl border border-ds-neutral-20 bg-ds-neutral-0 p-5 shadow-md hover:shadow-lg transition-shadow font-saans">
         {/* Top section: Icon links, Betrag + ZinsPocket rechts, horizontal */}
         <div className="flex items-start gap-2">
-          <div className="w-9 h-9 rounded-lg bg-zins-pocket-bg flex items-center justify-center shrink-0 border border-white/80">
-            <div className="w-5 h-5 rounded bg-pocket-dark flex items-center justify-center">
-              <Icon name="plus" size="sm" className="text-ds-neutral-0 w-3 h-3" strokeWidth={2.5} />
+          {/* ZinsPocket-Icon: cream Squircle, dunkles umrandetes Quadrat, dunkles Plus */}
+          <div className="w-9 h-9 rounded-xl bg-zins-pocket-cream flex items-center justify-center shrink-0">
+            <div className="w-5 h-5 rounded border-2 border-pocket-dark flex items-center justify-center">
+              <Icon name="plus" size="sm" className="text-pocket-dark w-2.5 h-2.5" strokeWidth={1.5} />
             </div>
           </div>
           <div className="flex-1 min-w-0 pt-0.5">
@@ -48,7 +49,7 @@ export function PocketCard({
   }
 
   return (
-    <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 p-5 shadow-md hover:shadow-lg transition-shadow flex items-start gap-2 font-saans">
+    <div className="rounded-xl border border-ds-neutral-20 bg-ds-neutral-0 p-5 shadow-md hover:shadow-lg transition-shadow flex items-start gap-2 font-saans">
       <div className="w-8 h-8 rounded-full bg-pocket-green flex items-center justify-center shrink-0">
         <Icon
           name={investmentIcon}
