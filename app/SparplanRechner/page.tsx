@@ -297,7 +297,7 @@ export default function SparplanRechnerPage() {
                           max={50}
                           unit=" Jahre"
                           showValueRight
-                          valueClassName="text-lg sm:text-xl font-semibold text-ds-orange-60 font-saans tracking-tight"
+                          valueClassName="text-lg sm:text-xl font-semibold text-ds-darkgreen font-saans tracking-tight"
                           snapTickValues={[
                             1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
                             11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
