@@ -11,12 +11,20 @@ export default function Home() {
           Berechne deine Vermögensentwicklung mit dem interaktiven
           Sparplan-Rechner.
         </p>
-        <Link
-          href="/SparplanRechner"
-          className="inline-flex items-center justify-center px-8 py-4 rounded-ds-pill bg-ds-orange-60 text-ds-neutral-100 font-semibold shadow-lg hover:bg-ds-orange-70 transition-colors"
-        >
-          Zum Sparplan-Rechner
-        </Link>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Link
+            href="/Dashboard"
+            className="inline-flex items-center justify-center px-8 py-4 rounded-ds-pill bg-ds-darkgreen text-ds-neutral-0 font-semibold shadow-lg hover:bg-ds-neutral-90 transition-colors"
+          >
+            Zum Dashboard
+          </Link>
+          <Link
+            href="/SparplanRechner"
+            className="inline-flex items-center justify-center px-8 py-4 rounded-ds-pill bg-ds-orange-60 text-ds-neutral-100 font-semibold shadow-lg hover:bg-ds-orange-70 transition-colors"
+          >
+            Zum Sparplan-Rechner
+          </Link>
+        </div>
       </div>
     </main>
   );
