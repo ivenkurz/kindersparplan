@@ -42,7 +42,7 @@ export default function SparplanRechnerPage() {
   const [monatlich, setMonatlich] = useState(100);
   const [laufzeit, setLaufzeit] = useState(10);
   const [strategieIndex, setStrategieIndex] = useState(5); // 0–10
-  const [chartView, setChartView] = useState<"spanne" | "einzahlung_ertrag">("spanne");
+  const [showEinzahlungen, setShowEinzahlungen] = useState(false);
 
   const selectedStrategy = strategies[strategieIndex];
   const rendite = selectedStrategy.return;
@@ -52,6 +52,10 @@ export default function SparplanRechnerPage() {
   const stufeName =
     STUFE_NAMES[strategieIndex] ??
     (strategieIndex <= 2 ? "Niedrig" : strategieIndex <= 6 ? "Ausgewogen" : "Hoch");
+
+  const chartView: "spanne" | "einzahlung_ertrag" = showEinzahlungen
+    ? "einzahlung_ertrag"
+    : "spanne";
 
   const { chartData, gesamtEinzahlungen, ertrag, endwert, schwankungen, twrPa } = useMemo(() => {
       if (isInvalid) {
@@ -211,7 +215,7 @@ export default function SparplanRechnerPage() {
                     </div>
                     {/* Slider-Legende: Markierungen bei 0, 5, 10 mit Tooltips */}
                     <div className="mt-3 text-xs">
-                      <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center text-ds-neutral-100 font-semibold">
+                      <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center text-ds-neutral-100 font-normal">
                         <span
                           data-tooltip-id="legend-0"
                           className="cursor-help justify-self-start inline-flex items-center justify-center min-w-[44px] min-h-[44px]"
@@ -305,7 +309,7 @@ export default function SparplanRechnerPage() {
                       </div>
                       {/* Laufzeit-Legende: gleiches Layout wie Strategie */}
                       <div className="mt-3 text-xs">
-                        <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center text-ds-neutral-100 font-semibold">
+                        <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center text-ds-neutral-100 font-normal">
                           <span className="justify-self-start inline-flex items-center justify-center min-w-[44px] min-h-[44px]">
                             1 Jahr
                           </span>
@@ -317,13 +321,6 @@ export default function SparplanRechnerPage() {
                           <span className="justify-self-end inline-flex items-center justify-center min-w-[44px] min-h-[44px]">
                             50 Jahre
                           </span>
-                        </div>
-                        <div className="mt-2 grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center">
-                          <span className="h-px bg-ds-neutral-20 w-full" />
-                          <span />
-                          <span className="h-px bg-ds-neutral-20 w-full" />
-                          <span />
-                          <span className="h-px bg-ds-neutral-20 w-full" />
                         </div>
                       </div>
                     </div>
@@ -359,28 +356,24 @@ export default function SparplanRechnerPage() {
                     <div className="flex flex-col flex-1 min-h-0">
                       <div className="flex items-center justify-between gap-3 mb-3">
                         <h2 className="text-lg font-bold text-ds-neutral-100">Wertentwicklung</h2>
-                        <div className="inline-flex rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 p-0.5 gap-2">
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs font-medium text-ds-neutral-70">
+                            Einzahlungen
+                          </span>
                           <button
                             type="button"
-                            onClick={() => setChartView("spanne")}
-                            className={`px-2.5 py-1.5 rounded-ds-16 text-[11px] font-semibold min-w-[44px] ${
-                              chartView === "spanne"
-                                ? "bg-ds-neutral-0 text-ds-neutral-100 shadow-sm"
-                                : "text-ds-neutral-70 hover:text-ds-neutral-100"
+                            role="switch"
+                            aria-checked={showEinzahlungen}
+                            onClick={() => setShowEinzahlungen((v) => !v)}
+                            className={`relative inline-flex items-center w-[52px] h-8 rounded-full transition-colors border border-ds-neutral-20 ${
+                              showEinzahlungen ? "bg-ds-seagreen" : "bg-ds-neutral-10"
                             }`}
                           >
-                            Spanne
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setChartView("einzahlung_ertrag")}
-                            className={`px-2.5 py-1.5 rounded-ds-16 text-[11px] font-semibold min-w-[44px] ${
-                              chartView === "einzahlung_ertrag"
-                                ? "bg-ds-neutral-0 text-ds-neutral-100 shadow-sm"
-                                : "text-ds-neutral-70 hover:text-ds-neutral-100"
-                            }`}
-                          >
-                            Einzahlung + Ertrag
+                            <span
+                              className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-ds-neutral-0 shadow-sm transition-transform ${
+                                showEinzahlungen ? "translate-x-[26px]" : "translate-x-[2px]"
+                              }`}
+                            />
                           </button>
                         </div>
                       </div>
@@ -406,28 +399,24 @@ export default function SparplanRechnerPage() {
                   <>
                     <div className="flex items-center justify-between gap-3 mb-3">
                       <h2 className="text-lg font-bold text-ds-neutral-100">Wertentwicklung</h2>
-                      <div className="inline-flex rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 p-0.5 gap-2">
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs font-medium text-ds-neutral-70">
+                          Einzahlungen
+                        </span>
                         <button
                           type="button"
-                          onClick={() => setChartView("spanne")}
-                          className={`px-2.5 py-1.5 rounded-ds-16 text-[11px] font-semibold min-w-[44px] ${
-                            chartView === "spanne"
-                              ? "bg-ds-neutral-0 text-ds-neutral-100 shadow-sm"
-                              : "text-ds-neutral-70 hover:text-ds-neutral-100"
+                          role="switch"
+                          aria-checked={showEinzahlungen}
+                          onClick={() => setShowEinzahlungen((v) => !v)}
+                          className={`relative inline-flex items-center w-[52px] h-8 rounded-full transition-colors border border-ds-neutral-20 ${
+                            showEinzahlungen ? "bg-ds-seagreen" : "bg-ds-neutral-10"
                           }`}
                         >
-                          Spanne
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setChartView("einzahlung_ertrag")}
-                          className={`px-2.5 py-1.5 rounded-ds-16 text-[11px] font-semibold min-w-[44px] ${
-                            chartView === "einzahlung_ertrag"
-                              ? "bg-ds-neutral-0 text-ds-neutral-100 shadow-sm"
-                              : "text-ds-neutral-70 hover:text-ds-neutral-100"
-                          }`}
-                        >
-                          Einzahlung + Ertrag
+                          <span
+                            className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-ds-neutral-0 shadow-sm transition-transform ${
+                              showEinzahlungen ? "translate-x-[26px]" : "translate-x-[2px]"
+                            }`}
+                          />
                         </button>
                       </div>
                     </div>
