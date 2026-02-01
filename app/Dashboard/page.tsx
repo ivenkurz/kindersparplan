@@ -11,34 +11,36 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-ds-neutral-0 font-saans pb-20">
-      {/* Header – dunkelgrün */}
-      <header className="bg-ds-darkgreen px-4 pt-4 pb-16">
-        <div className="flex items-center justify-between">
-          <span className="text-xl font-bold text-ds-neutral-0">evergreen</span>
-          <div className="flex items-center gap-4">
-            <button type="button" className="relative p-2 text-ds-neutral-0" aria-label="Benachrichtigungen">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-              </svg>
-              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-ds-orange-60" />
-            </button>
-            <button type="button" className="p-2 text-ds-neutral-0" aria-label="Hilfe">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </button>
-            <button type="button" className="p-2 text-ds-neutral-0" aria-label="Menü">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+      {/* Sticky: Header + Account Card */}
+      <div className="sticky top-0 z-20 bg-ds-neutral-100 shadow-md">
+        {/* Header – dunkelgrün, fast schwarz */}
+        <header className="bg-ds-neutral-100 px-4 pt-4 pb-12 rounded-b-ds-lg">
+          <div className="flex items-center justify-between">
+            <span className="text-xl font-bold text-ds-neutral-0">evergreen</span>
+            <div className="flex items-center gap-4">
+              <button type="button" className="relative p-2 text-ds-neutral-0" aria-label="Benachrichtigungen">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-ds-orange-60" />
+              </button>
+              <button type="button" className="p-2 text-ds-neutral-0" aria-label="Hilfe">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </button>
+              <button type="button" className="p-2 text-ds-neutral-0" aria-label="Menü">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Account Summary Card – weiß, überlappend */}
-      <section className="px-4 -mt-10">
-        <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 shadow-sm p-5">
+        {/* Account Summary Card – weiß, überlappend, abgerundet */}
+        <section className="px-4 -mt-8 pb-4">
+          <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 shadow-sm p-5">
           <div className="flex justify-between items-center py-3 border-b border-ds-neutral-10">
             <span className="text-sm text-ds-neutral-70">Gesamtvermögen</span>
             <span className="text-lg font-bold text-ds-neutral-100">{formatCurrency(8467.98)}</span>
@@ -56,8 +58,9 @@ export default function DashboardPage() {
             <span className="text-sm text-ds-neutral-70">Ertrag</span>
             <span className="text-lg font-semibold text-ds-seagreen">{formatCurrency(317.44)}</span>
           </div>
-        </div>
-      </section>
+          </div>
+        </section>
+      </div>
 
       {/* Steuer-Banner – hellgelb */}
       {!bannerDismissed && (
@@ -165,30 +168,19 @@ export default function DashboardPage() {
       <div className="h-24" />
 
       {/* Floating Action Buttons */}
-      <section className="fixed bottom-20 left-4 right-4 z-30 flex gap-3 px-0 pb-[env(safe-area-inset-bottom)]">
-        <div className="flex-1 flex gap-3 rounded-ds-lg bg-ds-neutral-0 p-3 shadow-lg border border-ds-neutral-10">
-          <button
-            type="button"
-            className="flex-1 rounded-ds-16 bg-ds-orange-60 py-3 font-semibold text-ds-neutral-0 hover:bg-ds-orange-70 transition-colors shadow-md"
-          >
-            Einzahlen
-          </button>
-          <Link
-            href="/SparplanRechner"
-            className="flex-1 rounded-ds-16 bg-ds-darkgreen py-3 font-semibold text-ds-neutral-0 text-center hover:bg-ds-neutral-90 transition-colors shadow-md"
-          >
-            Sparpläne
-          </Link>
-          <button
-            type="button"
-            className="rounded-ds-16 bg-ds-darkgreen p-3 text-ds-neutral-0 hover:bg-ds-neutral-90 transition-colors shadow-md shrink-0"
-            aria-label="Überweisung"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-            </svg>
-          </button>
-        </div>
+      <section className="fixed bottom-20 left-4 right-4 z-30 flex gap-3 pb-[env(safe-area-inset-bottom)]">
+        <button
+          type="button"
+          className="flex-1 rounded-ds-16 bg-ds-orange-60 py-3 font-semibold text-ds-neutral-0 shadow-lg hover:bg-ds-orange-70 transition-colors"
+        >
+          Einzahlen
+        </button>
+        <Link
+          href="/SparplanRechner"
+          className="flex-1 rounded-ds-16 bg-ds-darkgreen py-3 font-semibold text-ds-neutral-0 text-center shadow-lg hover:bg-ds-neutral-90 transition-colors"
+        >
+          Sparpläne
+        </Link>
       </section>
 
       {/* Bottom Navigation */}
