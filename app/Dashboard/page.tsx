@@ -11,10 +11,10 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-ds-neutral-0 font-saans pb-20">
-      {/* Sticky: Header + Account Card */}
-      <div className="sticky top-0 z-20 bg-ds-neutral-100 shadow-md">
-        {/* Header – dunkelgrün, fast schwarz */}
-        <header className="bg-ds-neutral-100 px-4 pt-4 pb-12 rounded-b-ds-lg">
+      {/* Sticky: Header + Account Card – exakt wie Vorlage */}
+      <div className="sticky top-0 z-20 shadow-md">
+        {/* Header – dunkelgrün, unten links/rechts rund, geht bis zur Hälfte der Card */}
+        <header className="bg-ds-neutral-100 px-4 pt-4 pb-16 rounded-b-ds-lg">
           <div className="flex items-center justify-between">
             <span className="text-xl font-bold text-ds-neutral-0">evergreen</span>
             <div className="flex items-center gap-4">
@@ -38,8 +38,8 @@ export default function DashboardPage() {
           </div>
         </header>
 
-        {/* Account Summary Card – weiß, überlappend, abgerundet */}
-        <section className="px-4 -mt-8 pb-4">
+        {/* Account Summary Card – weiß, obere Hälfte unter Header (Vorlage) */}
+        <section className="px-4 -mt-[3.5rem] pb-4">
           <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 shadow-sm p-5">
           <div className="flex justify-between items-center py-3 border-b border-ds-neutral-10">
             <span className="text-sm text-ds-neutral-70">Gesamtvermögen</span>
@@ -102,28 +102,24 @@ export default function DashboardPage() {
           </button>
         </div>
 
-        {/* ZinsPockets */}
+        {/* ZinsPockets – grünes Quadrat mit Plus (CDS: ds-seagreen, ds-neutral-0) */}
         <p className="text-sm text-ds-neutral-70 mb-2">ZinsPockets</p>
         <div className="grid grid-cols-2 gap-3 mb-6">
           <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 p-4 shadow-sm">
-            <div className="flex justify-between items-start mb-2">
-              <div className="w-10 h-10 rounded-ds-16 bg-ds-seagreen flex items-center justify-center">
-                <svg className="w-5 h-5 text-ds-neutral-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-              </div>
+            <div className="w-10 h-10 rounded-ds-16 bg-ds-seagreen flex items-center justify-center mb-3">
+              <svg className="w-5 h-5 text-ds-neutral-0" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
             </div>
             <p className="text-lg font-bold text-ds-neutral-100">{formatCurrency(3211.34)}</p>
             <p className="text-xs text-ds-neutral-70">ZinsPocket</p>
             <p className="text-base font-bold text-ds-neutral-100 mt-1">Reisen</p>
           </div>
           <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 p-4 shadow-sm">
-            <div className="flex justify-between items-start mb-2">
-              <div className="w-10 h-10 rounded-ds-16 bg-ds-seagreen flex items-center justify-center">
-                <svg className="w-5 h-5 text-ds-neutral-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-              </div>
+            <div className="w-10 h-10 rounded-ds-16 bg-ds-seagreen flex items-center justify-center mb-3">
+              <svg className="w-5 h-5 text-ds-neutral-0" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
             </div>
             <p className="text-lg font-bold text-ds-neutral-100">{formatCurrency(1178.11)}</p>
             <p className="text-xs text-ds-neutral-70">ZinsPocket Plus</p>
@@ -131,13 +127,13 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* InvestmentPockets */}
+        {/* InvestmentPockets – Chart (Altersvorsorge), Gebäude (Immobilie), CDS-Farben */}
         <p className="text-sm text-ds-neutral-70 mb-2">InvestmentPockets</p>
         <div className="space-y-3">
           <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 p-4 shadow-sm flex items-start gap-3">
             <div className="w-10 h-10 rounded-ds-16 bg-ds-seagreen flex items-center justify-center shrink-0">
-              <svg className="w-5 h-5 text-ds-neutral-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              <svg className="w-5 h-5 text-ds-neutral-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 011.414-1.418L21 3.75" />
               </svg>
             </div>
             <div className="flex-1 min-w-0">
@@ -145,14 +141,14 @@ export default function DashboardPage() {
               <p className="text-xs text-ds-neutral-70">Evergreen Wachstum 90</p>
               <p className="text-base font-bold text-ds-neutral-100 mt-1">Altersvorsorge</p>
             </div>
-            <svg className="w-5 h-5 text-ds-neutral-100 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-ds-neutral-70 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-label="Gesperrt">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
           <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 p-4 shadow-sm flex items-start gap-3">
             <div className="w-10 h-10 rounded-ds-16 bg-ds-seagreen flex items-center justify-center shrink-0">
-              <svg className="w-5 h-5 text-ds-neutral-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              <svg className="w-5 h-5 text-ds-neutral-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
               </svg>
             </div>
             <div className="flex-1 min-w-0">
