@@ -88,7 +88,7 @@ export default function SliderInput({
             </div>
           )}
           {hasSnapTicks && (
-            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 -mt-0.5 px-3 flex justify-between pointer-events-none">
+            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 -mt-1.5 px-3 flex justify-between pointer-events-none">
               {snapTicksForRender!.map((v) => (
                 <span
                   key={v}

@@ -29,11 +29,11 @@ const STUFE_NAMES: Record<number, string> = {
   10: "Hoch",
 };
 
-function CardBadge({ number }: { number: number }) {
+function StepBadge({ number }: { number: number }) {
   return (
-    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-ds-orange-60 text-white font-bold text-sm shrink-0">
+    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-ds-yellow-60 text-ds-neutral-100 font-semibold text-2xl shrink-0 shadow-sm">
       {number}
-    </span>
+    </div>
   );
 }
 
@@ -174,7 +174,7 @@ export default function SparplanRechnerPage() {
               {/* Karte 1: Dein Risiko */}
               <div className="bg-ds-neutral-0 rounded-ds-lg shadow-sm p-5 sm:p-8 border border-ds-neutral-20">
                 <div className="flex items-center gap-3 mb-6">
-                  <CardBadge number={1} />
+                  <StepBadge number={1} />
                   <h2 className="text-lg font-bold text-ds-neutral-100">
                     Risiko/Ertrag wählen
                   </h2>
@@ -253,7 +253,7 @@ export default function SparplanRechnerPage() {
               {/* Karte 2: Sparplan einrichten */}
               <div className="bg-ds-neutral-0 rounded-ds-lg shadow-sm p-5 sm:p-8 border border-ds-neutral-20 flex-1 flex flex-col">
                 <div className="flex items-center gap-3 mb-6">
-                  <CardBadge number={2} />
+                  <StepBadge number={2} />
                   <h2 className="text-lg font-bold text-ds-neutral-100">Sparplan konfigurieren</h2>
                 </div>
 
