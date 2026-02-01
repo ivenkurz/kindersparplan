@@ -62,15 +62,17 @@ export default function ResultCards(props: ResultCardsProps) {
           Voraussichtliches Ergebnis nach {laufzeit} Jahren
         </p>
         <div className="flex items-end justify-between gap-4">
-          <div className="min-w-0 flex items-end gap-3 flex-wrap">
+          <div className="min-w-0 flex items-end gap-3 flex-nowrap">
             <p
               className={`font-semibold text-ds-neutral-100 leading-none ${
                 sticky ? "text-xl sm:text-2xl md:text-4xl" : "text-3xl md:text-4xl"
-              }`}
+              } tabular-nums whitespace-nowrap`}
             >
               {formatCurrency(endwert)}
             </p>
-            <p className={`text-base md:text-lg font-semibold ${renditeColor} leading-none`}>
+            <p
+              className={`text-base md:text-lg font-semibold ${renditeColor} leading-none tabular-nums whitespace-nowrap min-w-[170px] text-right`}
+            >
               {renditeLine}
             </p>
           </div>
@@ -80,13 +82,13 @@ export default function ResultCards(props: ResultCardsProps) {
       <div className="grid grid-cols-3 gap-4 sm:gap-5 md:gap-4">
         <div>
           <p className="text-xs text-ds-neutral-70 font-medium mb-1">Eingezahlt</p>
-          <p className="text-lg md:text-lg font-semibold text-ds-neutral-100">
+          <p className="text-lg md:text-lg font-semibold text-ds-neutral-100 tabular-nums whitespace-nowrap">
             {formatCurrency(gesamtEinzahlungen)}
           </p>
         </div>
         <div>
           <p className="text-xs text-ds-neutral-70 font-medium mb-1">Ertrag</p>
-          <p className={`text-lg md:text-lg font-semibold ${ertragColor}`}>
+          <p className={`text-lg md:text-lg font-semibold ${ertragColor} tabular-nums whitespace-nowrap`}>
             {ertrag >= 0 ? "+" : ""}
             {formatCurrency(ertrag)}
           </p>
@@ -95,7 +97,7 @@ export default function ResultCards(props: ResultCardsProps) {
           <div className="flex items-center gap-1 mb-1">
             <p className="text-xs text-ds-neutral-70 font-medium">Schwankungen</p>
           </div>
-          <p className="text-lg md:text-lg font-semibold text-ds-neutral-100">
+          <p className="text-lg md:text-lg font-semibold text-ds-neutral-100 tabular-nums whitespace-nowrap">
             ±{schwankungenFormatted}%
           </p>
         </div>
