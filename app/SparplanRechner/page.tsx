@@ -265,18 +265,6 @@ export default function SparplanRechnerPage() {
 
                 <div className="space-y-4 md:space-y-6">
                   <div>
-                    <h3 className="text-sm font-semibold text-ds-neutral-100 mb-2">Strategie</h3>
-                    <div className="relative bg-ds-neutral-10 border border-ds-neutral-20 rounded-ds-16 p-4 sm:p-5 shadow-sm overflow-hidden min-h-[112px]">
-                      <p className="font-semibold text-ds-neutral-100 truncate pr-1">
-                        {selectedStrategy.name}
-                      </p>
-                      <p className="text-sm text-ds-neutral-70 mt-1 overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">
-                        {selectedStrategy.beschreibung}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div>
                     <div className="pt-2 pb-0 md:py-0">
                       <SliderInput
                         label="Risiko/Ertrag"
@@ -304,6 +292,18 @@ export default function SparplanRechnerPage() {
                           Hoch
                         </span>
                       </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-sm font-semibold text-ds-neutral-100 mb-2">Strategie</h3>
+                    <div className="relative bg-ds-neutral-10 border border-ds-neutral-20 rounded-ds-16 p-4 sm:p-5 shadow-sm overflow-hidden min-h-[112px]">
+                      <p className="font-semibold text-ds-neutral-100 truncate pr-1">
+                        {selectedStrategy.name}
+                      </p>
+                      <p className="text-sm text-ds-neutral-70 mt-1 overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">
+                        {selectedStrategy.beschreibung}
+                      </p>
                     </div>
                   </div>
                 </div>
