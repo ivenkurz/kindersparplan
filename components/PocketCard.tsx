@@ -1,7 +1,12 @@
 "use client";
 
 import { useId } from "react";
-import { Icon } from "./Icon";
+
+const LockIcon = () => (
+  <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0 mt-1" aria-label="Gesperrt">
+    <path d="M3.375 3.375V4.5H7.125V3.375C7.125 2.33906 6.28594 1.5 5.25 1.5C4.21406 1.5 3.375 2.33906 3.375 3.375V3.375M1.875 4.5V3.375C1.875 1.51172 3.38672 0 5.25 0C7.11328 0 8.625 1.51172 8.625 3.375V4.5H9C9.82734 4.5 10.5 5.17266 10.5 6V10.5C10.5 11.3273 9.82734 12 9 12H1.5C0.672656 12 0 11.3273 0 10.5V6C0 5.17266 0.672656 4.5 1.5 4.5H1.875V4.5" fill="#022011" />
+  </svg>
+);
 
 const InvestmentPocketIcon = () => (
   <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
@@ -77,9 +82,7 @@ export function PocketCard({
           <p className="text-[18px] font-semibold text-black leading-[38px] tabular-nums">{formatCurrency(amount)}</p>
           <p className="text-xs font-normal text-ds-neutral-70 leading-4">{sublabel}</p>
         </div>
-        {locked && (
-          <Icon name="lock" size="sm" className="text-ds-neutral-100 w-[10.5px] h-3 shrink-0 mt-1" aria-label="Gesperrt" />
-        )}
+        {locked && <LockIcon />}
       </div>
       {/* Bottom section: Title – 23px, bold, Family/serif */}
       <p className="text-[23px] font-bold text-black leading-[38px] font-serif">{title}</p>

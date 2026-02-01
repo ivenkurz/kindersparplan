@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { PocketCard } from "@/components/PocketCard";
 
 const formatCurrency = (v: number) =>
-  new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR", maximumFractionDigits: 2 }).format(v);
+  new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v);
 
 export default function DashboardPage() {
   const [bannerDismissed, setBannerDismissed] = useState(false);
@@ -68,17 +68,28 @@ export default function DashboardPage() {
           </div>
         </header>
 
-        {/* Account Summary Card – Saans, Vermögens-Typografie */}
+        {/* Account Summary Card – Figma: padding 20px, gap 30px, shadow, rounded-2xl */}
         <section className="px-4 -mt-20 pb-0 font-saans">
-          <div className="rounded-ds-lg bg-ds-neutral-0 shadow-sm p-4">
-            <div className="flex justify-between items-center py-3 border-b border-ds-neutral-10">
-              <span className="text-base font-medium text-gray-600">Gesamtvermögen</span>
-              <span className="text-2xl md:text-3xl font-bold text-evergreen-dark leading-tight tracking-tight tabular-nums">{formatCurrency(8467.98)}</span>
+          <div className="flex flex-row items-center p-5 gap-[30px] min-h-[141px] w-full max-w-[335px] bg-ds-neutral-0 rounded-2xl shadow-[0px_2px_8px_rgba(0,0,0,0.08)]">
+            {/* Labels | Values – gap 74px */}
+            <div className="flex flex-row items-center gap-8 md:gap-[74px] flex-1 min-w-0">
+              {/* Labels – 12px, weight 380, #6B7280 */}
+              <div className="flex flex-col items-start gap-4 shrink-0">
+                <span className="text-xs font-normal text-pocket-gray leading-4">Gesamtvermögen</span>
+                <span className="text-xs font-normal text-pocket-gray leading-4">Ein- & Auszahlungen</span>
+                <span className="text-xs font-normal text-pocket-gray leading-4">Ertrag</span>
+              </div>
+              {/* Values – Gesamtvermögen 21px/670, Einzahlungen 16px/380, Ertrag 16px/380 */}
+              <div className="flex flex-col items-end gap-4 shrink-0">
+                <span className="text-[21px] font-[670] text-ds-neutral-100 leading-4 tabular-nums">{formatCurrency(8467.98)}</span>
+                <span className="text-base font-normal text-ds-neutral-70 leading-4 text-right tabular-nums">{formatCurrency(8289.76)}</span>
+                <span className="text-base font-normal text-ds-seagreen leading-4 text-right tabular-nums">{formatCurrency(317.44)}</span>
+              </div>
             </div>
-            <div className="flex justify-between items-center py-3">
-              <span className="text-base font-medium text-gray-600">Ertrag</span>
-              <span className="text-xl md:text-2xl font-bold text-ds-seagreen leading-tight tracking-tight tabular-nums">{formatCurrency(317.44)}</span>
-            </div>
+            {/* Chart icon – rotated 90°, #BBBFBD */}
+            <svg className="w-8 h-8 shrink-0 text-zins-pocket-border -rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
           </div>
         </section>
       </div>
