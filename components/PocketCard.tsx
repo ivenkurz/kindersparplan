@@ -3,7 +3,7 @@
 import { Icon } from "./Icon";
 
 const formatCurrency = (v: number) =>
-  new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(v);
+  new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR", maximumFractionDigits: 2 }).format(v);
 
 export type PocketVariant = "zins" | "investment";
 
