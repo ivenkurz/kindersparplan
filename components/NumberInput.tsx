@@ -32,7 +32,7 @@ export default function NumberInput({
           type="button"
           onClick={handleDecrement}
           disabled={value <= min}
-          className="flex items-center justify-center w-12 h-12 bg-ds-neutral-100 text-ds-neutral-0 hover:bg-ds-neutral-90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-ds-neutral-100"
+          className="flex items-center justify-center w-14 h-14 sm:w-12 sm:h-12 bg-ds-neutral-100 text-ds-neutral-0 hover:bg-ds-neutral-90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-ds-neutral-100"
           aria-label="Verringern"
         >
           <svg
@@ -60,7 +60,7 @@ export default function NumberInput({
           type="button"
           onClick={handleIncrement}
           disabled={value >= max}
-          className="flex items-center justify-center w-12 h-12 bg-ds-neutral-100 text-ds-neutral-0 hover:bg-ds-neutral-90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-ds-neutral-100"
+          className="flex items-center justify-center w-14 h-14 sm:w-12 sm:h-12 bg-ds-neutral-100 text-ds-neutral-0 hover:bg-ds-neutral-90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-ds-neutral-100"
           aria-label="Erhöhen"
         >
           <svg

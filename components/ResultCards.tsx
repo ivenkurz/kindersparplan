@@ -53,7 +53,7 @@ export default function ResultCards(props: ResultCardsProps) {
     twrPa
   )}% p.a.)`;
 
-  const spacingClass = sticky ? "space-y-3" : "space-y-4";
+  const spacingClass = sticky ? "space-y-2" : "space-y-4";
 
   return (
     <div className={spacingClass}>
@@ -79,7 +79,7 @@ export default function ResultCards(props: ResultCardsProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 sm:gap-5 md:gap-4">
+      <div className="grid grid-cols-3 gap-3 sm:gap-5 md:gap-4">
         <div>
           <p className="text-xs text-ds-neutral-70 font-medium mb-1">Eingezahlt</p>
           <p className="text-lg md:text-lg font-semibold text-ds-neutral-100 tabular-nums whitespace-nowrap">

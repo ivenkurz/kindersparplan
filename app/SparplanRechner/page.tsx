@@ -130,7 +130,7 @@ export default function SparplanRechnerPage() {
       {/* Sticky Ergebnis oben – mobile-first, full-width (nur Mobile) */}
       {!isInvalid && (
         <div className="md:hidden fixed top-0 left-0 right-0 z-20 bg-ds-neutral-0 border-b border-ds-neutral-10">
-          <div className="max-w-6xl mx-auto px-4 py-3">
+          <div className="max-w-6xl mx-auto px-4 py-2.5">
             <ResultCards
               gesamtEinzahlungen={gesamtEinzahlungen}
               ertrag={ertrag}
@@ -146,7 +146,7 @@ export default function SparplanRechnerPage() {
       )}
       <div
         className={`max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 sm:pb-10 ${
-          !isInvalid ? "pt-28 md:pt-8" : "pt-8"
+          !isInvalid ? "pt-20 md:pt-8" : "pt-8"
         }`}
       >
         {/* Header: Zurück-Link außerhalb des Rechner-Containers */}
@@ -169,10 +169,10 @@ export default function SparplanRechnerPage() {
 
         {/* Desktop: klarer, begrenzter Gesamt-Container (Mobile unverändert) */}
         <div className="bg-ds-yellow-10 border border-ds-neutral-20 rounded-ds-lg shadow-sm p-5 sm:p-6">
-          <div className="flex flex-col md:flex-row md:items-stretch gap-5 md:gap-6 pt-8 md:pt-0">
-            <div className="flex-1 min-w-0 flex flex-col gap-6">
+          <div className="flex flex-col md:flex-row md:items-stretch gap-4 md:gap-6 pt-8 md:pt-0">
+            <div className="flex-1 min-w-0 flex flex-col gap-4 md:gap-6">
               {/* Karte 1: Dein Risiko */}
-              <div className="bg-ds-neutral-0 rounded-ds-lg shadow-sm p-6 sm:p-8 border border-ds-neutral-20">
+              <div className="bg-ds-neutral-0 rounded-ds-lg shadow-sm p-5 sm:p-8 border border-ds-neutral-20">
                 <div className="flex items-center gap-3 mb-6">
                   <CardBadge number={1} />
                   <h2 className="text-lg font-bold text-ds-neutral-100">
@@ -180,7 +180,7 @@ export default function SparplanRechnerPage() {
                   </h2>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-4 md:space-y-6">
                   <div>
                     <h3 className="text-sm font-semibold text-ds-neutral-100 mb-2">Strategie</h3>
                     <div className="relative bg-ds-neutral-10 border border-ds-neutral-20 rounded-ds-16 p-4 sm:p-5 shadow-sm overflow-hidden min-h-[112px]">
@@ -195,11 +195,6 @@ export default function SparplanRechnerPage() {
                   </div>
 
                   <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <h3 className="text-sm font-medium text-ds-neutral-100">
-                        Risiko/Ertrag wählen
-                      </h3>
-                    </div>
                     <div className="py-4 md:py-0">
                       <SliderInput
                         label=""
@@ -256,7 +251,7 @@ export default function SparplanRechnerPage() {
               </div>
 
               {/* Karte 2: Sparplan einrichten */}
-              <div className="bg-ds-neutral-0 rounded-ds-lg shadow-sm p-6 sm:p-8 border border-ds-neutral-20 flex-1 flex flex-col">
+              <div className="bg-ds-neutral-0 rounded-ds-lg shadow-sm p-5 sm:p-8 border border-ds-neutral-20 flex-1 flex flex-col">
                 <div className="flex items-center gap-3 mb-6">
                   <CardBadge number={2} />
                   <h2 className="text-lg font-bold text-ds-neutral-100">Sparplan konfigurieren</h2>
