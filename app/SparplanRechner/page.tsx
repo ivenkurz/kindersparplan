@@ -31,7 +31,7 @@ const STUFE_NAMES: Record<number, string> = {
 
 function StepBadge({ number }: { number: number }) {
   return (
-    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-ds-yellow-60 text-ds-neutral-100 font-semibold text-2xl shrink-0 shadow-sm">
+    <div className="inline-flex items-center justify-center w-14 h-14 rounded-ds-16 bg-ds-yellow-60 text-ds-neutral-100 font-semibold text-2xl shrink-0 shadow-sm">
       {number}
     </div>
   );
