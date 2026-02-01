@@ -72,6 +72,9 @@ export default function SparplanRechnerPage() {
         confLow: number;
         confRange: number;
       }[] = [];
+      // Chart soll bei Jahr 0 bei 0 € starten (laienfreundlicher Einstieg)
+      data.push({ jahr: 0, wert: 0, einzahlungen: 0, confLow: 0, confRange: 0 });
+
       let wert = einmalig;
       const monatlicheRendite = Math.pow(1 + rendite, 1 / 12) - 1;
       const z95 = 1.96; // übliche Konfidenz: 95%
@@ -316,13 +319,13 @@ export default function SparplanRechnerPage() {
                     />
                     <div className="h-px bg-ds-neutral-20" />
                     <div>
-                      <h2 className="text-lg font-bold text-ds-neutral-100 mb-4">Wertentwicklung</h2>
-                      <div className="flex items-center justify-end mb-3">
-                        <div className="inline-flex rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 p-1">
+                      <div className="flex items-center justify-between gap-3 mb-3">
+                        <h2 className="text-lg font-bold text-ds-neutral-100">Wertentwicklung</h2>
+                        <div className="inline-flex rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 p-0.5">
                           <button
                             type="button"
                             onClick={() => setChartView("spanne")}
-                            className={`px-3 py-2 rounded-ds-16 text-xs font-semibold min-w-[44px] ${
+                            className={`px-2.5 py-1.5 rounded-ds-16 text-[11px] font-semibold min-w-[44px] ${
                               chartView === "spanne"
                                 ? "bg-ds-neutral-0 text-ds-neutral-100 shadow-sm"
                                 : "text-ds-neutral-70 hover:text-ds-neutral-100"
@@ -333,7 +336,7 @@ export default function SparplanRechnerPage() {
                           <button
                             type="button"
                             onClick={() => setChartView("einzahlung_ertrag")}
-                            className={`px-3 py-2 rounded-ds-16 text-xs font-semibold min-w-[44px] ${
+                            className={`px-2.5 py-1.5 rounded-ds-16 text-[11px] font-semibold min-w-[44px] ${
                               chartView === "einzahlung_ertrag"
                                 ? "bg-ds-neutral-0 text-ds-neutral-100 shadow-sm"
                                 : "text-ds-neutral-70 hover:text-ds-neutral-100"
@@ -355,19 +358,19 @@ export default function SparplanRechnerPage() {
                   isInvalid ? "opacity-50 pointer-events-none" : ""
                 }`}
               >
-                <h2 className="text-lg font-bold text-ds-neutral-100 mb-6">Wertentwicklung</h2>
                 {isInvalid ? (
                   <p className="text-ds-neutral-70 text-sm">
                     Chart wird angezeigt, sobald die Eingaben gültig sind.
                   </p>
                 ) : (
                   <>
-                    <div className="flex items-center justify-end mb-3">
-                      <div className="inline-flex rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 p-1">
+                    <div className="flex items-center justify-between gap-3 mb-3">
+                      <h2 className="text-lg font-bold text-ds-neutral-100">Wertentwicklung</h2>
+                      <div className="inline-flex rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 p-0.5">
                         <button
                           type="button"
                           onClick={() => setChartView("spanne")}
-                          className={`px-3 py-2 rounded-ds-16 text-xs font-semibold min-w-[44px] ${
+                          className={`px-2.5 py-1.5 rounded-ds-16 text-[11px] font-semibold min-w-[44px] ${
                             chartView === "spanne"
                               ? "bg-ds-neutral-0 text-ds-neutral-100 shadow-sm"
                               : "text-ds-neutral-70 hover:text-ds-neutral-100"
@@ -378,7 +381,7 @@ export default function SparplanRechnerPage() {
                         <button
                           type="button"
                           onClick={() => setChartView("einzahlung_ertrag")}
-                          className={`px-3 py-2 rounded-ds-16 text-xs font-semibold min-w-[44px] ${
+                          className={`px-2.5 py-1.5 rounded-ds-16 text-[11px] font-semibold min-w-[44px] ${
                             chartView === "einzahlung_ertrag"
                               ? "bg-ds-neutral-0 text-ds-neutral-100 shadow-sm"
                               : "text-ds-neutral-70 hover:text-ds-neutral-100"
