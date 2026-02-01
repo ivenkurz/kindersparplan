@@ -257,6 +257,8 @@ export default function ValueChart({ data, view = "spanne" }: ValueChartProps) {
                   stroke="#008542"
                   strokeWidth={3}
                   fill="transparent"
+                  isAnimationActive={false}
+                  animationDuration={0}
                   activeDot={{ r: 6, stroke: "#008542", strokeWidth: 2, fill: "#fff" }}
                 />
               </>
