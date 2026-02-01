@@ -15,6 +15,7 @@ const config: Config = {
       colors: {
         // Marketing Design System – behalte Locofy-Extraktion
         "ds-app-bg": "#F8F9FC",
+        "ds-menu-bg": "#374151",
         "ds-neutral": {
           0: "#fff",
           10: "#f0f1f1",

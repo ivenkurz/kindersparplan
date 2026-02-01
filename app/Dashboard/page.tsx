@@ -10,6 +10,7 @@ const formatCurrency = (v: number) =>
 export default function DashboardPage() {
   const [bannerDismissed, setBannerDismissed] = useState(false);
   const [navVisible, setNavVisible] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
   const lastScrollYRef = useRef(0);
 
   useEffect(() => {
@@ -53,7 +54,12 @@ export default function DashboardPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </button>
-              <button type="button" className="p-2 text-ds-neutral-0" aria-label="Menü">
+              <button
+                type="button"
+                className="p-2 text-ds-neutral-0"
+                aria-label="Menü"
+                onClick={() => setMenuOpen(true)}
+              >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
@@ -177,6 +183,87 @@ export default function DashboardPage() {
           Sparpläne
         </Link>
       </section>
+
+      {/* Burger-Menü – Slide-in Panel */}
+      {menuOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-[60] bg-black/40"
+            aria-hidden
+            onClick={() => setMenuOpen(false)}
+          />
+          <aside
+            className="fixed top-0 right-0 bottom-0 z-[70] w-72 max-w-[85vw] bg-ds-menu-bg shadow-xl flex flex-col pt-16 px-4 pb-6"
+            role="dialog"
+            aria-label="Menü"
+          >
+            <button
+              type="button"
+              className="absolute top-4 right-4 p-2 text-ds-neutral-0 hover:bg-white/10 rounded-lg"
+              aria-label="Menü schließen"
+              onClick={() => setMenuOpen(false)}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <nav className="flex flex-col gap-1">
+              <Link
+                href="/Dashboard"
+                className="flex items-center gap-3 px-4 py-3 text-ds-neutral-0 font-medium rounded-lg hover:bg-white/10 transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                <svg className="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                Profil
+              </Link>
+              <Link
+                href="/Dashboard"
+                className="flex items-center gap-3 px-4 py-3 text-ds-neutral-0 font-medium rounded-lg hover:bg-white/10 transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                <svg className="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                Entdecken
+              </Link>
+              <Link
+                href="/Dashboard"
+                className="flex items-center gap-3 px-4 py-3 text-ds-neutral-0 font-medium rounded-lg hover:bg-white/10 transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                <svg className="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                Service
+              </Link>
+              <a
+                href="https://evergreen.de"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 px-4 py-3 text-ds-neutral-0 font-medium rounded-lg hover:bg-white/10 transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                <svg className="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Zur Webseite
+              </a>
+              <button
+                type="button"
+                className="flex items-center gap-3 px-4 py-3 text-ds-neutral-0 font-medium rounded-lg hover:bg-white/10 transition-colors text-left w-full"
+                onClick={() => setMenuOpen(false)}
+              >
+                <svg className="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Ausloggen
+              </button>
+            </nav>
+          </aside>
+        </>
+      )}
 
       {/* Bottom Navigation – hide-on-scroll */}
       <nav
