@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body
-        className={`${saans.variable} ${saans.className} min-h-screen bg-ds-neutral-0 text-ds-neutral-100 antialiased font-saans`}
+        className={`${saans.variable} ${saans.className} min-h-screen bg-ds-neutral-0 text-ds-neutral-100 antialiased font-saans pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]`}
       >
         {children}
       </body>

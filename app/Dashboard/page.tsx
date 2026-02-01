@@ -1,22 +1,66 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const formatCurrency = (v: number) =>
   new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR", maximumFractionDigits: 2 }).format(v);
 
 export default function DashboardPage() {
   const [bannerDismissed, setBannerDismissed] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+  const [headerVisible, setHeaderVisible] = useState(true);
+  const lastScrollYRef = useRef(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const current = window.scrollY;
+      const last = lastScrollYRef.current;
+      setScrollY(current);
+      setHeaderVisible(current <= last || current < 50);
+      lastScrollYRef.current = current;
+    };
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const headerShrunk = scrollY > 100;
 
   return (
-    <main className="min-h-screen bg-ds-neutral-0 font-saans pb-20">
-      {/* Sticky: Header + Account Card – exakt wie Vorlage */}
-      <div className="sticky top-0 z-20 shadow-md">
-        {/* Header – dunkelgrün, unten links/rechts rund, geht bis ca. Hälfte der Card */}
-        <header className="bg-ds-neutral-100 px-4 pt-4 pb-24 rounded-b-ds-lg">
-          <div className="flex items-center justify-between">
-            <span className="text-xl font-bold text-ds-neutral-0">evergreen</span>
+    <main className="min-h-screen bg-ds-neutral-0 font-saans pb-[calc(5rem+env(safe-area-inset-bottom))]">
+      {/* Spacer für fixed Header-Block */}
+      <div className="h-[280px]" aria-hidden />
+
+      {/* Fixed Header + Account Card – hide-on-scroll */}
+      <div
+        className={`fixed top-0 left-0 right-0 z-50 shadow-md transition-transform duration-300 ${
+          headerVisible ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
+        {/* Header – dunkelgrün, shrinkbar */}
+        <header
+          className={`bg-ds-neutral-100 px-4 rounded-b-ds-lg transition-all duration-300 ${
+            headerShrunk ? "pt-2 pb-16" : "pt-4 pb-24"
+          }`}
+        >
+          <div className={`flex items-center justify-between ${headerShrunk ? "h-12" : "h-16"}`}>
+            <span
+              className={`text-xl font-bold text-ds-neutral-0 transition-transform duration-300 ${
+                headerShrunk ? "scale-90 origin-left" : ""
+              }`}
+            >
+              evergreen
+            </span>
             <div className="flex items-center gap-4">
               <button type="button" className="relative p-2 text-ds-neutral-0" aria-label="Benachrichtigungen">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -183,8 +227,12 @@ export default function DashboardPage() {
         </Link>
       </section>
 
-      {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-ds-neutral-0 border-t border-ds-neutral-10 flex justify-around py-3 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+      {/* Bottom Navigation – hide-on-scroll */}
+      <nav
+        className={`fixed bottom-0 left-0 right-0 z-50 bg-ds-neutral-0 border-t border-ds-neutral-10 flex justify-around py-3 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-transform duration-300 ${
+          headerVisible ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
         <Link href="/Dashboard" className="flex flex-col items-center gap-1 text-ds-neutral-100 font-semibold">
           <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
             <path d="M3 13h1v7c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-7h1a1 1 0 00.707-1.707l-9-9a.999.999 0 00-1.414 0l-9 9A1 1 0 003 13z" />
