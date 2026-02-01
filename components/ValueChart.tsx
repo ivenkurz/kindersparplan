@@ -318,7 +318,7 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
                   strokeWidth={2}
                   fill="url(#colorEingezahlt)"
                   isAnimationActive={false}
-                  activeDot={false}
+                  activeDot={{ r: 5, stroke: "#616a65", strokeWidth: 2, fill: "#fff" }}
                 />
                 <Area
                   type="monotone"

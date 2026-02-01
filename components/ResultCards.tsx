@@ -48,6 +48,7 @@ export default function ResultCards(props: ResultCardsProps) {
   const isPositive = prozentSteigerung >= 0;
   const renditeColor = isPositive ? "text-ds-seagreen" : "text-ds-orange-90";
   const ertragColor = ertrag >= 0 ? "text-ds-seagreen" : "text-ds-orange-90";
+  const einzahlungenColor = "text-ds-neutral-70"; // wie Chart-Linie für Einzahlungen
   const renditePrefix = isPositive ? "+" : "";
   const renditeLine = `${renditePrefix}${formatPercent(prozentSteigerung)}% (${formatPercent(
     twrPa
@@ -81,13 +82,13 @@ export default function ResultCards(props: ResultCardsProps) {
 
       <div className="grid grid-cols-3 gap-3 sm:gap-5 md:gap-4">
         <div>
-          <p className="text-xs text-ds-neutral-70 font-medium mb-1">Eingezahlt</p>
-          <p className="text-lg md:text-lg font-semibold text-ds-neutral-100 tabular-nums whitespace-nowrap">
+          <p className="text-xs text-ds-neutral-70 font-medium mb-1">Einzahlungen</p>
+          <p className={`text-lg md:text-lg font-semibold ${einzahlungenColor} tabular-nums whitespace-nowrap`}>
             {formatCurrency(gesamtEinzahlungen)}
           </p>
         </div>
         <div>
-          <p className="text-xs text-ds-neutral-70 font-medium mb-1">Ertrag</p>
+          <p className="text-xs text-ds-neutral-70 font-medium mb-1">Gesamtertrag</p>
           <p className={`text-lg md:text-lg font-semibold ${ertragColor} tabular-nums whitespace-nowrap`}>
             {ertrag >= 0 ? "+" : ""}
             {formatCurrency(ertrag)}
