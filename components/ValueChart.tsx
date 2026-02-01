@@ -153,13 +153,13 @@ function RiskHinweis() {
 
   return (
     <div
-      className="relative inline-flex"
+      className="relative inline-flex pt-4"
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
       {trigger}
       {open && (
-        <div className="absolute z-50 bottom-full mb-2 left-1/2 -translate-x-1/2 w-[360px] max-w-[85vw] bg-ds-neutral-0 border border-ds-neutral-20 rounded-ds-16 shadow-sm p-3">
+        <div className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 w-[360px] max-w-[85vw] bg-ds-neutral-0 border border-ds-neutral-20 rounded-ds-16 shadow-sm p-3">
           {content}
         </div>
       )}
