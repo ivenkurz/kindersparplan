@@ -36,10 +36,10 @@ function StepBadge({ number }: { number: number }) {
 }
 
 export default function SparplanRechnerPage() {
-  const [einmalig, setEinmalig] = useState(1000);
-  const [monatlich, setMonatlich] = useState(100);
-  const [laufzeit, setLaufzeit] = useState(10);
-  const [strategieIndex, setStrategieIndex] = useState(5); // 0–10
+  const [einmalig, setEinmalig] = useState(5000);
+  const [monatlich, setMonatlich] = useState(150);
+  const [laufzeit, setLaufzeit] = useState(25);
+  const [strategieIndex, setStrategieIndex] = useState(7); // Evergreen Wachstum 70
   const [showEinzahlungen, setShowEinzahlungen] = useState(false);
 
   const selectedStrategy = strategies[strategieIndex];
