@@ -190,7 +190,6 @@ export default function SparplanRechnerPage() {
                   <div>
                     <h3 className="text-sm font-semibold text-ds-neutral-100 mb-2">Strategie</h3>
                     <div className="relative bg-ds-neutral-10 border border-ds-neutral-20 rounded-ds-16 p-4 sm:p-5 shadow-sm overflow-hidden min-h-[112px]">
-                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-ds-seagreen" />
                       <p className="font-semibold text-ds-neutral-100 truncate pr-1">
                         {selectedStrategy.name}
                       </p>

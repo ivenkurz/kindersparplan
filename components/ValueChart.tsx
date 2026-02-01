@@ -188,6 +188,7 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
     []
   );
   const yTickFormatter = (v: number) => formatNumber.format(Number(v));
+  const yAxisWidth = isMobile ? 72 : 88;
 
   const outerClass = fill
     ? "w-full flex flex-col h-full"
@@ -210,7 +211,7 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
             margin={{
               top: 10,
               right: isMobile ? 8 : 10,
-              left: isMobile ? 6 : 0,
+              left: isMobile ? 8 : 8,
               bottom: isMobile ? 18 : 22,
             }}
           >
@@ -252,26 +253,16 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
               domain={[0, euroMax]}
               ticks={euroTicks}
               interval={0}
-              // Mobile: Werte innenliegend, damit der Plot breiter wird
-              mirror={isMobile}
-              width={isMobile ? 12 : 96}
-              tickMargin={isMobile ? 0 : 10}
+              // Werte "innenliegend" (Richtung Plot), aber in der Achsen-Gutter positioniert,
+              // damit das Grid die Labels nicht überdeckt.
+              mirror
+              width={yAxisWidth}
+              tickMargin={0}
               tickFormatter={yTickFormatter}
-              tick={{ fill: "#3b403d", fontSize: 12, dx: isMobile ? 10 : 0 }}
+              tick={{ fill: "#3b403d", fontSize: 12, dx: -8 }}
               tickLine={false}
               axisLine={false}
-              label={
-                isMobile
-                  ? undefined
-                  : {
-                      value: "Euro",
-                      angle: -90,
-                      position: "insideLeft",
-                      fill: "#616a65",
-                      fontSize: 12,
-                      fontWeight: 600,
-                    }
-              }
+              label={undefined}
             />
             <Tooltip
               content={<CustomTooltip />}
@@ -349,8 +340,8 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
       <div
         className={
           fill
-            ? "flex-none pt-2 border-t border-ds-neutral-10 overflow-hidden"
-            : "flex-none h-[60px] sm:h-[52px] pt-2 border-t border-ds-neutral-10 overflow-hidden"
+            ? "flex-none pt-2 overflow-hidden"
+            : "flex-none h-[60px] sm:h-[52px] pt-2 overflow-hidden"
         }
       >
         {view === "spanne" ? (
@@ -374,7 +365,7 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
             <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ds-neutral-90">
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-sm bg-[#616a65]/25 border border-ds-neutral-20" />
-                Eingezahlt
+                Einzahlungen
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-sm bg-[#008542]/20 border border-ds-neutral-20" />
