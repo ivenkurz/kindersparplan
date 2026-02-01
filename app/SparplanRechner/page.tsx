@@ -148,7 +148,7 @@ export default function SparplanRechnerPage() {
       )}
       <div
         className={`max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 sm:pb-10 ${
-          !isInvalid ? "pt-20 md:pt-8" : "pt-8"
+          !isInvalid ? "pt-32 md:pt-8" : "pt-8"
         }`}
       >
         {/* Header: Zurück-Link außerhalb des Rechner-Containers */}
