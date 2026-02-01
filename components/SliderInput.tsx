@@ -97,14 +97,14 @@ export default function SliderInput({
               [&::-moz-range-track]:h-full [&::-moz-range-track]:bg-ds-neutral-20 [&::-moz-range-track]:rounded-full
               [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-7 [&::-webkit-slider-thumb]:h-7 md:[&::-webkit-slider-thumb]:w-5 md:[&::-webkit-slider-thumb]:h-5
               [&::-webkit-slider-thumb]:mt-[-6px] md:[&::-webkit-slider-thumb]:mt-[-5px]
-              [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-ds-orange-60
+              [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-ds-neutral-100
               [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-0
               [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:duration-150
-              active:[&::-webkit-slider-thumb]:shadow-ds-orange-glow [&:hover::-webkit-slider-thumb]:shadow-ds-orange-glow
+              active:[&::-webkit-slider-thumb]:shadow-md [&:hover::-webkit-slider-thumb]:shadow-md
               [&::-moz-range-thumb]:w-7 [&::-moz-range-thumb]:h-7 md:[&::-moz-range-thumb]:w-5 md:[&::-moz-range-thumb]:h-5
-              [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-ds-orange-60 [&::-moz-range-thumb]:border-0
+              [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-ds-neutral-100 [&::-moz-range-thumb]:border-0
               [&::-moz-range-thumb]:transition-transform [&::-moz-range-thumb]:duration-150
-              active:[&::-moz-range-thumb]:shadow-ds-orange-glow"
+              active:[&::-moz-range-thumb]:shadow-md"
           />
           {hasSnapTicks && (
             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-20 px-3 flex justify-between pointer-events-none">
