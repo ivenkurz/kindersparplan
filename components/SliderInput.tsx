@@ -107,10 +107,19 @@ export default function SliderInput({
               active:[&::-moz-range-thumb]:shadow-md"
           />
           {hasSnapTicks && (
-            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-20 px-3 flex justify-between pointer-events-none">
-              {snapTicksForRender!.map((v) => (
-                <span key={v} className="w-px h-2 bg-white/90" aria-hidden="true" />
-              ))}
+            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-20 pointer-events-none">
+              {snapTicksForRender!.map((v) => {
+                const pos =
+                  max === min ? 0 : ((v - min) / (max - min)) * 100;
+                return (
+                  <span
+                    key={v}
+                    className="absolute w-px h-2 bg-white/90 -translate-x-1/2"
+                    style={{ left: `${pos}%` }}
+                    aria-hidden="true"
+                  />
+                );
+              })}
             </div>
           )}
         </div>
