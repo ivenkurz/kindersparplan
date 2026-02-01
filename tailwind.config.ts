@@ -35,6 +35,7 @@ const config: Config = {
           10: "#fff9eb",
           60: "#ffc93b",
         },
+        "ds-steuer-banner": "#FFE6A5",
         "ds-darkgreen": "#054726",
         "ds-seagreen": "#008542",
         "ds-sage": "#a2bcaf",
