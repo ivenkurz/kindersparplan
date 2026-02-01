@@ -3,13 +3,11 @@
 import { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { Tooltip } from "react-tooltip";
-import "react-tooltip/dist/react-tooltip.css";
 import NumberInput from "@/components/NumberInput";
 import SliderInput from "@/components/SliderInput";
 import ResultCards from "@/components/ResultCards";
 import ValidationAlert from "@/components/ValidationAlert";
-import { strategies, sliderLegendTooltips } from "@/data/strategies";
+import { strategies } from "@/data/strategies";
 
 const ValueChart = dynamic(() => import("@/components/ValueChart"), {
   ssr: false,
@@ -212,38 +210,22 @@ export default function SparplanRechnerPage() {
                         snapTickValues={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
                       />
                     </div>
-                    {/* Slider-Legende: Markierungen bei 0, 5, 10 mit Tooltips */}
+                    {/* Slider-Legende: Markierungen bei 0, 5, 10 (ohne Tooltips) */}
                     <div className="mt-1 text-xs">
                       <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center text-ds-neutral-100 font-normal">
-                        <span
-                          data-tooltip-id="legend-0"
-                          className="cursor-help justify-self-start inline-flex items-center justify-center min-w-[44px] min-h-[44px]"
-                        >
+                        <span className="justify-self-start inline-flex items-center justify-center min-w-[44px] min-h-[44px]">
                           Niedrig
                         </span>
                         <span className="text-ds-neutral-40 px-2">·</span>
-                        <span
-                          data-tooltip-id="legend-5"
-                          className="cursor-help justify-self-center inline-flex items-center justify-center min-w-[44px] min-h-[44px]"
-                        >
+                        <span className="justify-self-center inline-flex items-center justify-center min-w-[44px] min-h-[44px]">
                           Ausgewogen
                         </span>
                         <span className="text-ds-neutral-40 px-2">·</span>
-                        <span
-                          data-tooltip-id="legend-10"
-                          className="cursor-help justify-self-end inline-flex items-center justify-center min-w-[44px] min-h-[44px]"
-                        >
+                        <span className="justify-self-end inline-flex items-center justify-center min-w-[44px] min-h-[44px]">
                           Hoch
                         </span>
                       </div>
                     </div>
-                    {([0, 5, 10] as const).map((pos) => (
-                      <Tooltip
-                        key={pos}
-                        id={`legend-${pos}`}
-                        content={sliderLegendTooltips[pos] ?? ""}
-                      />
-                    ))}
                   </div>
                 </div>
               </div>
