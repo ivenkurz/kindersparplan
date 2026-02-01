@@ -1,6 +1,24 @@
 "use client";
 
+import { useId } from "react";
 import { Icon } from "./Icon";
+
+const ZinsPocketIcon = () => {
+  const clipId = useId();
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+      <g clipPath={`url(#${clipId})`}>
+        <path d="M24 0H8C3.58172 0 0 3.58172 0 8V24C0 28.4183 3.58172 32 8 32H24C28.4183 32 32 28.4183 32 24V8C32 3.58172 28.4183 0 24 0Z" fill="#FFE6A5" />
+        <path d="M21.9585 11.6036C21.9585 10.7408 21.2592 10.0415 20.3964 10.0415H11.6036C10.7408 10.0415 10.0415 10.7408 10.0415 11.6036V20.3964C10.0415 21.2592 10.7408 21.9585 11.6036 21.9585H20.3964C21.2592 21.9585 21.9585 21.2592 21.9585 20.3964V11.6036ZM17.0645 12.3102C17.3521 12.3102 17.5852 12.5433 17.5852 12.8309V14.4148H19.1691C19.4567 14.4148 19.6898 14.6479 19.6898 14.9355V17.0645C19.6898 17.3521 19.4567 17.5852 19.1691 17.5852H17.5852V19.1691C17.5852 19.4567 17.3521 19.6898 17.0645 19.6898H14.9355C14.6479 19.6898 14.4148 19.4567 14.4148 19.1691V17.5852H12.8309C12.5433 17.5852 12.3102 17.3521 12.3102 17.0645V14.9355C12.3102 14.6479 12.5433 14.4148 12.8309 14.4148H14.4148V12.8309C14.4148 12.5433 14.6479 12.3102 14.9355 12.3102H17.0645ZM15.4562 14.9355C15.4562 15.2231 15.2231 15.4562 14.9355 15.4562H13.3516V16.5438H14.9355C15.2231 16.5438 15.4562 16.7769 15.4562 17.0645V18.6484H16.5438V17.0645C16.5438 16.7769 16.7769 16.5438 17.0645 16.5438H18.6484V15.4562H17.0645C16.7769 15.4562 16.5438 15.2231 16.5438 14.9355V13.3516H15.4562V14.9355ZM23 20.3964C23 21.8344 21.8344 23 20.3964 23H11.6036C10.1656 23 9.00002 21.8344 9 20.3964V11.6036C9 10.1656 10.1656 9 11.6036 9H20.3964C21.8344 9.00002 23 10.1656 23 11.6036V20.3964Z" fill="#022011" />
+      </g>
+      <defs>
+        <clipPath id={clipId}>
+          <rect width="32" height="32" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+};
 
 const formatCurrency = (v: number) =>
   new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v);
@@ -31,12 +49,7 @@ export function PocketCard({
       <div className="box-border flex flex-col justify-between items-start p-4 gap-[10.5px] min-h-[120px] rounded-xl border border-zins-pocket-border bg-ds-neutral-0 shadow-md hover:shadow-lg transition-shadow font-saans">
         {/* Top section: Icon + Betrag/Label, gap 7px */}
         <div className="flex flex-row items-start gap-[7px] w-full">
-          {/* Icon: 32x32, #FFE6A5, radius 8px, padding 7px */}
-          <div className="w-8 h-8 rounded-lg bg-zins-pocket-icon flex flex-row items-center justify-center p-[7px] shrink-0">
-            <div className="w-[18px] h-[18px] flex items-center justify-center p-0.5">
-              <Icon name="plus" size="sm" className="text-ds-neutral-100 w-[14px] h-[14px]" strokeWidth={1.5} />
-            </div>
-          </div>
+          <ZinsPocketIcon />
           <div className="flex-1 min-w-0 flex flex-col items-end text-right">
             <p className="text-[18px] font-semibold text-black leading-[38px] tabular-nums">{formatCurrency(amount)}</p>
             <p className="text-xs font-normal text-ds-neutral-70 leading-4">{sublabel}</p>
