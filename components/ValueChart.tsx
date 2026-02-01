@@ -163,7 +163,7 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
 
   const outerClass = fill
     ? "w-full flex flex-col h-full"
-    : "w-full flex flex-col h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]";
+    : "w-full flex flex-col h-[300px] sm:h-[312px] md:h-[300px] lg:h-[320px]";
 
   return (
     <div className={outerClass}>
@@ -171,8 +171,8 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
       <div
         className={
           fill
-            ? "flex-1 min-h-[300px]"
-            : "flex-1 min-h-[300px]"
+            ? "flex-1 min-h-[220px]"
+            : "flex-none h-[240px] sm:h-[260px] md:h-[240px] lg:h-[260px]"
         }
       >
         <ResponsiveContainer width="100%" height="100%">
@@ -313,7 +313,7 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
         className={
           fill
             ? "flex-none pt-2 border-t border-ds-neutral-10 overflow-hidden"
-            : "flex-none pt-2 border-t border-ds-neutral-10 overflow-hidden"
+            : "flex-none h-[60px] sm:h-[52px] pt-2 border-t border-ds-neutral-10 overflow-hidden"
         }
       >
         {view === "spanne" ? (
