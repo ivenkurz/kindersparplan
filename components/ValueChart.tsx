@@ -205,13 +205,15 @@ export default function ValueChart({ data, view = "spanne" }: ValueChartProps) {
               domain={[0, euroMax]}
               ticks={euroTicks}
               interval={0}
-              // Werte sollen im Chart beginnen (links bündig mit Jahr 0 / Plot-Start)
+              // Werte sollen im Chart beginnen (links bündig mit Jahr 0 / Plot-Start),
+              // aber trotzdem nicht geclipped werden -> genügend Achsenbreite reservieren.
               mirror
-              width={0}
-              tickMargin={8}
+              width={96}
+              tickMargin={10}
               tickFormatter={(v) =>
                 new Intl.NumberFormat("de-DE", { maximumFractionDigits: 0 }).format(Number(v))
               }
+              // Links ausgerichtet nach innen (in den Plot hinein)
               tick={{ fill: "#3b403d", fontSize: 12, textAnchor: "start" }}
               tickLine={false}
               axisLine={false}
