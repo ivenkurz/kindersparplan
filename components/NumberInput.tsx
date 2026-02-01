@@ -24,7 +24,7 @@ export default function NumberInput({
 
   return (
     <div className="space-y-2">
-      <label className="text-sm font-medium text-ds-neutral-100 block">
+      <label className="text-sm font-semibold text-ds-neutral-100 block">
         {label}
       </label>
       <div className="flex items-center rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 overflow-hidden">

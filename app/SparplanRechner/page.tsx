@@ -200,9 +200,9 @@ export default function SparplanRechnerPage() {
                   </div>
 
                   <div>
-                    <div className="py-4 md:py-0">
+                    <div className="py-2 md:py-0">
                       <SliderInput
-                        label=""
+                        label="Risiko/Ertrag"
                         value={strategieIndex}
                         onChange={setStrategieIndex}
                         min={0}
@@ -213,7 +213,7 @@ export default function SparplanRechnerPage() {
                       />
                     </div>
                     {/* Slider-Legende: Markierungen bei 0, 5, 10 mit Tooltips */}
-                    <div className="mt-3 text-xs">
+                    <div className="mt-2 text-xs">
                       <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center text-ds-neutral-100 font-normal">
                         <span
                           data-tooltip-id="legend-0"
@@ -287,7 +287,7 @@ export default function SparplanRechnerPage() {
                       />
                     </div>
                     <div className="md:col-span-2">
-                      <div className="py-4 md:py-0">
+                      <div className="py-2 md:py-0">
                         <SliderInput
                           label="Laufzeit"
                           value={laufzeit}
@@ -307,7 +307,7 @@ export default function SparplanRechnerPage() {
                         />
                       </div>
                       {/* Laufzeit-Legende: gleiches Layout wie Strategie */}
-                      <div className="mt-3 text-xs">
+                      <div className="mt-2 text-xs">
                         <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center text-ds-neutral-100 font-normal">
                           <span className="justify-self-start inline-flex items-center justify-center min-w-[44px] min-h-[44px]">
                             1 Jahr
