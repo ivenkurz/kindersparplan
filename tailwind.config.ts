@@ -41,6 +41,14 @@ const config: Config = {
         "ds-pocket-dark": "#1E3A24",
         "ds-pocket-yellow": "#FBE9AE",
         "ds-investment-icon": "#9ACD32",
+        // Pocket-Cards – exakte Figma-Hex-Werte (extend only)
+        "pocket-yellow": "#FCD34D",
+        "pocket-green": "#10B981",
+        "pocket-accent": "#F97316",
+        "pocket-dark": "#1E3A24",
+        "pocket-gray": "#6B7280",
+        "pocket-investment": "#9ACD32",
+        "evergreen-dark": "#0f3d2e",
         "ds-crimson": "#c20024",
         // Legacy evergreen (alias) – behalte für Kompatibilität
         evergreen: {
@@ -65,6 +73,9 @@ const config: Config = {
       },
       boxShadow: {
         "ds-orange-glow": "0 0 12px 4px rgba(253, 143, 24, 0.4)",
+      },
+      backgroundImage: {
+        "pocket-gradient": "linear-gradient(to right, #10b981, #059669)",
       },
     },
   },

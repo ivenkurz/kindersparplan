@@ -2,22 +2,21 @@
 
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
+import { PocketCard } from "@/components/PocketCard";
 
 const formatCurrency = (v: number) =>
   new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR", maximumFractionDigits: 2 }).format(v);
 
 export default function DashboardPage() {
   const [bannerDismissed, setBannerDismissed] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
-  const [headerVisible, setHeaderVisible] = useState(true);
+  const [navVisible, setNavVisible] = useState(true);
   const lastScrollYRef = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
       const current = window.scrollY;
       const last = lastScrollYRef.current;
-      setScrollY(current);
-      setHeaderVisible(current <= last || current < 50);
+      setNavVisible(current <= last || current < 50);
       lastScrollYRef.current = current;
     };
     let ticking = false;
@@ -34,33 +33,14 @@ export default function DashboardPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const headerShrunk = scrollY > 100;
-
   return (
     <main className="min-h-screen bg-ds-neutral-0 font-saans pb-[calc(5rem+env(safe-area-inset-bottom))]">
-      {/* Spacer für fixed Header-Block */}
-      <div className="h-[280px]" aria-hidden />
-
-      {/* Fixed Header + Account Card – hide-on-scroll */}
-      <div
-        className={`fixed top-0 left-0 right-0 z-50 shadow-md transition-transform duration-300 ${
-          headerVisible ? "translate-y-0" : "-translate-y-full"
-        }`}
-      >
-        {/* Header – dunkelgrün, shrinkbar */}
-        <header
-          className={`bg-ds-neutral-100 px-4 rounded-b-ds-lg transition-all duration-300 ${
-            headerShrunk ? "pt-2 pb-16" : "pt-4 pb-24"
-          }`}
-        >
-          <div className={`flex items-center justify-between ${headerShrunk ? "h-12" : "h-16"}`}>
-            <span
-              className={`text-xl font-bold text-ds-neutral-0 transition-transform duration-300 ${
-                headerShrunk ? "scale-90 origin-left" : ""
-              }`}
-            >
-              evergreen
-            </span>
+      {/* Sticky Header + Account Card */}
+      <div className="sticky top-0 z-50 shadow-md">
+        {/* Header – #022011 (ds-neutral-100) */}
+        <header className="bg-ds-neutral-100 px-4 pt-4 pb-24 rounded-b-ds-lg">
+          <div className="flex items-center justify-between h-16">
+            <span className="text-xl font-bold text-ds-neutral-0">evergreen</span>
             <div className="flex items-center gap-4">
               <button type="button" className="relative p-2 text-ds-neutral-0" aria-label="Benachrichtigungen">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,26 +62,17 @@ export default function DashboardPage() {
           </div>
         </header>
 
-        {/* Account Summary Card – weiß, weiter oben, kein Divider */}
+        {/* Account Summary Card – ohne Ein- und Auszahlungen */}
         <section className="px-4 -mt-20 pb-0">
-          <div className="rounded-ds-lg bg-ds-neutral-0 shadow-sm p-5">
-          <div className="flex justify-between items-center py-3 border-b border-ds-neutral-10">
-            <span className="text-sm text-ds-neutral-70">Gesamtvermögen</span>
-            <span className="text-lg font-bold text-ds-neutral-100">{formatCurrency(8467.98)}</span>
-          </div>
-          <div className="flex justify-between items-center py-3 border-b border-ds-neutral-10">
-            <span className="text-sm text-ds-neutral-70">Ein- & Auszahlungen</span>
-            <div className="flex items-center gap-1">
-              <span className="text-lg font-semibold text-ds-neutral-100">{formatCurrency(8289.76)}</span>
-              <svg className="w-5 h-5 text-ds-neutral-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
+          <div className="rounded-ds-lg bg-ds-neutral-0 shadow-sm p-4">
+            <div className="flex justify-between items-center py-2 border-b border-ds-neutral-10">
+              <span className="text-sm text-ds-neutral-70">Gesamtvermögen</span>
+              <span className="text-lg font-bold text-ds-neutral-100">{formatCurrency(8467.98)}</span>
             </div>
-          </div>
-          <div className="flex justify-between items-center py-3">
-            <span className="text-sm text-ds-neutral-70">Ertrag</span>
-            <span className="text-lg font-semibold text-ds-seagreen">{formatCurrency(317.44)}</span>
-          </div>
+            <div className="flex justify-between items-center py-2">
+              <span className="text-sm text-ds-neutral-70">Ertrag</span>
+              <span className="text-lg font-semibold text-ds-seagreen">{formatCurrency(317.44)}</span>
+            </div>
           </div>
         </section>
       </div>
@@ -137,7 +108,7 @@ export default function DashboardPage() {
           <h2 className="text-xl font-bold text-ds-neutral-100">Meine Pockets</h2>
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 rounded-ds-16 bg-ds-darkgreen px-4 py-2 text-sm font-semibold text-ds-neutral-0"
+            className="inline-flex items-center gap-1.5 rounded-ds-16 bg-ds-neutral-100 px-4 py-2 text-sm font-semibold text-ds-neutral-0"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -146,73 +117,53 @@ export default function DashboardPage() {
           </button>
         </div>
 
-        {/* ZinsPockets – Vorlage: weißes Plus in dunkelgrünem Quadrat, in gelbem Kreis */}
+        {/* ZinsPockets – exakte Figma-Farben: pocket-yellow, pocket-dark */}
         <p className="text-sm text-ds-neutral-70 mb-2">ZinsPockets</p>
         <div className="grid grid-cols-2 gap-3 mb-6">
-          <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 p-4 shadow-sm">
-            <div className="w-10 h-10 rounded-full bg-ds-pocket-yellow flex items-center justify-center mb-3">
-              <div className="w-6 h-6 rounded bg-ds-pocket-dark flex items-center justify-center">
-                <svg className="w-[14px] h-[14px] text-ds-neutral-0" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                </svg>
-              </div>
-            </div>
-            <p className="text-lg font-bold text-ds-neutral-100">{formatCurrency(3211.34)}</p>
-            <p className="text-xs text-ds-neutral-70">ZinsPocket</p>
-            <p className="text-base font-bold text-ds-neutral-100 mt-1">Reisen</p>
-          </div>
-          <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 p-4 shadow-sm">
-            <div className="w-10 h-10 rounded-full bg-ds-pocket-yellow flex items-center justify-center mb-3">
-              <div className="w-6 h-6 rounded bg-ds-pocket-dark flex items-center justify-center">
-                <svg className="w-[14px] h-[14px] text-ds-neutral-0" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                </svg>
-              </div>
-            </div>
-            <p className="text-lg font-bold text-ds-neutral-100">{formatCurrency(1178.11)}</p>
-            <p className="text-xs text-ds-neutral-70">ZinsPocket Plus</p>
-            <p className="text-base font-bold text-ds-neutral-100 mt-1">Notgroschen</p>
-          </div>
+          <PocketCard
+            variant="zins"
+            amount={3211.34}
+            sublabel="ZinsPocket"
+            title="Reisen"
+          />
+          <PocketCard
+            variant="zins"
+            amount={1178.11}
+            sublabel="ZinsPocket Plus"
+            title="Notgroschen"
+          />
         </div>
 
-        {/* InvestmentPockets – Vorlage: gelbgrünes Icon in weißem Kreis */}
+        {/* InvestmentPockets – exakte Figma-Farben: pocket-investment, pocket-gray (Lock) */}
         <p className="text-sm text-ds-neutral-70 mb-2">InvestmentPockets</p>
         <div className="space-y-3">
-          <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 p-4 shadow-sm flex items-start gap-3">
-            <div className="w-10 h-10 rounded-full bg-ds-neutral-0 border border-ds-neutral-20 flex items-center justify-center shrink-0">
-              <svg className="w-5 h-5 text-ds-investment-icon" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 011.414-1.418L21 3.75" />
-              </svg>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-lg font-bold text-ds-neutral-100">{formatCurrency(18547.24)}</p>
-              <p className="text-xs text-ds-neutral-70">Evergreen Wachstum 90</p>
-              <p className="text-base font-bold text-ds-neutral-100 mt-1">Altersvorsorge</p>
-            </div>
-            <svg className="w-5 h-5 text-ds-neutral-70 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-label="Gesperrt">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-          </div>
-          <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 p-4 shadow-sm flex items-start gap-3">
-            <div className="w-10 h-10 rounded-full bg-ds-neutral-0 border border-ds-neutral-20 flex items-center justify-center shrink-0">
-              <svg className="w-5 h-5 text-ds-investment-icon" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-              </svg>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-lg font-bold text-ds-neutral-100">{formatCurrency(34487.49)}</p>
-              <p className="text-xs text-ds-neutral-70">Evergreen Wachstum 70</p>
-              <p className="text-base font-bold text-ds-neutral-100 mt-1">Immobilie</p>
-            </div>
-          </div>
+          <PocketCard
+            variant="investment"
+            amount={18547.24}
+            sublabel="Evergreen Wachstum 90"
+            title="Altersvorsorge"
+            locked
+            investmentIcon="chart-up"
+          />
+          <PocketCard
+            variant="investment"
+            amount={34487.49}
+            sublabel="Evergreen Wachstum 70"
+            title="Immobilie"
+            investmentIcon="building"
+          />
         </div>
       </section>
 
       {/* Spacer für Floating Buttons */}
       <div className="h-24" />
 
-      {/* Floating Action Buttons */}
-      <section className="fixed bottom-20 left-4 right-4 z-30 flex gap-3 pb-[env(safe-area-inset-bottom)]">
+      {/* Floating Action Buttons – unten wenn Nav hide, oben wenn Nav sichtbar */}
+      <section
+        className={`fixed left-4 right-4 z-30 flex gap-3 pb-[env(safe-area-inset-bottom)] transition-all duration-300 ${
+          navVisible ? "bottom-20" : "bottom-4"
+        }`}
+      >
         <button
           type="button"
           className="flex-1 rounded-ds-16 bg-ds-orange-60 py-3 font-semibold text-ds-neutral-0 shadow-lg hover:bg-ds-orange-70 transition-colors"
@@ -221,7 +172,7 @@ export default function DashboardPage() {
         </button>
         <Link
           href="/SparplanRechner"
-          className="flex-1 rounded-ds-16 bg-ds-darkgreen py-3 font-semibold text-ds-neutral-0 text-center shadow-lg hover:bg-ds-neutral-90 transition-colors"
+          className="flex-1 rounded-ds-16 bg-ds-neutral-100 py-3 font-semibold text-ds-neutral-0 text-center shadow-lg hover:bg-ds-neutral-90 transition-colors"
         >
           Sparpläne
         </Link>
@@ -230,7 +181,7 @@ export default function DashboardPage() {
       {/* Bottom Navigation – hide-on-scroll */}
       <nav
         className={`fixed bottom-0 left-0 right-0 z-50 bg-ds-neutral-0 border-t border-ds-neutral-10 flex justify-around py-3 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-transform duration-300 ${
-          headerVisible ? "translate-y-0" : "translate-y-full"
+          navVisible ? "translate-y-0" : "translate-y-full"
         }`}
       >
         <Link href="/Dashboard" className="flex flex-col items-center gap-1 text-ds-neutral-100 font-semibold">
