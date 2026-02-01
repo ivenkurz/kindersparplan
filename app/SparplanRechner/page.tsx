@@ -130,7 +130,7 @@ export default function SparplanRechnerPage() {
       {/* Sticky Ergebnis oben – mobile-first, full-width (nur Mobile) */}
       {!isInvalid && (
         <div className="md:hidden fixed top-0 left-0 right-0 z-20 bg-ds-neutral-0 border-b border-ds-neutral-10">
-          <div className="max-w-6xl mx-auto px-4 py-1.5">
+          <div className="max-w-6xl mx-auto px-4 py-3">
             <ResultCards
               gesamtEinzahlungen={gesamtEinzahlungen}
               ertrag={ertrag}
@@ -146,7 +146,7 @@ export default function SparplanRechnerPage() {
       )}
       <div
         className={`max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 sm:pb-10 ${
-          !isInvalid ? "pt-24 md:pt-8" : "pt-8"
+          !isInvalid ? "pt-28 md:pt-8" : "pt-8"
         }`}
       >
         {/* Header: Zurück-Link außerhalb des Rechner-Containers */}
@@ -168,8 +168,8 @@ export default function SparplanRechnerPage() {
         </header>
 
         {/* Desktop: klarer, begrenzter Gesamt-Container (Mobile unverändert) */}
-        <div className="bg-ds-yellow-10 border border-ds-neutral-20 rounded-ds-lg shadow-sm p-4 sm:p-6">
-          <div className="flex flex-col md:flex-row md:items-stretch gap-6 pt-8 md:pt-0">
+        <div className="bg-ds-yellow-10 border border-ds-neutral-20 rounded-ds-lg shadow-sm p-5 sm:p-6">
+          <div className="flex flex-col md:flex-row md:items-stretch gap-5 md:gap-6 pt-8 md:pt-0">
             <div className="flex-1 min-w-0 flex flex-col gap-6">
               {/* Karte 1: Dein Risiko */}
               <div className="bg-ds-neutral-0 rounded-ds-lg shadow-sm p-6 sm:p-8 border border-ds-neutral-20">
@@ -200,36 +200,38 @@ export default function SparplanRechnerPage() {
                         Risiko/Ertrag wählen
                       </h3>
                     </div>
-                    <SliderInput
-                      label=""
-                      value={strategieIndex}
-                      onChange={setStrategieIndex}
-                      min={0}
-                      max={10}
-                      step={1}
-                      hideValue
-                    snapTickValues={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
-                    />
+                    <div className="py-4 md:py-0">
+                      <SliderInput
+                        label=""
+                        value={strategieIndex}
+                        onChange={setStrategieIndex}
+                        min={0}
+                        max={10}
+                        step={1}
+                        hideValue
+                        snapTickValues={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+                      />
+                    </div>
                     {/* Slider-Legende: Markierungen bei 0, 5, 10 mit Tooltips */}
                     <div className="mt-3 text-xs">
                       <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center text-ds-neutral-100 font-semibold">
                         <span
                           data-tooltip-id="legend-0"
-                          className="relative cursor-help justify-self-start after:content-[''] after:absolute after:-inset-3"
+                          className="cursor-help justify-self-start inline-flex items-center justify-center min-w-[44px] min-h-[44px]"
                         >
                           Niedrig
                         </span>
                         <span className="text-ds-neutral-40 px-2">·</span>
                         <span
                           data-tooltip-id="legend-5"
-                          className="relative cursor-help justify-self-center after:content-[''] after:absolute after:-inset-3"
+                          className="cursor-help justify-self-center inline-flex items-center justify-center min-w-[44px] min-h-[44px]"
                         >
                           Ausgewogen
                         </span>
                         <span className="text-ds-neutral-40 px-2">·</span>
                         <span
                           data-tooltip-id="legend-10"
-                          className="relative cursor-help justify-self-end after:content-[''] after:absolute after:-inset-3"
+                          className="cursor-help justify-self-end inline-flex items-center justify-center min-w-[44px] min-h-[44px]"
                         >
                           Hoch
                         </span>
@@ -290,25 +292,27 @@ export default function SparplanRechnerPage() {
                       />
                     </div>
                     <div className="md:col-span-2">
-                      <SliderInput
-                        label="Laufzeit"
-                        value={laufzeit}
-                        onChange={setLaufzeit}
-                        min={1}
-                        max={50}
-                        unit=" Jahre"
-                        leftLabel="1 Jahr"
-                        rightLabel="50 Jahre"
-                        showValueRight
-                        valueClassName="text-lg sm:text-xl font-semibold text-ds-orange-60 font-saans tracking-tight"
-                        snapTickValues={[
-                          1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-                          11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-                          21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
-                          31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-                          41, 42, 43, 44, 45, 46, 47, 48, 49, 50
-                        ]}
-                      />
+                      <div className="py-4 md:py-0">
+                        <SliderInput
+                          label="Laufzeit"
+                          value={laufzeit}
+                          onChange={setLaufzeit}
+                          min={1}
+                          max={50}
+                          unit=" Jahre"
+                          leftLabel="1 Jahr"
+                          rightLabel="50 Jahre"
+                          showValueRight
+                          valueClassName="text-lg sm:text-xl font-semibold text-ds-orange-60 font-saans tracking-tight"
+                          snapTickValues={[
+                            1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+                            11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+                            21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+                            31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+                            41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
+                          ]}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -341,7 +345,7 @@ export default function SparplanRechnerPage() {
                     <div className="flex flex-col flex-1 min-h-0">
                       <div className="flex items-center justify-between gap-3 mb-3">
                         <h2 className="text-lg font-bold text-ds-neutral-100">Wertentwicklung</h2>
-                        <div className="inline-flex rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 p-0.5">
+                        <div className="inline-flex rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 p-0.5 gap-2">
                           <button
                             type="button"
                             onClick={() => setChartView("spanne")}
@@ -388,7 +392,7 @@ export default function SparplanRechnerPage() {
                   <>
                     <div className="flex items-center justify-between gap-3 mb-3">
                       <h2 className="text-lg font-bold text-ds-neutral-100">Wertentwicklung</h2>
-                      <div className="inline-flex rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 p-0.5">
+                      <div className="inline-flex rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 p-0.5 gap-2">
                         <button
                           type="button"
                           onClick={() => setChartView("spanne")}
