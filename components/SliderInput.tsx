@@ -88,7 +88,7 @@ export default function SliderInput({
             </div>
           )}
           {hasSnapTicks && (
-            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-3 flex justify-between pointer-events-none">
+            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 -mt-0.5 px-3 flex justify-between pointer-events-none">
               {snapTicksForRender!.map((v) => (
                 <span
                   key={v}
@@ -112,6 +112,7 @@ export default function SliderInput({
               [&::-moz-range-track]:h-4 md:[&::-moz-range-track]:h-2.5
               [&::-moz-range-track]:bg-ds-neutral-20 [&::-moz-range-track]:rounded-full
               [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-7 [&::-webkit-slider-thumb]:h-7 md:[&::-webkit-slider-thumb]:w-5 md:[&::-webkit-slider-thumb]:h-5
+              [&::-webkit-slider-thumb]:mt-[-6px] md:[&::-webkit-slider-thumb]:mt-[-5px]
               [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-ds-orange-60
               [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-0
               [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:duration-150
