@@ -166,7 +166,7 @@ export default function ValueChart({ data, view = "spanne" }: ValueChartProps) {
           <AreaChart
             data={chartData}
             // Mehr Platz links, damit große €-Ticks nicht abgeschnitten werden
-            margin={{ top: 10, right: 10, left: 8, bottom: 22 }}
+            margin={{ top: 10, right: 10, left: 0, bottom: 22 }}
           >
             <defs>
               {/* Spanne (95%) */}
@@ -205,12 +205,14 @@ export default function ValueChart({ data, view = "spanne" }: ValueChartProps) {
               domain={[0, euroMax]}
               ticks={euroTicks}
               interval={0}
-              width={92}
-              tickMargin={10}
+              // Werte sollen im Chart beginnen (links bündig mit Jahr 0 / Plot-Start)
+              mirror
+              width={0}
+              tickMargin={8}
               tickFormatter={(v) =>
                 new Intl.NumberFormat("de-DE", { maximumFractionDigits: 0 }).format(Number(v))
               }
-              tick={{ fill: "#3b403d", fontSize: 12 }}
+              tick={{ fill: "#3b403d", fontSize: 12, textAnchor: "start" }}
               tickLine={false}
               axisLine={false}
               label={{
