@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import {
   AreaChart,
   Area,
@@ -22,6 +23,26 @@ interface ValueChartProps {
   data: ChartDataPoint[];
   view?: "spanne" | "einzahlung_ertrag";
   fill?: boolean;
+}
+
+function useIsMobile(maxWidthPx = 639) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia(`(max-width: ${maxWidthPx}px)`);
+    const onChange = () => setIsMobile(mq.matches);
+    onChange();
+    // Safari fallback
+    if (typeof mq.addEventListener === "function") mq.addEventListener("change", onChange);
+    else mq.addListener(onChange);
+    return () => {
+      if (typeof mq.removeEventListener === "function") mq.removeEventListener("change", onChange);
+      else mq.removeListener(onChange);
+    };
+  }, [maxWidthPx]);
+
+  return isMobile;
 }
 
 function getNiceYearStep(maxYear: number) {
@@ -135,6 +156,7 @@ function CustomTooltip({
 }
 
 export default function ValueChart({ data, view = "spanne", fill = false }: ValueChartProps) {
+  const isMobile = useIsMobile();
   const chartData = data.map((d) => {
     const eingezahlt = d.einzahlungen ?? 0;
     const ertrag = (d.wert ?? 0) - eingezahlt;
@@ -161,6 +183,12 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
   );
   const { ticks: euroTicks, max: euroMax } = buildEuroTicks(maxY);
 
+  const formatNumber = useMemo(
+    () => new Intl.NumberFormat("de-DE", { maximumFractionDigits: 0 }),
+    []
+  );
+  const yTickFormatter = (v: number) => formatNumber.format(Number(v));
+
   const outerClass = fill
     ? "w-full flex flex-col h-full"
     : "w-full flex flex-col h-[300px] sm:h-[312px] md:h-[300px] lg:h-[320px]";
@@ -178,8 +206,8 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={chartData}
-            // Mehr Platz links, damit große €-Ticks nicht abgeschnitten werden
-            margin={{ top: 10, right: 10, left: 0, bottom: 22 }}
+            // Mobile: Achse kompakter, mehr Breite für den Plot
+            margin={{ top: 10, right: isMobile ? 8 : 10, left: 0, bottom: isMobile ? 18 : 22 }}
           >
             <defs>
               {/* Spanne (95%) */}
@@ -219,22 +247,24 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
               ticks={euroTicks}
               interval={0}
               // Y-Achsenwerte links außerhalb des Plots; Grid startet im Plot (wie Screenshot)
-              width={96}
-              tickMargin={10}
-              tickFormatter={(v) =>
-                new Intl.NumberFormat("de-DE", { maximumFractionDigits: 0 }).format(Number(v))
-              }
+              width={isMobile ? 64 : 96}
+              tickMargin={isMobile ? 6 : 10}
+              tickFormatter={yTickFormatter}
               tick={{ fill: "#3b403d", fontSize: 12 }}
               tickLine={false}
               axisLine={false}
-              label={{
-                value: "Euro",
-                angle: -90,
-                position: "insideLeft",
-                fill: "#616a65",
-                fontSize: 12,
-                fontWeight: 600,
-              }}
+              label={
+                isMobile
+                  ? undefined
+                  : {
+                      value: "Euro",
+                      angle: -90,
+                      position: "insideLeft",
+                      fill: "#616a65",
+                      fontSize: 12,
+                      fontWeight: 600,
+                    }
+              }
             />
             <Tooltip
               content={<CustomTooltip />}
