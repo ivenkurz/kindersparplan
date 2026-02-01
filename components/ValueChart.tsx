@@ -35,6 +35,13 @@ function YAxisTick({
   payload?: { value?: number | string };
 }) {
   const value = payload?.value ?? "";
+  const formatted = (() => {
+    // Recharts liefert hier oft rohe Zahlen ohne Formatierung → Tausenderpunkt erzwingen
+    if (typeof value === "string" && value.includes(".")) return value;
+    const asNum = typeof value === "number" ? value : Number(value);
+    if (!Number.isFinite(asNum)) return String(value);
+    return new Intl.NumberFormat("de-DE", { maximumFractionDigits: 0 }).format(asNum);
+  })();
   return (
     <text
       x={x}
@@ -49,7 +56,7 @@ function YAxisTick({
       strokeWidth={6}
       paintOrder="stroke"
     >
-      {value}
+      {formatted}
     </text>
   );
 }
