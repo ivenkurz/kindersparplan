@@ -207,7 +207,12 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
           <AreaChart
             data={chartData}
             // Mobile: Achse kompakter, mehr Breite für den Plot
-            margin={{ top: 10, right: isMobile ? 8 : 10, left: 0, bottom: isMobile ? 18 : 22 }}
+            margin={{
+              top: 10,
+              right: isMobile ? 8 : 10,
+              left: isMobile ? 6 : 0,
+              bottom: isMobile ? 18 : 22,
+            }}
           >
             <defs>
               {/* Spanne (95%) */}
@@ -225,11 +230,12 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
                 <stop offset="100%" stopColor="#008542" stopOpacity={0.12} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#d1d4d2" horizontal={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#d1d4d2" vertical={false} />
             <XAxis
               dataKey="jahr"
               ticks={yearTicks}
               interval={0}
+              padding={{ left: isMobile ? 10 : 0, right: isMobile ? 4 : 0 }}
               tick={{ fill: "#022011", fontSize: 14, fontWeight: 600 }}
               tickLine={false}
               axisLine={{ stroke: "#d1d4d2" }}
