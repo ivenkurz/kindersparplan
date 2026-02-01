@@ -208,6 +208,7 @@ export default function SparplanRechnerPage() {
                       max={10}
                       step={1}
                       hideValue
+                    snapTickValues={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
                     />
                     {/* Slider-Legende: Markierungen bei 0, 5, 10 mit Tooltips */}
                     <div className="mt-3 text-xs">
@@ -300,6 +301,13 @@ export default function SparplanRechnerPage() {
                         rightLabel="50 Jahre"
                         showValueRight
                         valueClassName="text-lg sm:text-xl font-semibold text-ds-orange-60 font-saans tracking-tight"
+                        snapTickValues={[
+                          1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+                          11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+                          21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+                          31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+                          41, 42, 43, 44, 45, 46, 47, 48, 49, 50
+                        ]}
                       />
                     </div>
                   </div>
@@ -319,7 +327,7 @@ export default function SparplanRechnerPage() {
                     Bitte gib gültige Werte (≥ 0 €) bei Einmalzahlung und monatlichem Sparplan ein.
                   </p>
                 ) : (
-                  <div className="space-y-6">
+                  <div className="h-full flex flex-col gap-6">
                     <ResultCards
                       gesamtEinzahlungen={gesamtEinzahlungen}
                       ertrag={ertrag}
@@ -330,7 +338,7 @@ export default function SparplanRechnerPage() {
                       stufe={stufeName}
                     />
                     <div className="h-px bg-ds-neutral-20" />
-                    <div>
+                    <div className="flex flex-col flex-1 min-h-0">
                       <div className="flex items-center justify-between gap-3 mb-3">
                         <h2 className="text-lg font-bold text-ds-neutral-100">Wertentwicklung</h2>
                         <div className="inline-flex rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 p-0.5">
@@ -358,7 +366,7 @@ export default function SparplanRechnerPage() {
                           </button>
                         </div>
                       </div>
-                      <div className="flex flex-col flex-1 min-h-[320px]">
+                      <div className="flex-1 min-h-[260px]">
                         <ValueChart data={chartData} view={chartView} fill />
                       </div>
                     </div>

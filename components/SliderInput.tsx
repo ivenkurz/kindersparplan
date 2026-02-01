@@ -16,6 +16,7 @@ interface SliderInputProps {
   valueClassName?: string;
   thumbLabel?: string;
   thumbLabelClassName?: string;
+  snapTickValues?: number[];
   id?: string;
 }
 
@@ -35,12 +36,14 @@ export default function SliderInput({
   valueClassName,
   thumbLabel,
   thumbLabelClassName,
+  snapTickValues,
   id,
 }: SliderInputProps) {
   const displayValue = formatValue ? formatValue(value) : `${value}${unit}`;
   const thumbPercent =
     max === min ? 0 : ((value - min) / (max - min)) * 100;
   const thumbLeft = Math.min(98, Math.max(2, thumbPercent));
+  const hasSnapTicks = Array.isArray(snapTickValues) && snapTickValues.length > 1;
 
   return (
     <div className="space-y-2">
@@ -78,6 +81,17 @@ export default function SliderInput({
               style={{ left: `${thumbLeft}%`, transform: "translateX(-50%)" }}
             >
               {thumbLabel}
+            </div>
+          )}
+          {hasSnapTicks && (
+            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-2.5 flex justify-between pointer-events-none">
+              {snapTickValues!.map((v) => (
+                <span
+                  key={v}
+                  className="w-px h-2 bg-white/90"
+                  aria-hidden="true"
+                />
+              ))}
             </div>
           )}
           <input
