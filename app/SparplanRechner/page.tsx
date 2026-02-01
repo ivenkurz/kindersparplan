@@ -72,17 +72,19 @@ export default function SparplanRechnerPage() {
         confLow: number;
         confRange: number;
       }[] = [];
-      // Chart soll bei Jahr 0 bei 0 € starten (laienfreundlicher Einstieg)
+      // Chart soll bei Jahr 0 bei 0 € starten (ohne Einmalzahlung/Monatsrate)
       data.push({ jahr: 0, wert: 0, einzahlungen: 0, confLow: 0, confRange: 0 });
 
-      let wert = einmalig;
+      // Einzahlung-Logik: Einmalzahlung kommt erst im ersten Monat dazu (nicht in Jahr 0)
+      let wert = 0;
       const monatlicheRendite = Math.pow(1 + rendite, 1 / 12) - 1;
       const z95 = 1.96; // übliche Konfidenz: 95%
       const sigma = Math.max(0, selectedStrategy.volatility); // jährliche Volatilität (0..)
 
       for (let jahr = 1; jahr <= laufzeit; jahr++) {
         for (let monat = 0; monat < 12; monat++) {
-          wert = (wert + monatlich) * (1 + monatlicheRendite);
+          const extraEinmalig = jahr === 1 && monat === 0 ? einmalig : 0;
+          wert = (wert + extraEinmalig + monatlich) * (1 + monatlicheRendite);
         }
         const faktor = Math.exp(z95 * sigma * Math.sqrt(jahr));
         const confLow = Math.round(wert / faktor);
