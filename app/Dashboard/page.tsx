@@ -79,8 +79,8 @@ export default function DashboardPage() {
           </div>
         </header>
 
-        {/* Account Summary Card – Figma: padding 20px, gap 30px, shadow, rounded-2xl */}
-        <section className="px-4 -mt-20 pb-0 font-saans">
+        {/* Account Summary Card – mittig, gleiche Abstände links/rechts */}
+        <section className="px-4 -mt-20 pb-0 font-saans flex justify-center">
           <div className="flex flex-row items-start p-5 min-h-[141px] w-full max-w-[335px] bg-ds-neutral-0 rounded-2xl shadow-[0px_2px_8px_rgba(0,0,0,0.08)]">
             {/* Labels | Values – gap 74px */}
             <div className="flex flex-row items-start gap-8 md:gap-[74px] flex-1 min-w-0">
@@ -96,16 +96,17 @@ export default function DashboardPage() {
                 )}
                 <span className="text-xs font-normal text-pocket-gray leading-4">Ertrag</span>
               </div>
-              {/* Values – Gesamtvermögen 21px/670, Einzahlungen 16px/380, Ertrag 16px/380 – Euro-Beträge rechtsbündig */}
-              <div className="flex flex-col items-end gap-4 shrink-0 min-w-[120px]">
-                <span className="text-[21px] font-[670] text-ds-neutral-100 leading-4 tabular-nums text-right w-full">{formatCurrency(8467.98)}</span>
+              {/* Values – rechts am Card-Rand, gleicher Abstand, Pfeil rechts vom Wert */}
+              <div className="flex flex-col items-end gap-4 flex-1 min-w-0 pr-0">
+                <span className="text-[21px] font-[670] text-ds-neutral-100 leading-4 tabular-nums text-right">{formatCurrency(8467.98)}</span>
                 <button
                   type="button"
                   onClick={() => setEinAuszahlungExpanded((e) => !e)}
-                  className="flex items-center justify-end gap-1.5 text-base font-normal text-ds-neutral-70 leading-4 tabular-nums hover:text-ds-neutral-100 transition-colors w-full"
+                  className="flex items-center justify-end gap-1.5 text-base font-normal text-ds-neutral-70 leading-4 tabular-nums hover:text-ds-neutral-100 transition-colors"
                   aria-expanded={einAuszahlungExpanded}
                   aria-label={einAuszahlungExpanded ? "Ein- und Auszahlungen einklappen" : "Ein- und Auszahlungen aufklappen"}
                 >
+                  <span className="tabular-nums text-right">{formatCurrency(8289.76)}</span>
                   <svg
                     width="16"
                     height="10"
@@ -116,15 +117,14 @@ export default function DashboardPage() {
                   >
                     <path d="M7.29365 9.70615C7.68428 10.0968 8.31865 10.0968 8.70928 9.70615L14.7093 3.70615C15.0999 3.31553 15.0999 2.68115 14.7093 2.29053C14.3187 1.8999 13.6843 1.8999 13.2937 2.29053L7.9999 7.58428L2.70615 2.29365C2.31553 1.90303 1.68115 1.90303 1.29053 2.29365C0.899902 2.68428 0.899902 3.31865 1.29053 3.70928L7.29053 9.70928L7.29365 9.70615" fill="#BBBFBD" />
                   </svg>
-                  <span className="tabular-nums text-right">{formatCurrency(8289.76)}</span>
                 </button>
                 {einAuszahlungExpanded && (
                   <>
-                    <span className="text-base font-normal text-ds-neutral-70 leading-4 tabular-nums text-right w-full">{formatCurrency(10000)}</span>
-                    <span className="text-base font-normal text-ds-neutral-70 leading-4 tabular-nums text-right w-full">{formatCurrency(1710.24)}</span>
+                    <span className="text-base font-normal text-ds-neutral-70 leading-4 tabular-nums text-right">{formatCurrency(10000)}</span>
+                    <span className="text-base font-normal text-ds-neutral-70 leading-4 tabular-nums text-right">{formatCurrency(1710.24)}</span>
                   </>
                 )}
-                <span className="text-base font-normal text-ds-seagreen leading-4 tabular-nums text-right w-full">{formatCurrency(317.44)}</span>
+                <span className="text-base font-normal text-ds-seagreen leading-4 tabular-nums text-right">{formatCurrency(317.44)}</span>
               </div>
             </div>
           </div>
