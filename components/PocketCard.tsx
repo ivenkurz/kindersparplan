@@ -3,6 +3,13 @@
 import { useId } from "react";
 import { Icon } from "./Icon";
 
+const InvestmentPocketIcon = () => (
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+    <rect width="32" height="32" rx="8" fill="#DCE05C" />
+    <path d="M24 15.4997C24 15.8812 23.6967 16.1905 23.3229 16.1907C22.949 16.1907 22.6458 15.8813 22.6458 15.4997V12.3593L16.7857 18.3404C16.5213 18.61 16.0926 18.61 15.8283 18.3404L12.6959 15.1434L7.15575 20.7978C6.89139 21.0674 6.46268 21.0674 6.19831 20.7978C5.9339 20.5279 5.9339 20.0896 6.19831 19.8197L12.2171 13.6767L12.2683 13.6299C12.5341 13.4083 12.9266 13.4238 13.1746 13.6767L16.307 16.8737L21.6875 11.3821H18.6107C18.2368 11.382 17.9336 11.0726 17.9336 10.6911C17.9336 10.3095 18.2368 10.0001 18.6107 10H23.3229C23.6967 10.0002 24 10.3095 24 10.6911V15.4997Z" fill="#022011" />
+  </svg>
+);
+
 const ZinsPocketIcon = () => {
   const clipId = useId();
   return (
@@ -63,13 +70,7 @@ export function PocketCard({
 
   return (
     <div className="rounded-xl border border-ds-neutral-20 bg-ds-neutral-0 p-5 shadow-md hover:shadow-lg transition-shadow flex items-start gap-2 font-saans">
-      <div className="w-8 h-8 rounded-full bg-pocket-green flex items-center justify-center shrink-0">
-        <Icon
-          name={investmentIcon}
-          size="sm"
-          className="text-ds-neutral-0 w-4 h-4"
-        />
-      </div>
+      <InvestmentPocketIcon />
       <div className="flex-1 min-w-0">
         <p className="text-lg md:text-xl font-bold text-black leading-tight tracking-tight tabular-nums">{formatCurrency(amount)}</p>
         <p className="text-xs font-medium text-gray-500 mt-0.5">{sublabel}</p>
