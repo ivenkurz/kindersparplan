@@ -69,16 +69,20 @@ export function PocketCard({
   }
 
   return (
-    <div className="rounded-xl border border-ds-neutral-20 bg-ds-neutral-0 p-5 shadow-md hover:shadow-lg transition-shadow flex items-start gap-2 font-saans">
-      <InvestmentPocketIcon />
-      <div className="flex-1 min-w-0">
-        <p className="text-lg md:text-xl font-bold text-black leading-tight tracking-tight tabular-nums">{formatCurrency(amount)}</p>
-        <p className="text-xs font-medium text-gray-500 mt-0.5">{sublabel}</p>
-        <p className="text-sm font-medium text-black mt-1">{title}</p>
+    <div className="box-border flex flex-col justify-between items-start p-4 gap-[10.5px] min-h-[103px] rounded-xl border border-zins-pocket-border bg-ds-neutral-0 shadow-md hover:shadow-lg transition-shadow font-saans">
+      {/* Top section: Icon + Betrag/Sublabel, gap 7px – Figma Layout */}
+      <div className="flex flex-row items-start gap-[7px] w-full">
+        <InvestmentPocketIcon />
+        <div className="flex-1 min-w-0 flex flex-col items-end text-right">
+          <p className="text-[18px] font-semibold text-black leading-[38px] tabular-nums">{formatCurrency(amount)}</p>
+          <p className="text-xs font-normal text-ds-neutral-70 leading-4">{sublabel}</p>
+        </div>
+        {locked && (
+          <Icon name="lock" size="sm" className="text-ds-neutral-100 w-[10.5px] h-3 shrink-0 mt-1" aria-label="Gesperrt" />
+        )}
       </div>
-      {locked && (
-        <Icon name="lock" size="sm" className="text-pocket-gray w-4 h-4 shrink-0" aria-label="Gesperrt" />
-      )}
+      {/* Bottom section: Title – 23px, bold, Family/serif */}
+      <p className="text-[23px] font-bold text-black leading-[38px] font-serif">{title}</p>
     </div>
   );
 }
