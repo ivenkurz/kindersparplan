@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface NumberInputProps {
   label: string;
@@ -15,6 +15,19 @@ interface NumberInputProps {
 const formatWithThousands = (v: number) =>
   new Intl.NumberFormat("de-DE", { maximumFractionDigits: 0 }).format(v);
 
+function useIsMobile(maxWidthPx = 767) {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia(`(max-width: ${maxWidthPx}px)`);
+    const onChange = () => setIsMobile(mq.matches);
+    onChange();
+    mq.addEventListener?.("change", onChange);
+    return () => mq.removeEventListener?.("change", onChange);
+  }, [maxWidthPx]);
+  return isMobile;
+}
+
 export default function NumberInput({
   label,
   value,
@@ -26,6 +39,9 @@ export default function NumberInput({
 }: NumberInputProps) {
   const [display, setDisplay] = useState<string>(() => formatWithThousands(value));
   const [isFocused, setIsFocused] = useState(false);
+  const [mobileModalOpen, setMobileModalOpen] = useState(false);
+  const mobileInputRef = useRef<HTMLInputElement>(null);
+  const isMobile = useIsMobile();
 
   const handleDecrement = () => onChange(Math.max(min, value - step));
   const handleIncrement = () => onChange(Math.min(max, value + step));
@@ -68,6 +84,33 @@ export default function NumberInput({
     }
   }, [value, isFocused]);
 
+  const openMobileModal = () => {
+    if (!isMobile) return;
+    setDisplay(String(value));
+    setMobileModalOpen(true);
+    setTimeout(() => mobileInputRef.current?.focus(), 150);
+  };
+
+  const closeMobileModal = () => {
+    setMobileModalOpen(false);
+    setDisplay(formatWithThousands(value));
+  };
+
+  useEffect(() => {
+    if (mobileModalOpen) {
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = "";
+      };
+    }
+  }, [mobileModalOpen]);
+
+  const confirmMobileModal = () => {
+    const n = parseInput(display);
+    onChange(n);
+    closeMobileModal();
+  };
+
   return (
     <div className="space-y-2">
       <label className="text-sm font-semibold text-ds-neutral-100 block">
@@ -93,15 +136,25 @@ export default function NumberInput({
             <path d="M4.459 11.978L19.541 11.979" />
           </svg>
         </button>
-        <input
-          type="text"
-          inputMode="numeric"
-          value={displayValue}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          onFocus={handleFocus}
-          className="flex-1 min-w-0 px-4 py-3 bg-transparent text-ds-neutral-100 font-semibold text-center border-0 focus:ring-0 focus:outline-none"
-        />
+        {isMobile ? (
+          <button
+            type="button"
+            onClick={openMobileModal}
+            className="flex-1 min-w-0 px-4 py-3 bg-transparent text-ds-neutral-100 font-semibold text-center border-0 cursor-pointer focus:ring-0 focus:outline-none"
+          >
+            {formatWithThousands(value)} {unit}
+          </button>
+        ) : (
+          <input
+            type="text"
+            inputMode="numeric"
+            value={displayValue}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            onFocus={handleFocus}
+            className="flex-1 min-w-0 px-4 py-3 bg-transparent text-ds-neutral-100 font-semibold text-center border-0 focus:ring-0 focus:outline-none"
+          />
+        )}
         <button
           type="button"
           onClick={handleIncrement}
@@ -122,6 +175,55 @@ export default function NumberInput({
           </svg>
         </button>
       </div>
+
+      {/* Mobile: Modal mit Zahlen-Eingabefeld */}
+      {mobileModalOpen && (
+        <div
+          className="fixed inset-0 z-50 md:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${label} eingeben`}
+        >
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={closeMobileModal}
+            aria-hidden="true"
+          />
+          <div className="absolute bottom-0 left-0 right-0 rounded-t-2xl bg-ds-neutral-0 p-6 pb-[env(safe-area-inset-bottom)] shadow-lg">
+            <p className="mb-4 text-sm font-semibold text-ds-neutral-70">{label}</p>
+            <input
+              ref={mobileInputRef}
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              value={display}
+              onChange={(e) => setDisplay(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") confirmMobileModal();
+              }}
+              className="mb-6 w-full rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 px-6 py-4 text-2xl font-semibold text-ds-neutral-100 text-center tabular-nums"
+              placeholder="0"
+              autoComplete="off"
+            />
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={closeMobileModal}
+                className="flex-1 rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 py-3 font-semibold text-ds-neutral-100"
+              >
+                Abbrechen
+              </button>
+              <button
+                type="button"
+                onClick={confirmMobileModal}
+                className="flex-1 rounded-ds-16 bg-ds-seagreen py-3 font-semibold text-ds-neutral-0"
+              >
+                Fertig
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
