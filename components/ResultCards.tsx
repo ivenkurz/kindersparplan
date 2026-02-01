@@ -55,13 +55,10 @@ export default function ResultCards(props: ResultCardsProps) {
   )}% p.a.)`;
 
   const wrapperClass = sticky ? "space-y-2" : "space-y-3";
-  const cardClass = sticky
-    ? "bg-ds-neutral-0 border border-ds-neutral-20 rounded-ds-lg shadow-sm px-4 py-3"
-    : "bg-ds-neutral-0 border border-ds-neutral-20 rounded-ds-lg shadow-sm p-5";
 
   return (
     <div className={wrapperClass}>
-      <div className={cardClass}>
+      <div>
         <div className="flex items-start justify-between gap-3">
           <p className="text-sm text-ds-neutral-70 font-semibold">
             Nach {laufzeit} Jahren
