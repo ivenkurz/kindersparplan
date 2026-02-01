@@ -233,13 +233,6 @@ export default function SparplanRechnerPage() {
                           Hoch
                         </span>
                       </div>
-                      <div className="mt-2 grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center">
-                        <span className="h-px bg-ds-neutral-20 w-full" />
-                        <span />
-                        <span className="h-px bg-ds-neutral-20 w-full" />
-                        <span />
-                        <span className="h-px bg-ds-neutral-20 w-full" />
-                      </div>
                     </div>
                     {([0, 5, 10] as const).map((pos) => (
                       <Tooltip
@@ -299,8 +292,6 @@ export default function SparplanRechnerPage() {
                           min={1}
                           max={50}
                           unit=" Jahre"
-                          leftLabel="1 Jahr"
-                          rightLabel="50 Jahre"
                           showValueRight
                           valueClassName="text-lg sm:text-xl font-semibold text-ds-orange-60 font-saans tracking-tight"
                           snapTickValues={[
@@ -311,6 +302,29 @@ export default function SparplanRechnerPage() {
                             41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
                           ]}
                         />
+                      </div>
+                      {/* Laufzeit-Legende: gleiches Layout wie Strategie */}
+                      <div className="mt-3 text-xs">
+                        <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center text-ds-neutral-100 font-semibold">
+                          <span className="justify-self-start inline-flex items-center justify-center min-w-[44px] min-h-[44px]">
+                            1 Jahr
+                          </span>
+                          <span className="text-ds-neutral-40 px-2">·</span>
+                          <span className="justify-self-center inline-flex items-center justify-center min-w-[44px] min-h-[44px]">
+                            25 Jahre
+                          </span>
+                          <span className="text-ds-neutral-40 px-2">·</span>
+                          <span className="justify-self-end inline-flex items-center justify-center min-w-[44px] min-h-[44px]">
+                            50 Jahre
+                          </span>
+                        </div>
+                        <div className="mt-2 grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center">
+                          <span className="h-px bg-ds-neutral-20 w-full" />
+                          <span />
+                          <span className="h-px bg-ds-neutral-20 w-full" />
+                          <span />
+                          <span className="h-px bg-ds-neutral-20 w-full" />
+                        </div>
                       </div>
                     </div>
                   </div>
