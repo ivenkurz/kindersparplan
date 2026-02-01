@@ -358,7 +358,9 @@ export default function SparplanRechnerPage() {
                           </button>
                         </div>
                       </div>
-                      <ValueChart data={chartData} view={chartView} />
+                      <div className="flex flex-col flex-1 min-h-[320px]">
+                        <ValueChart data={chartData} view={chartView} fill />
+                      </div>
                     </div>
                   </div>
                 )}

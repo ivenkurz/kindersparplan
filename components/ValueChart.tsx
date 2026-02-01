@@ -21,6 +21,7 @@ interface ChartDataPoint {
 interface ValueChartProps {
   data: ChartDataPoint[];
   view?: "spanne" | "einzahlung_ertrag";
+  fill?: boolean;
 }
 
 function getNiceYearStep(maxYear: number) {
@@ -76,7 +77,9 @@ function buildEuroTicks(maxValue: number) {
   const niceMax = Math.ceil(maxValue / step) * step;
   const ticks: number[] = [];
   for (let t = 0; t <= niceMax; t += step) ticks.push(t);
-  return { ticks: ticks.length ? ticks : [0], max: niceMax };
+  // "0" auf der Y-Achse weglassen (wir starten trotzdem bei 0 im Domain)
+  const ticksWithoutZero = ticks.filter((t) => t !== 0);
+  return { ticks: ticksWithoutZero.length ? ticksWithoutZero : [step], max: niceMax };
 }
 
 function CustomTooltip({
@@ -131,7 +134,7 @@ function CustomTooltip({
   );
 }
 
-export default function ValueChart({ data, view = "spanne" }: ValueChartProps) {
+export default function ValueChart({ data, view = "spanne", fill = false }: ValueChartProps) {
   const chartData = data.map((d) => {
     const eingezahlt = d.einzahlungen ?? 0;
     const ertrag = (d.wert ?? 0) - eingezahlt;
@@ -158,10 +161,20 @@ export default function ValueChart({ data, view = "spanne" }: ValueChartProps) {
   );
   const { ticks: euroTicks, max: euroMax } = buildEuroTicks(maxY);
 
+  const outerClass = fill
+    ? "w-full flex flex-col h-full"
+    : "w-full flex flex-col h-[300px] sm:h-[312px] md:h-[300px] lg:h-[320px]";
+
   return (
-    <div className="w-full flex flex-col h-[300px] sm:h-[312px] md:h-[300px] lg:h-[320px]">
+    <div className={outerClass}>
       {/* Chart: feste Höhe, unabhängig von Legende/Hinweis */}
-      <div className="flex-none h-[240px] sm:h-[260px] md:h-[240px] lg:h-[260px]">
+      <div
+        className={
+          fill
+            ? "flex-1 min-h-[220px]"
+            : "flex-none h-[240px] sm:h-[260px] md:h-[240px] lg:h-[260px]"
+        }
+      >
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={chartData}
@@ -205,16 +218,13 @@ export default function ValueChart({ data, view = "spanne" }: ValueChartProps) {
               domain={[0, euroMax]}
               ticks={euroTicks}
               interval={0}
-              // Werte sollen im Chart beginnen (links bündig mit Jahr 0 / Plot-Start),
-              // aber trotzdem nicht geclipped werden -> genügend Achsenbreite reservieren.
-              mirror
+              // Y-Achsenwerte links außerhalb des Plots; Grid startet im Plot (wie Screenshot)
               width={96}
               tickMargin={10}
               tickFormatter={(v) =>
                 new Intl.NumberFormat("de-DE", { maximumFractionDigits: 0 }).format(Number(v))
               }
-              // Links ausgerichtet nach innen (in den Plot hinein)
-              tick={{ fill: "#3b403d", fontSize: 12, textAnchor: "start" }}
+              tick={{ fill: "#3b403d", fontSize: 12 }}
               tickLine={false}
               axisLine={false}
               label={{
@@ -299,7 +309,13 @@ export default function ValueChart({ data, view = "spanne" }: ValueChartProps) {
       </div>
 
       {/* Legende + Erklärung: fester Block, damit Card-Höhe konstant bleibt */}
-      <div className="flex-none h-[60px] sm:h-[52px] pt-2 border-t border-ds-neutral-10 overflow-hidden">
+      <div
+        className={
+          fill
+            ? "flex-none pt-2 border-t border-ds-neutral-10 overflow-hidden"
+            : "flex-none h-[60px] sm:h-[52px] pt-2 border-t border-ds-neutral-10 overflow-hidden"
+        }
+      >
         {view === "spanne" ? (
           <>
             <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ds-neutral-90">
