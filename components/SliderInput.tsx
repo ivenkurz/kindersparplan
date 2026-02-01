@@ -43,8 +43,6 @@ export default function SliderInput({
   const thumbPercent =
     max === min ? 0 : ((value - min) / (max - min)) * 100;
   const thumbLeft = Math.min(98, Math.max(2, thumbPercent));
-  const hasSnapTicks = Array.isArray(snapTickValues) && snapTickValues.length > 1;
-  const snapTicksForRender = snapTickValues;
 
   return (
     <div className="space-y-2">
@@ -106,13 +104,6 @@ export default function SliderInput({
               [&::-moz-range-thumb]:transition-transform [&::-moz-range-thumb]:duration-150
               active:[&::-moz-range-thumb]:shadow-md"
           />
-          {hasSnapTicks && (
-            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-20 px-3 flex justify-between items-center pointer-events-none">
-              {snapTicksForRender!.map((v) => (
-                <span key={v} className="w-px h-3 bg-white/90 flex-shrink-0" aria-hidden="true" />
-              ))}
-            </div>
-          )}
         </div>
         {rightLabel && (
           <span className="text-xs text-ds-neutral-70 whitespace-nowrap shrink-0">
