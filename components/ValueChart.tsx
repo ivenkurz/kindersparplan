@@ -25,6 +25,8 @@ interface ValueChartProps {
   fill?: boolean;
 }
 
+const RISK_LINK_URL = "https://www.evergreen.de/download/fonds";
+
 function YAxisTick({
   x,
   y,
@@ -58,6 +60,109 @@ function YAxisTick({
     >
       {formatted}
     </text>
+  );
+}
+
+function RiskHinweis() {
+  const isMobile = useIsMobile();
+  const [open, setOpen] = useState(false);
+
+  const content = (
+    <div className="text-xs text-ds-neutral-90 leading-relaxed">
+      <p>
+        Die dargestellte Wertentwicklung bezieht sich auf die gewählte Beispielstrategie.
+        Grundlage der Entwicklung sind die Evergreen Sustainable World Fonds. Vergangene
+        Wertentwicklungen, einschließlich simulierten oder prognostizierten Renditen, sind
+        kein verlässlicher Indikator für die Zukunft. Der Wert einer Anlage kann schwanken
+        und Anlegende können Verluste bis hin zum Totalverlust erleiden. Diese Darstellung
+        stellt keine Anlageberatung oder Kaufempfehlung dar. Sie dient ausschließlich der
+        Information und berücksichtigt keine individuellen Anlageziele oder finanziellen
+        Verhältnisse. Vor einer Investition sollten die gesetzlichen Verkaufsunterlagen auf{" "}
+        <a
+          href={RISK_LINK_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-ds-orange-60 underline underline-offset-2"
+        >
+          {RISK_LINK_URL}
+        </a>{" "}
+        sorgfältig gelesen werden. Die Evergreen GmbH ist ein von der BaFin zugelassenes
+        Wertpapierinstitut gemäß § 15 WpIG.
+      </p>
+    </div>
+  );
+
+  const trigger = (
+    <button
+      type="button"
+      className="inline-flex items-center gap-1.5 text-xs text-ds-neutral-70 hover:text-ds-neutral-100 transition-colors"
+      onClick={() => {
+        if (isMobile) setOpen(true);
+      }}
+      onFocus={() => {
+        if (!isMobile) setOpen(true);
+      }}
+      onBlur={() => {
+        if (!isMobile) setOpen(false);
+      }}
+      aria-haspopup="dialog"
+      aria-expanded={open}
+    >
+      <span className="underline underline-offset-2">Risikohinweis</span>
+      <span className="inline-flex items-center justify-center w-4 h-4 rounded-full border border-ds-neutral-20 text-[10px] leading-none">
+        i
+      </span>
+    </button>
+  );
+
+  if (isMobile) {
+    return (
+      <>
+        {trigger}
+        {open && (
+          <div
+            className="fixed inset-0 z-50 bg-black/40 flex items-end sm:items-center justify-center p-4"
+            onClick={() => setOpen(false)}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Risikohinweis"
+          >
+            <div
+              className="w-full max-w-xl bg-ds-neutral-0 rounded-ds-lg border border-ds-neutral-20 shadow-sm p-4 sm:p-5 max-h-[80vh] overflow-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <p className="text-sm font-semibold text-ds-neutral-100">Risikohinweis</p>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-ds-neutral-20 text-ds-neutral-100"
+                  aria-label="Schließen"
+                >
+                  ×
+                </button>
+              </div>
+              {content}
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  return (
+    <div
+      className="relative inline-flex"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      {trigger}
+      {open && (
+        <div className="absolute z-50 bottom-full mb-2 left-1/2 -translate-x-1/2 w-[360px] max-w-[85vw] bg-ds-neutral-0 border border-ds-neutral-20 rounded-ds-16 shadow-sm p-3">
+          {content}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -375,8 +480,8 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
       <div
         className={
           fill
-            ? "flex-none pt-2 overflow-hidden"
-            : "flex-none h-[60px] sm:h-[52px] pt-2 overflow-hidden"
+            ? "flex-none pt-2 overflow-visible"
+            : "flex-none h-[76px] sm:h-[68px] pt-2 overflow-visible"
         }
       >
         {view === "spanne" ? (
@@ -413,6 +518,9 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
             </p>
           </>
         )}
+        <div className="mt-1 flex items-center justify-center">
+          <RiskHinweis />
+        </div>
       </div>
     </div>
   );
