@@ -159,7 +159,7 @@ export default function ValueChart({ data, view = "spanne" }: ValueChartProps) {
   const { ticks: euroTicks, max: euroMax } = buildEuroTicks(maxY);
 
   return (
-    <div className="w-full flex flex-col h-[320px] sm:h-[336px] md:h-[320px] lg:h-[340px]">
+    <div className="w-full flex flex-col h-[300px] sm:h-[312px] md:h-[300px] lg:h-[320px]">
       {/* Chart: feste Höhe, unabhängig von Legende/Hinweis */}
       <div className="flex-none h-[240px] sm:h-[260px] md:h-[240px] lg:h-[260px]">
         <ResponsiveContainer width="100%" height="100%">
@@ -299,7 +299,7 @@ export default function ValueChart({ data, view = "spanne" }: ValueChartProps) {
       </div>
 
       {/* Legende + Erklärung: fester Block, damit Card-Höhe konstant bleibt */}
-      <div className="flex-none h-[80px] sm:h-[76px] pt-3 border-t border-ds-neutral-10 overflow-hidden">
+      <div className="flex-none h-[60px] sm:h-[52px] pt-2 border-t border-ds-neutral-10 overflow-hidden">
         {view === "spanne" ? (
           <>
             <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ds-neutral-90">
@@ -312,7 +312,7 @@ export default function ValueChart({ data, view = "spanne" }: ValueChartProps) {
                 Spanne (95%)
               </div>
             </div>
-            <p className="mt-2 text-[11px] text-ds-neutral-70 text-center max-w-md mx-auto overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">
+            <p className="mt-1 text-[10px] text-ds-neutral-70 text-center max-w-md mx-auto overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">
               Die Spanne zeigt den Bereich, in dem der Ertrag mit hoher Wahrscheinlichkeit liegen wird.
             </p>
           </>
@@ -329,7 +329,7 @@ export default function ValueChart({ data, view = "spanne" }: ValueChartProps) {
               </div>
             </div>
             {/* Platzhalter, damit die Card-Höhe gleich bleibt */}
-            <p className="mt-2 text-[11px] text-ds-neutral-70 text-center max-w-md mx-auto opacity-0">
+            <p className="mt-1 text-[10px] text-ds-neutral-70 text-center max-w-md mx-auto opacity-0">
               Platzhalter
             </p>
           </>
