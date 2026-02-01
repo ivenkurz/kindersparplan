@@ -38,6 +38,9 @@ const config: Config = {
         "ds-darkgreen": "#054726",
         "ds-seagreen": "#008542",
         "ds-sage": "#a2bcaf",
+        "ds-pocket-dark": "#1E3A24",
+        "ds-pocket-yellow": "#FBE9AE",
+        "ds-investment-icon": "#9ACD32",
         "ds-crimson": "#c20024",
         // Legacy evergreen (alias) – behalte für Kompatibilität
         evergreen: {
