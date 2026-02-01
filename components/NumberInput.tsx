@@ -176,21 +176,21 @@ export default function NumberInput({
         </button>
       </div>
 
-      {/* Mobile: Modal mit Zahlen-Eingabefeld */}
+      {/* Mobile: Modal mit Zahlen-Eingabefeld (CDS-konform) */}
       {mobileModalOpen && (
         <div
-          className="fixed inset-0 z-50 md:hidden"
+          className="fixed inset-0 z-50 md:hidden font-saans"
           role="dialog"
           aria-modal="true"
           aria-label={`${label} eingeben`}
         >
           <div
-            className="absolute inset-0 bg-black/40"
+            className="absolute inset-0 bg-ds-neutral-100/40"
             onClick={closeMobileModal}
             aria-hidden="true"
           />
-          <div className="absolute bottom-0 left-0 right-0 rounded-t-2xl bg-ds-neutral-0 p-6 pb-[env(safe-area-inset-bottom)] shadow-lg">
-            <p className="mb-4 text-sm font-semibold text-ds-neutral-70">{label}</p>
+          <div className="absolute bottom-0 left-0 right-0 rounded-t-ds-lg border-t border-x border-ds-neutral-20 bg-ds-neutral-0 p-6 pb-[env(safe-area-inset-bottom)] shadow-lg">
+            <p className="mb-4 text-sm font-semibold text-ds-neutral-100">{label}</p>
             <input
               ref={mobileInputRef}
               type="text"
@@ -201,7 +201,7 @@ export default function NumberInput({
               onKeyDown={(e) => {
                 if (e.key === "Enter") confirmMobileModal();
               }}
-              className="mb-6 w-full rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 px-6 py-4 text-2xl font-semibold text-ds-neutral-100 text-center tabular-nums"
+              className="mb-6 w-full rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 px-6 py-4 text-2xl font-semibold text-ds-neutral-100 text-center tabular-nums placeholder:text-ds-neutral-40 focus:border-ds-seagreen focus:outline-none focus:ring-2 focus:ring-ds-seagreen/30"
               placeholder="0"
               autoComplete="off"
             />
@@ -209,14 +209,14 @@ export default function NumberInput({
               <button
                 type="button"
                 onClick={closeMobileModal}
-                className="flex-1 rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 py-3 font-semibold text-ds-neutral-100"
+                className="flex-1 rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 py-3 font-semibold text-ds-neutral-100 transition-colors hover:bg-ds-neutral-20"
               >
                 Abbrechen
               </button>
               <button
                 type="button"
                 onClick={confirmMobileModal}
-                className="flex-1 rounded-ds-16 bg-ds-seagreen py-3 font-semibold text-ds-neutral-0"
+                className="flex-1 rounded-ds-16 bg-ds-seagreen py-3 font-semibold text-ds-neutral-0 transition-colors hover:bg-ds-darkgreen"
               >
                 Fertig
               </button>
