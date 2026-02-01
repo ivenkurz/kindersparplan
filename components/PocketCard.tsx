@@ -3,7 +3,7 @@
 import { Icon } from "./Icon";
 
 const formatCurrency = (v: number) =>
-  new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR", maximumFractionDigits: 2 }).format(v);
+  new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(v);
 
 export type PocketVariant = "zins" | "investment";
 
@@ -28,12 +28,12 @@ export function PocketCard({
 }: PocketCardProps) {
   if (variant === "zins") {
     return (
-      <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 p-4 shadow-md hover:shadow-lg transition-shadow font-saans">
+      <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 p-5 shadow-md hover:shadow-lg transition-shadow font-saans">
         {/* Top section: Icon links, Betrag + ZinsPocket rechts, horizontal */}
-        <div className="flex items-start gap-3">
-          <div className="w-12 h-12 rounded-lg bg-zins-pocket-bg flex items-center justify-center shrink-0 border border-white/80">
-            <div className="w-7 h-7 rounded bg-pocket-dark flex items-center justify-center">
-              <Icon name="plus" size="sm" className="text-ds-neutral-0" strokeWidth={2.5} />
+        <div className="flex items-start gap-2">
+          <div className="w-9 h-9 rounded-lg bg-zins-pocket-bg flex items-center justify-center shrink-0 border border-white/80">
+            <div className="w-5 h-5 rounded bg-pocket-dark flex items-center justify-center">
+              <Icon name="plus" size="sm" className="text-ds-neutral-0 w-3 h-3" strokeWidth={2.5} />
             </div>
           </div>
           <div className="flex-1 min-w-0 pt-0.5">
@@ -48,12 +48,12 @@ export function PocketCard({
   }
 
   return (
-    <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 p-4 shadow-md hover:shadow-lg transition-shadow flex items-start gap-3 font-saans">
-      <div className="w-10 h-10 rounded-full bg-pocket-green flex items-center justify-center shrink-0">
+    <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 p-5 shadow-md hover:shadow-lg transition-shadow flex items-start gap-2 font-saans">
+      <div className="w-8 h-8 rounded-full bg-pocket-green flex items-center justify-center shrink-0">
         <Icon
           name={investmentIcon}
-          size="md"
-          className="text-ds-neutral-0"
+          size="sm"
+          className="text-ds-neutral-0 w-4 h-4"
         />
       </div>
       <div className="flex-1 min-w-0">
@@ -62,7 +62,7 @@ export function PocketCard({
         <p className="text-sm font-medium text-black mt-1">{title}</p>
       </div>
       {locked && (
-        <Icon name="lock" size="md" className="text-pocket-gray shrink-0" aria-label="Gesperrt" />
+        <Icon name="lock" size="sm" className="text-pocket-gray w-4 h-4 shrink-0" aria-label="Gesperrt" />
       )}
     </div>
   );
