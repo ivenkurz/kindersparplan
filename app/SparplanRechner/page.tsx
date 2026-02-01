@@ -368,7 +368,7 @@ export default function SparplanRechnerPage() {
 
               {/* Mobile: Chart bleibt unverändert als eigene Karte */}
               <div
-                className={`md:hidden px-4 py-4 border-b border-ds-neutral-10 transition-opacity ${
+                className={`md:hidden px-4 py-4 transition-opacity ${
                   isInvalid ? "opacity-50 pointer-events-none" : ""
                 }`}
               >
