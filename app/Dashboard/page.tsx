@@ -13,8 +13,8 @@ export default function DashboardPage() {
     <main className="min-h-screen bg-ds-neutral-0 font-saans pb-20">
       {/* Sticky: Header + Account Card – exakt wie Vorlage */}
       <div className="sticky top-0 z-20 shadow-md">
-        {/* Header – dunkelgrün, unten links/rechts rund, geht bis zur Hälfte der Card */}
-        <header className="bg-ds-neutral-100 px-4 pt-4 pb-16 rounded-b-ds-lg">
+        {/* Header – dunkelgrün, unten links/rechts rund, geht bis ca. Hälfte der Card */}
+        <header className="bg-ds-neutral-100 px-4 pt-4 pb-24 rounded-b-ds-lg">
           <div className="flex items-center justify-between">
             <span className="text-xl font-bold text-ds-neutral-0">evergreen</span>
             <div className="flex items-center gap-4">
@@ -38,9 +38,9 @@ export default function DashboardPage() {
           </div>
         </header>
 
-        {/* Account Summary Card – weiß, obere Hälfte unter Header (Vorlage) */}
-        <section className="px-4 -mt-[3.5rem] pb-4">
-          <div className="rounded-ds-lg border border-ds-neutral-20 bg-ds-neutral-0 shadow-sm p-5">
+        {/* Account Summary Card – weiß, obere Hälfte unter Header, kein Divider unten */}
+        <section className="px-4 -mt-16 pb-0">
+          <div className="rounded-ds-lg border-x border-t border-ds-neutral-20 bg-ds-neutral-0 shadow-sm p-5">
           <div className="flex justify-between items-center py-3 border-b border-ds-neutral-10">
             <span className="text-sm text-ds-neutral-70">Gesamtvermögen</span>
             <span className="text-lg font-bold text-ds-neutral-100">{formatCurrency(8467.98)}</span>
