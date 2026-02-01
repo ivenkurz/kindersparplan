@@ -48,61 +48,109 @@ export default function ResultCards(props: ResultCardsProps) {
   const isPositive = prozentSteigerung >= 0;
   const renditeColor = isPositive ? "text-ds-seagreen" : "text-ds-orange-90";
   const ertragColor = ertrag >= 0 ? "text-ds-seagreen" : "text-ds-orange-90";
-  const einzahlungenColor = "text-ds-neutral-70"; // wie Chart-Linie für Einzahlungen
+  const einzahlungenColor = "text-ds-neutral-100";
   const renditePrefix = isPositive ? "+" : "";
   const renditeLine = `${renditePrefix}${formatPercent(prozentSteigerung)}% (${formatPercent(
     twrPa
   )}% p.a.)`;
 
-  const spacingClass = sticky ? "space-y-2" : "space-y-4";
+  const wrapperClass = sticky ? "space-y-2" : "space-y-3";
+  const cardClass = sticky
+    ? "bg-ds-neutral-0 border border-ds-neutral-20 rounded-ds-lg shadow-sm px-4 py-3"
+    : "bg-ds-neutral-0 border border-ds-neutral-20 rounded-ds-lg shadow-sm p-5";
 
   return (
-    <div className={spacingClass}>
-      <div className="min-w-0">
-        <p className="text-xs md:text-sm text-ds-neutral-70 font-semibold mb-2">
-          Voraussichtliches Ergebnis nach {laufzeit} Jahren
-        </p>
-        <div className="flex items-end justify-between gap-4">
-          <div className="min-w-0 flex items-end gap-3 flex-nowrap">
-            <p
-              className={`font-semibold text-ds-neutral-100 leading-none ${
-                sticky ? "text-xl sm:text-2xl md:text-4xl" : "text-3xl md:text-4xl"
-              } tabular-nums whitespace-nowrap`}
+    <div className={wrapperClass}>
+      <div className={cardClass}>
+        <div className="flex items-start justify-between gap-3">
+          <p className="text-sm text-ds-neutral-70 font-semibold">
+            Nach {laufzeit} Jahren
+          </p>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-ds-pill bg-ds-seagreen/15 text-ds-seagreen text-xs font-semibold whitespace-nowrap">
+            <svg
+              className="w-4 h-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
             >
-              {formatCurrency(endwert)}
-            </p>
-            <p
-              className={`text-base md:text-lg font-semibold ${renditeColor} leading-none tabular-nums whitespace-nowrap min-w-[170px] text-right`}
-            >
+              <path d="M4 19V5" />
+              <path d="M4 19h16" />
+              <path d="M7 14l4-4 3 3 5-6" />
+            </svg>
+            Prognose
+          </span>
+        </div>
+
+        <div className="mt-2">
+          <p
+            className={`font-semibold text-ds-darkgreen leading-none ${
+              sticky ? "text-3xl" : "text-4xl"
+            } tabular-nums whitespace-nowrap`}
+          >
+            {formatCurrency(endwert)}
+          </p>
+
+          <div className="mt-2 flex items-center gap-3">
+            {isPositive && (
+              <span className="inline-flex items-center justify-center w-9 h-9 rounded-ds-16 bg-ds-seagreen/15 text-ds-seagreen shrink-0">
+                <svg
+                  className="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M12 6l8 14H4l8-14z" />
+                </svg>
+              </span>
+            )}
+            <p className={`text-lg font-semibold ${renditeColor} tabular-nums whitespace-nowrap`}>
               {renditeLine}
             </p>
           </div>
         </div>
+
+        <div className="mt-4 border-t border-ds-neutral-10 pt-3">
+          <div className="grid grid-cols-3 text-left">
+            <div className="pr-3">
+              <p className="text-[11px] tracking-widest text-ds-neutral-70 font-semibold">
+                EINZAHLUNG
+              </p>
+              <p className={`mt-1 text-lg font-semibold ${einzahlungenColor} tabular-nums whitespace-nowrap`}>
+                {formatCurrency(gesamtEinzahlungen)}
+              </p>
+            </div>
+
+            <div className="px-3 border-l border-ds-neutral-10">
+              <p className="text-[11px] tracking-widest text-ds-neutral-70 font-semibold">
+                ERTRAG
+              </p>
+              <p className={`mt-1 text-lg font-semibold ${ertragColor} tabular-nums whitespace-nowrap`}>
+                {ertrag >= 0 ? "+" : ""}
+                {formatCurrency(ertrag)}
+              </p>
+            </div>
+
+            <div className="pl-3 border-l border-ds-neutral-10">
+              <p className="text-[11px] tracking-widest text-ds-neutral-70 font-semibold">
+                SCHWANKUNG
+              </p>
+              <p className="mt-1 text-lg font-semibold text-ds-neutral-100 tabular-nums whitespace-nowrap">
+                ±{schwankungenFormatted}%
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-3 sm:gap-5 md:gap-4">
-        <div>
-          <p className="text-xs text-ds-neutral-70 font-medium mb-1">Einzahlungen</p>
-          <p className={`text-lg md:text-lg font-semibold ${einzahlungenColor} tabular-nums whitespace-nowrap`}>
-            {formatCurrency(gesamtEinzahlungen)}
-          </p>
-        </div>
-        <div>
-          <p className="text-xs text-ds-neutral-70 font-medium mb-1">Gesamtertrag</p>
-          <p className={`text-lg md:text-lg font-semibold ${ertragColor} tabular-nums whitespace-nowrap`}>
-            {ertrag >= 0 ? "+" : ""}
-            {formatCurrency(ertrag)}
-          </p>
-        </div>
-        <div>
-          <div className="flex items-center gap-1 mb-1">
-            <p className="text-xs text-ds-neutral-70 font-medium">Schwankungen</p>
-          </div>
-          <p className="text-lg md:text-lg font-semibold text-ds-neutral-100 tabular-nums whitespace-nowrap">
-            ±{schwankungenFormatted}%
-          </p>
-        </div>
-      </div>
+      {!sticky && (
+        <p className="text-xs text-ds-neutral-50 italic text-center">
+          Historische Werte – keine Garantie für die Zukunft.
+        </p>
+      )}
     </div>
   );
 }
