@@ -36,7 +36,7 @@ export default function DashboardPage() {
   return (
     <main className="min-h-screen bg-ds-neutral-0 font-saans pb-[calc(5rem+env(safe-area-inset-bottom))]">
       {/* Sticky Header + Account Card */}
-      <div className="sticky top-0 z-50 shadow-md">
+      <div className="sticky top-0 z-50">
         {/* Header – #022011 (ds-neutral-100) */}
         <header className="bg-ds-neutral-100 px-4 pt-4 pb-24 rounded-b-ds-lg">
           <div className="flex items-center justify-between h-16">
