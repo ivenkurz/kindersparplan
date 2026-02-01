@@ -44,10 +44,7 @@ export default function SliderInput({
     max === min ? 0 : ((value - min) / (max - min)) * 100;
   const thumbLeft = Math.min(98, Math.max(2, thumbPercent));
   const hasSnapTicks = Array.isArray(snapTickValues) && snapTickValues.length > 1;
-  const snapTicksForRender =
-    hasSnapTicks && snapTickValues!.length > 15
-      ? snapTickValues!.filter((_, idx) => idx % 5 === 0 || idx === snapTickValues!.length - 1)
-      : snapTickValues;
+  const snapTicksForRender = snapTickValues;
 
   return (
     <div className="space-y-2">
@@ -75,7 +72,7 @@ export default function SliderInput({
             {leftLabel}
           </span>
         )}
-        <div className="relative flex-1">
+        <div className="relative flex-1 h-11">
           {!!thumbLabel && (
             <div
               className={
@@ -88,7 +85,7 @@ export default function SliderInput({
             </div>
           )}
           {hasSnapTicks && (
-            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 -mt-1.5 px-3 flex justify-between pointer-events-none">
+            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-3 flex justify-between pointer-events-none">
               {snapTicksForRender!.map((v) => (
                 <span
                   key={v}
@@ -106,11 +103,9 @@ export default function SliderInput({
             step={step}
             value={value}
             onChange={(e) => onChange(Number(e.target.value))}
-            className="w-full h-11 bg-transparent appearance-none cursor-pointer
-              [&::-webkit-slider-runnable-track]:h-4 md:[&::-webkit-slider-runnable-track]:h-2.5
-              [&::-webkit-slider-runnable-track]:bg-ds-neutral-20 [&::-webkit-slider-runnable-track]:rounded-full
-              [&::-moz-range-track]:h-4 md:[&::-moz-range-track]:h-2.5
-              [&::-moz-range-track]:bg-ds-neutral-20 [&::-moz-range-track]:rounded-full
+            className="absolute inset-x-0 top-1/2 -translate-y-1/2 w-full h-4 md:h-2.5 bg-transparent appearance-none cursor-pointer
+              [&::-webkit-slider-runnable-track]:h-full [&::-webkit-slider-runnable-track]:bg-ds-neutral-20 [&::-webkit-slider-runnable-track]:rounded-full
+              [&::-moz-range-track]:h-full [&::-moz-range-track]:bg-ds-neutral-20 [&::-moz-range-track]:rounded-full
               [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-7 [&::-webkit-slider-thumb]:h-7 md:[&::-webkit-slider-thumb]:w-5 md:[&::-webkit-slider-thumb]:h-5
               [&::-webkit-slider-thumb]:mt-[-6px] md:[&::-webkit-slider-thumb]:mt-[-5px]
               [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-ds-orange-60
