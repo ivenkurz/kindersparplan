@@ -225,7 +225,7 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
                 <stop offset="100%" stopColor="#008542" stopOpacity={0.12} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#d1d4d2" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#d1d4d2" horizontal={false} />
             <XAxis
               dataKey="jahr"
               ticks={yearTicks}
@@ -246,11 +246,12 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
               domain={[0, euroMax]}
               ticks={euroTicks}
               interval={0}
-              // Y-Achsenwerte links außerhalb des Plots; Grid startet im Plot (wie Screenshot)
-              width={isMobile ? 64 : 96}
-              tickMargin={isMobile ? 6 : 10}
+              // Mobile: Werte innenliegend, damit der Plot breiter wird
+              mirror={isMobile}
+              width={isMobile ? 12 : 96}
+              tickMargin={isMobile ? 0 : 10}
               tickFormatter={yTickFormatter}
-              tick={{ fill: "#3b403d", fontSize: 12 }}
+              tick={{ fill: "#3b403d", fontSize: 12, dx: isMobile ? 10 : 0 }}
               tickLine={false}
               axisLine={false}
               label={
