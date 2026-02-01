@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-ds-neutral-0">
+    <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-ds-app-bg">
       <div className="text-center max-w-md">
         <h1 className="text-3xl sm:text-4xl font-bold text-ds-neutral-100 mb-4">
           Evergreen Sparplan-Rechner

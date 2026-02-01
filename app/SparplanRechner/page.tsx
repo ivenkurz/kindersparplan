@@ -128,10 +128,10 @@ export default function SparplanRechnerPage() {
     }, [einmalig, monatlich, laufzeit, isInvalid, rendite, schwankungenApi]);
 
   return (
-    <main className="min-h-screen bg-ds-neutral-0 font-saans">
+    <main className="min-h-screen bg-ds-app-bg font-saans">
       {/* Sticky Ergebnis oben – mobile-first, full-width (nur Mobile) */}
       {!isInvalid && (
-        <div className="md:hidden fixed top-0 left-0 right-0 z-20 bg-ds-neutral-0 border-b border-ds-neutral-10">
+        <div className="md:hidden fixed top-0 left-0 right-0 z-20 bg-ds-app-bg border-b border-ds-neutral-10">
           <div className="max-w-6xl mx-auto px-4 py-2.5">
             <ResultCards
               gesamtEinzahlungen={gesamtEinzahlungen}

@@ -11,5 +11,5 @@
 }
 
 body {
-  @apply bg-ds-neutral-0 text-ds-neutral-100 antialiased font-saans;
+  @apply bg-ds-app-bg text-ds-neutral-100 antialiased font-saans;
 }

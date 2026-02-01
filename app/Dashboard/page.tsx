@@ -34,7 +34,7 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-ds-neutral-0 font-saans pb-[calc(5rem+env(safe-area-inset-bottom))]">
+    <main className="min-h-screen bg-ds-app-bg font-saans pb-[calc(5rem+env(safe-area-inset-bottom))]">
       {/* Sticky Header + Account Card */}
       <div className="sticky top-0 z-50">
         {/* Header – #022011 (ds-neutral-100) */}
@@ -62,16 +62,16 @@ export default function DashboardPage() {
           </div>
         </header>
 
-        {/* Account Summary Card – ohne Ein- und Auszahlungen */}
-        <section className="px-4 -mt-20 pb-0">
+        {/* Account Summary Card – Saans, Vermögens-Typografie */}
+        <section className="px-4 -mt-20 pb-0 font-saans">
           <div className="rounded-ds-lg bg-ds-neutral-0 shadow-sm p-4">
-            <div className="flex justify-between items-center py-2 border-b border-ds-neutral-10">
-              <span className="text-sm text-ds-neutral-70">Gesamtvermögen</span>
-              <span className="text-lg font-bold text-ds-neutral-100">{formatCurrency(8467.98)}</span>
+            <div className="flex justify-between items-center py-3 border-b border-ds-neutral-10">
+              <span className="text-base font-medium text-gray-600">Gesamtvermögen</span>
+              <span className="text-4xl md:text-5xl font-bold text-evergreen-dark leading-tight tracking-tight tabular-nums">{formatCurrency(8467.98)}</span>
             </div>
-            <div className="flex justify-between items-center py-2">
-              <span className="text-sm text-ds-neutral-70">Ertrag</span>
-              <span className="text-lg font-semibold text-ds-seagreen">{formatCurrency(317.44)}</span>
+            <div className="flex justify-between items-center py-3">
+              <span className="text-base font-medium text-gray-600">Ertrag</span>
+              <span className="text-4xl md:text-5xl font-bold text-ds-seagreen leading-tight tracking-tight tabular-nums">{formatCurrency(317.44)}</span>
             </div>
           </div>
         </section>
