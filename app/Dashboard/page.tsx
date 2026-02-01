@@ -85,7 +85,7 @@ export default function DashboardPage() {
 
         {/* Account Summary Card – mittig, gleiche Abstände links/rechts */}
         <section className="px-4 -mt-20 pb-0 font-saans flex justify-center">
-          <div className="flex flex-row items-start p-5 min-h-[141px] w-full max-w-[335px] bg-ds-neutral-0 rounded-2xl shadow-[0px_2px_8px_rgba(0,0,0,0.08)]">
+          <div className="flex flex-row items-start px-5 pt-5 pb-3 w-full max-w-[335px] bg-ds-neutral-0 rounded-2xl shadow-[0px_2px_8px_rgba(0,0,0,0.08)]">
             {/* Labels | Values – gap 74px */}
             <div className="flex flex-row items-start gap-8 md:gap-[74px] flex-1 min-w-0">
               {/* Labels – 12px, weight 380, #6B7280 */}
