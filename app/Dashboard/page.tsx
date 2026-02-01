@@ -161,29 +161,34 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      {/* Action Buttons */}
-      <section className="px-4 mt-6 flex gap-3">
-        <button
-          type="button"
-          className="flex-1 rounded-ds-16 bg-ds-orange-60 py-3 font-semibold text-ds-neutral-0 hover:bg-ds-orange-70 transition-colors"
-        >
-          Einzahlen
-        </button>
-        <Link
-          href="/SparplanRechner"
-          className="flex-1 rounded-ds-16 bg-ds-darkgreen py-3 font-semibold text-ds-neutral-0 text-center hover:bg-ds-neutral-90 transition-colors"
-        >
-          Sparpläne
-        </Link>
-        <button
-          type="button"
-          className="rounded-ds-16 bg-ds-darkgreen p-3 text-ds-neutral-0 hover:bg-ds-neutral-90 transition-colors"
-          aria-label="Überweisung"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-          </svg>
-        </button>
+      {/* Spacer für Floating Buttons */}
+      <div className="h-24" />
+
+      {/* Floating Action Buttons */}
+      <section className="fixed bottom-20 left-4 right-4 z-30 flex gap-3 px-0 pb-[env(safe-area-inset-bottom)]">
+        <div className="flex-1 flex gap-3 rounded-ds-lg bg-ds-neutral-0 p-3 shadow-lg border border-ds-neutral-10">
+          <button
+            type="button"
+            className="flex-1 rounded-ds-16 bg-ds-orange-60 py-3 font-semibold text-ds-neutral-0 hover:bg-ds-orange-70 transition-colors shadow-md"
+          >
+            Einzahlen
+          </button>
+          <Link
+            href="/SparplanRechner"
+            className="flex-1 rounded-ds-16 bg-ds-darkgreen py-3 font-semibold text-ds-neutral-0 text-center hover:bg-ds-neutral-90 transition-colors shadow-md"
+          >
+            Sparpläne
+          </Link>
+          <button
+            type="button"
+            className="rounded-ds-16 bg-ds-darkgreen p-3 text-ds-neutral-0 hover:bg-ds-neutral-90 transition-colors shadow-md shrink-0"
+            aria-label="Überweisung"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+          </button>
+        </div>
       </section>
 
       {/* Bottom Navigation */}
