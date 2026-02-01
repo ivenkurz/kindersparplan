@@ -72,7 +72,7 @@ export default function SliderInput({
             {leftLabel}
           </span>
         )}
-        <div className="relative flex-1 h-11">
+        <div className="relative flex-1 h-14 md:h-11">
           {!!thumbLabel && (
             <div
               className={
@@ -95,13 +95,13 @@ export default function SliderInput({
             className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-10 w-full h-4 md:h-2.5 bg-transparent appearance-none cursor-pointer
               [&::-webkit-slider-runnable-track]:h-full [&::-webkit-slider-runnable-track]:bg-ds-neutral-20 [&::-webkit-slider-runnable-track]:rounded-full
               [&::-moz-range-track]:h-full [&::-moz-range-track]:bg-ds-neutral-20 [&::-moz-range-track]:rounded-full
-              [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-7 [&::-webkit-slider-thumb]:h-7 md:[&::-webkit-slider-thumb]:w-5 md:[&::-webkit-slider-thumb]:h-5
-              [&::-webkit-slider-thumb]:mt-[-6px] md:[&::-webkit-slider-thumb]:mt-[-5px]
+              [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-11 [&::-webkit-slider-thumb]:h-11 md:[&::-webkit-slider-thumb]:w-5 md:[&::-webkit-slider-thumb]:h-5
+              [&::-webkit-slider-thumb]:mt-[-14px] md:[&::-webkit-slider-thumb]:mt-[-5px]
               [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-ds-neutral-100
               [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-0
               [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:duration-150
               active:[&::-webkit-slider-thumb]:shadow-md [&:hover::-webkit-slider-thumb]:shadow-md
-              [&::-moz-range-thumb]:w-7 [&::-moz-range-thumb]:h-7 md:[&::-moz-range-thumb]:w-5 md:[&::-moz-range-thumb]:h-5
+              [&::-moz-range-thumb]:w-11 [&::-moz-range-thumb]:h-11 md:[&::-moz-range-thumb]:w-5 md:[&::-moz-range-thumb]:h-5
               [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-ds-neutral-100 [&::-moz-range-thumb]:border-0
               [&::-moz-range-thumb]:transition-transform [&::-moz-range-thumb]:duration-150
               active:[&::-moz-range-thumb]:shadow-md"
