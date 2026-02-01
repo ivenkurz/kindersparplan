@@ -46,6 +46,7 @@ const config: Config = {
         "ds-investment-icon": "#9ACD32",
         // Pocket-Cards – exakte Figma-Hex-Werte (extend only)
         "pocket-yellow": "#FCD34D",
+        "zins-pocket-bg": "#FEE8B6",
         "pocket-green": "#10B981",
         "pocket-accent": "#F97316",
         "pocket-dark": "#1E3A24",
