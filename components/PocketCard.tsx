@@ -75,14 +75,16 @@ export function PocketCard({
 
   return (
     <div className="box-border flex flex-col justify-between items-start p-4 gap-[10.5px] min-h-[103px] rounded-xl border border-zins-pocket-border bg-ds-neutral-0 shadow-md hover:shadow-lg transition-shadow font-saans">
-      {/* Top section: Icon + Betrag/Sublabel, gap 7px – Figma Layout */}
+      {/* Top section: Icon + Betrag/Sublabel + Lock-Platz – Zahlen untereinander, Platz für Schloss */}
       <div className="flex flex-row items-start gap-[7px] w-full">
         <InvestmentPocketIcon />
-        <div className="flex-1 min-w-0 flex flex-col items-end text-right">
+        <div className="flex-1 min-w-[110px] flex flex-col items-end text-right pr-3">
           <p className="text-[18px] font-semibold text-black leading-[38px] tabular-nums">{formatCurrency(amount)}</p>
           <p className="text-xs font-normal text-ds-neutral-70 leading-4">{sublabel}</p>
         </div>
-        {locked && <LockIcon />}
+        <div className="w-[14px] shrink-0 flex items-start justify-center">
+          {locked && <LockIcon />}
+        </div>
       </div>
       {/* Bottom section: Title – 23px, bold, Family/serif */}
       <p className="text-[23px] font-bold text-black leading-[38px] font-serif">{title}</p>
