@@ -37,12 +37,12 @@ export function PocketCard({
             </div>
           </div>
           <div className="flex-1 min-w-0 pt-0.5">
-            <p className="text-2xl md:text-3xl font-bold text-black leading-tight tracking-tight tabular-nums">{formatCurrency(amount)}</p>
-            <p className="text-sm text-ds-neutral-70 mt-0.5 font-normal">{sublabel}</p>
+            <p className="text-lg md:text-xl font-bold text-black leading-tight tracking-tight tabular-nums">{formatCurrency(amount)}</p>
+            <p className="text-xs text-ds-neutral-70 mt-0.5 font-normal">{sublabel}</p>
           </div>
         </div>
-        {/* Bottom section: Reisen – sehr groß, serif, deutlicher Abstand */}
-        <p className="text-3xl md:text-4xl font-bold text-black font-serif mt-6">{title}</p>
+        {/* Bottom section: Reisen – serif, reduzierter Abstand */}
+        <p className="text-xl md:text-2xl font-bold text-black font-serif mt-4">{title}</p>
       </div>
     );
   }
@@ -57,9 +57,9 @@ export function PocketCard({
         />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-2xl md:text-3xl font-bold text-black leading-tight tracking-tight tabular-nums">{formatCurrency(amount)}</p>
-        <p className="text-sm font-medium text-gray-500 mt-0.5">{sublabel}</p>
-        <p className="text-base font-medium text-black mt-1">{title}</p>
+        <p className="text-lg md:text-xl font-bold text-black leading-tight tracking-tight tabular-nums">{formatCurrency(amount)}</p>
+        <p className="text-xs font-medium text-gray-500 mt-0.5">{sublabel}</p>
+        <p className="text-sm font-medium text-black mt-1">{title}</p>
       </div>
       {locked && (
         <Icon name="lock" size="md" className="text-pocket-gray shrink-0" aria-label="Gesperrt" />
