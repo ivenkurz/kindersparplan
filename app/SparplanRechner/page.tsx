@@ -168,11 +168,13 @@ export default function SparplanRechnerPage() {
         </header>
 
         {/* Desktop: klarer, begrenzter Gesamt-Container (Mobile unverändert) */}
-        <div className="bg-ds-yellow-10 border border-ds-neutral-20 rounded-ds-lg shadow-sm p-5 sm:p-6">
+        {/* Mobile: flach/app-like ohne gelbe Card. Desktop: gelbe Card wie bisher. */}
+        <div className="bg-transparent border-0 rounded-none shadow-none p-0 md:bg-ds-yellow-10 md:border md:border-ds-neutral-20 md:rounded-ds-lg md:shadow-sm md:p-5 md:sm:p-6">
           <div className="flex flex-col md:flex-row md:items-stretch gap-4 md:gap-6 pt-8 md:pt-0">
             <div className="flex-1 min-w-0 flex flex-col gap-4 md:gap-6">
               {/* Karte 1: Dein Risiko */}
-              <div className="bg-ds-neutral-0 rounded-ds-lg shadow-sm p-5 sm:p-8 border border-ds-neutral-20">
+              <section className="px-4 py-4 border-b border-ds-neutral-10 md:border-b-0 md:px-0 md:py-0">
+              <div className="bg-transparent border-0 rounded-none shadow-none p-0 md:bg-ds-neutral-0 md:rounded-ds-lg md:shadow-sm md:p-6 md:sm:p-8 md:border md:border-ds-neutral-20">
                 <div className="flex items-center gap-3 mb-6">
                   <StepBadge number={1} />
                   <h2 className="text-lg font-bold text-ds-neutral-100">
@@ -249,9 +251,11 @@ export default function SparplanRechnerPage() {
                   </div>
                 </div>
               </div>
+              </section>
 
               {/* Karte 2: Sparplan einrichten */}
-              <div className="bg-ds-neutral-0 rounded-ds-lg shadow-sm p-5 sm:p-8 border border-ds-neutral-20 flex-1 flex flex-col">
+              <section className="px-4 py-4 border-b border-ds-neutral-10 md:border-b-0 md:px-0 md:py-0">
+              <div className="bg-transparent border-0 rounded-none shadow-none p-0 md:bg-ds-neutral-0 md:rounded-ds-lg md:shadow-sm md:p-6 md:sm:p-8 md:border md:border-ds-neutral-20 flex-1 flex flex-col">
                 <div className="flex items-center gap-3 mb-6">
                   <StepBadge number={2} />
                   <h2 className="text-lg font-bold text-ds-neutral-100">Sparplan konfigurieren</h2>
@@ -312,6 +316,7 @@ export default function SparplanRechnerPage() {
                   </div>
                 </div>
               </div>
+              </section>
             </div>
 
             <div className="flex-1 min-w-0 flex flex-col gap-6">
@@ -375,7 +380,7 @@ export default function SparplanRechnerPage() {
 
               {/* Mobile: Chart bleibt unverändert als eigene Karte */}
               <div
-                className={`md:hidden bg-ds-neutral-0 rounded-ds-lg shadow-sm p-6 sm:p-8 border border-ds-neutral-20 transition-opacity ${
+                className={`md:hidden px-4 py-4 border-b border-ds-neutral-10 transition-opacity ${
                   isInvalid ? "opacity-50 pointer-events-none" : ""
                 }`}
               >
