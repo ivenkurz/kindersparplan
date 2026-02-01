@@ -169,8 +169,9 @@ export default function SparplanRechnerPage() {
 
         {/* Desktop: klarer, begrenzter Gesamt-Container (Mobile unverändert) */}
         <div className="bg-ds-yellow-10 border border-ds-neutral-20 rounded-ds-lg shadow-sm p-4 sm:p-6">
-          <div className="flex flex-col md:flex-row md:items-stretch gap-6 pt-8 md:pt-0">
-            <div className="flex-1 min-w-0 flex flex-col gap-6">
+          <div className="pt-8 md:pt-0 grid grid-cols-1 md:grid-cols-12 md:items-stretch gap-6 md:gap-8">
+            {/* Links (Desktop ~35–40%): Inputs */}
+            <div className="col-span-1 md:col-span-5 lg:col-span-4 min-w-0 flex flex-col gap-6">
               {/* Karte 1: Dein Risiko */}
               <div className="bg-ds-neutral-0 rounded-ds-lg shadow-sm p-6 sm:p-8 border border-ds-neutral-20">
                 <div className="flex items-center gap-3 mb-6">
@@ -315,7 +316,8 @@ export default function SparplanRechnerPage() {
               </div>
             </div>
 
-            <div className="flex-1 min-w-0 flex flex-col gap-6">
+            {/* Rechts (Desktop ~60–65%): Ergebnis + großer Chart */}
+            <div className="col-span-1 md:col-span-7 lg:col-span-8 min-w-0 flex flex-col gap-6">
               {/* Desktop: Ergebnis + Chart in einem gemeinsamen Block */}
               <div
                 className={`hidden md:flex bg-ds-neutral-0 rounded-ds-lg shadow-sm p-6 sm:p-8 border border-ds-neutral-20 transition-opacity flex-1 flex-col ${
@@ -366,7 +368,7 @@ export default function SparplanRechnerPage() {
                           </button>
                         </div>
                       </div>
-                      <div className="flex-1 min-h-[260px]">
+                      <div className="flex-1 min-h-[320px] md:min-h-[500px] lg:min-h-[600px]">
                         <ValueChart data={chartData} view={chartView} fill />
                       </div>
                     </div>
