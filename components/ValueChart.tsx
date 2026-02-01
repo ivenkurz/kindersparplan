@@ -25,6 +25,35 @@ interface ValueChartProps {
   fill?: boolean;
 }
 
+function YAxisTick({
+  x,
+  y,
+  payload,
+}: {
+  x?: number;
+  y?: number;
+  payload?: { value?: number | string };
+}) {
+  const value = payload?.value ?? "";
+  return (
+    <text
+      x={x}
+      y={y}
+      dx={10}
+      dy={4}
+      textAnchor="start"
+      fill="#3b403d"
+      fontSize={12}
+      // "Halo": maskiert Grid-Linien hinter den Labels (robust)
+      stroke="#fff"
+      strokeWidth={6}
+      paintOrder="stroke"
+    >
+      {value}
+    </text>
+  );
+}
+
 function useIsMobile(maxWidthPx = 639) {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -253,11 +282,12 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
               domain={[0, euroMax]}
               ticks={euroTicks}
               interval={0}
-              // Robust: Labels außerhalb des Plots, Grid startet erst im Plot (überdeckt keine Labels)
-              width={yAxisWidth}
-              tickMargin={isMobile ? 6 : 10}
+              // Chart soll "unter" die Werte gehen: Labels innenliegend (über dem Plot)
+              mirror
+              width={12}
+              tickMargin={0}
               tickFormatter={yTickFormatter}
-              tick={{ fill: "#3b403d", fontSize: isMobile ? 11 : 12 }}
+              tick={<YAxisTick />}
               tickLine={false}
               axisLine={false}
               label={undefined}
@@ -362,12 +392,12 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
           <>
             <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ds-neutral-90">
               <div className="flex items-center gap-2">
-                <span className="w-4 h-[3px] rounded-full bg-[#616a65]" />
-                Einzahlungen
-              </div>
-              <div className="flex items-center gap-2">
                 <span className="w-4 h-[3px] rounded-full bg-[#008542]" />
                 Erwarteter Gesamtwert
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-4 h-[3px] rounded-full bg-[#616a65]" />
+                Einzahlungen
               </div>
             </div>
             {/* Platzhalter, damit die Card-Höhe gleich bleibt */}
