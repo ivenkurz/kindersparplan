@@ -53,6 +53,7 @@ function YAxisTick({
       textAnchor="start"
       fill="#3b403d"
       fontSize={12}
+      fontFamily="var(--font-saans), Helvetica, sans-serif"
       // "Halo": maskiert Grid-Linien hinter den Labels (robust)
       stroke="#fff"
       strokeWidth={6}
@@ -378,7 +379,12 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
               ticks={yearTicks}
               interval={0}
               padding={{ left: isMobile ? 10 : 0, right: isMobile ? 4 : 0 }}
-              tick={{ fill: "#022011", fontSize: 14, fontWeight: 600 }}
+              tick={{
+                fill: "#022011",
+                fontSize: 14,
+                fontWeight: 600,
+                fontFamily: "var(--font-saans), Helvetica, sans-serif",
+              }}
               tickLine={false}
               axisLine={{ stroke: "#d1d4d2" }}
               label={{
