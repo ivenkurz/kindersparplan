@@ -10,7 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        saans: ["Saans", "Helvetica", "sans-serif"],
+        saans: ["var(--font-saans)", "Helvetica", "sans-serif"],
       },
       colors: {
         // Marketing Design System – behalte Locofy-Extraktion
