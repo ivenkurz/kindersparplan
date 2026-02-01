@@ -174,40 +174,28 @@ export default function SparplanRechnerPage() {
         <div className="bg-transparent border-0 rounded-none shadow-none p-0 md:bg-ds-yellow-10 md:border md:border-ds-neutral-20 md:rounded-ds-lg md:shadow-sm md:p-5 md:sm:p-6">
           <div className="flex flex-col md:flex-row md:items-stretch gap-4 md:gap-6 pt-8 md:pt-0">
             <div className="flex-1 min-w-0 flex flex-col gap-4 md:gap-6">
-              {/* Karte 1: Dein Risiko */}
+              {/* Karte 1: Strategie */}
               <section className="px-4 py-4 border-b border-ds-neutral-10 md:border-b-0 md:px-0 md:py-0">
               <div className="bg-transparent border-0 rounded-none shadow-none p-0 md:bg-ds-neutral-0 md:rounded-ds-lg md:shadow-sm md:p-6 md:sm:p-8 md:border md:border-ds-neutral-20">
                 <div className="flex items-center gap-3 mb-6">
                   <StepBadge number={1} />
                   <h2 className="text-lg font-bold text-ds-neutral-100">
-                    Risiko/Ertrag wählen
+                    Strategie
                   </h2>
                 </div>
 
                 <div className="space-y-4 md:space-y-6">
                   <div>
-                    <h3 className="text-sm font-semibold text-ds-neutral-100 mb-2">Strategie</h3>
-                    <div className="relative bg-ds-neutral-10 border border-ds-neutral-20 rounded-ds-16 p-4 sm:p-5 shadow-sm overflow-hidden min-h-[112px]">
-                      <p className="font-semibold text-ds-neutral-100 truncate pr-1">
-                        {selectedStrategy.name}
-                      </p>
-                      <p className="text-sm text-ds-neutral-70 mt-1 overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">
-                        {selectedStrategy.beschreibung}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div>
                     <div className="pt-2 pb-0 md:py-0">
                       <SliderInput
-                        label="Risiko/Ertrag"
+                        label=""
                         value={strategieIndex}
                         onChange={setStrategieIndex}
                         min={0}
                         max={10}
                         step={1}
                         hideValue
-                        snapTickValues={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+                        snapTickValues={[0, 5, 10]}
                       />
                     </div>
                     {/* Slider-Legende: Markierungen bei 0, 5, 10 (ohne Tooltips) */}
@@ -224,6 +212,36 @@ export default function SparplanRechnerPage() {
                         <span className="justify-self-end inline-flex items-center justify-center min-w-[44px] min-h-[44px]">
                           Hoch
                         </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Strategie-Card unter dem Slider */}
+                  <div className="bg-ds-neutral-0 border border-ds-neutral-20 rounded-ds-lg shadow-sm p-4 sm:p-5">
+                    <div className="flex items-start gap-3">
+                      <div className="w-11 h-11 rounded-ds-16 bg-ds-orange-30 text-ds-orange-60 flex items-center justify-center shrink-0">
+                        <svg
+                          className="w-6 h-6"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M12 2l8 4v6c0 5-3.5 9.5-8 10-4.5-.5-8-5-8-10V6l8-4z" />
+                          <path d="M9 12l2 2 4-4" />
+                        </svg>
+                      </div>
+
+                      <div className="min-w-0">
+                        <p className="text-base font-semibold text-ds-neutral-100 truncate">
+                          {selectedStrategy.name}
+                        </p>
+                        <p className="mt-1 text-sm text-ds-neutral-70 overflow-hidden [display:-webkit-box] [-webkit-line-clamp:1] [-webkit-box-orient:vertical]">
+                          {selectedStrategy.beschreibung}
+                        </p>
                       </div>
                     </div>
                   </div>
