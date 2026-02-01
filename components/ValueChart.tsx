@@ -253,13 +253,11 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
               domain={[0, euroMax]}
               ticks={euroTicks}
               interval={0}
-              // Werte "innenliegend" (Richtung Plot), aber in der Achsen-Gutter positioniert,
-              // damit das Grid die Labels nicht überdeckt.
-              mirror
+              // Robust: Labels außerhalb des Plots, Grid startet erst im Plot (überdeckt keine Labels)
               width={yAxisWidth}
-              tickMargin={0}
+              tickMargin={isMobile ? 6 : 10}
               tickFormatter={yTickFormatter}
-              tick={{ fill: "#3b403d", fontSize: 12, dx: -8 }}
+              tick={{ fill: "#3b403d", fontSize: isMobile ? 11 : 12 }}
               tickLine={false}
               axisLine={false}
               label={undefined}
@@ -349,7 +347,7 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
             <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ds-neutral-90">
               <div className="flex items-center gap-2">
                 <span className="w-4 h-[3px] rounded-full bg-ds-seagreen" />
-                Erwarteter Verlauf
+                Erwarteter Gesamtwert
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-sm bg-[#008542]/20 border border-ds-neutral-20" />
@@ -369,7 +367,7 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-4 h-[3px] rounded-full bg-[#008542]" />
-                Ertrag
+                Erwarteter Gesamtwert
               </div>
             </div>
             {/* Platzhalter, damit die Card-Höhe gleich bleibt */}
