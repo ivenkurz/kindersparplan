@@ -18,7 +18,11 @@ export default function DashboardPage() {
     const handleScroll = () => {
       const current = window.scrollY;
       const last = lastScrollYRef.current;
-      setNavVisible(current <= last || current < 50);
+      const isAtBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 20;
+      const isScrollingUp = current <= last;
+      const isAtTop = current < 50;
+      setNavVisible((isScrollingUp || isAtTop) && !isAtBottom);
       lastScrollYRef.current = current;
     };
     let ticking = false;
@@ -102,21 +106,11 @@ export default function DashboardPage() {
                 <button
                   type="button"
                   onClick={() => setEinAuszahlungExpanded((e) => !e)}
-                  className="flex items-center justify-end gap-1.5 text-base font-normal text-ds-neutral-70 leading-4 tabular-nums hover:text-ds-neutral-100 transition-colors"
+                  className="flex items-center justify-end text-base font-normal text-ds-neutral-70 leading-4 tabular-nums hover:text-ds-neutral-100 transition-colors"
                   aria-expanded={einAuszahlungExpanded}
                   aria-label={einAuszahlungExpanded ? "Ein- und Auszahlungen einklappen" : "Ein- und Auszahlungen aufklappen"}
                 >
-                  <span className="tabular-nums text-right">{formatCurrency(8289.76)}</span>
-                  <svg
-                    width="16"
-                    height="10"
-                    viewBox="0 0 16 10"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className={`shrink-0 transition-transform ${einAuszahlungExpanded ? "rotate-180" : ""}`}
-                  >
-                    <path d="M7.29365 9.70615C7.68428 10.0968 8.31865 10.0968 8.70928 9.70615L14.7093 3.70615C15.0999 3.31553 15.0999 2.68115 14.7093 2.29053C14.3187 1.8999 13.6843 1.8999 13.2937 2.29053L7.9999 7.58428L2.70615 2.29365C2.31553 1.90303 1.68115 1.90303 1.29053 2.29365C0.899902 2.68428 0.899902 3.31865 1.29053 3.70928L7.29053 9.70928L7.29365 9.70615" fill="#BBBFBD" />
-                  </svg>
+                  {formatCurrency(8289.76)}
                 </button>
                 {einAuszahlungExpanded && (
                   <>
