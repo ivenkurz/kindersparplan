@@ -186,20 +186,9 @@ export default function KindersparplanPage() {
   return (
     <main className="min-h-screen bg-ds-app-bg font-saans pb-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Kleiner Header: nur Zurück-Link, keine Menüleiste */}
-        <header className="pt-4 pb-1">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 text-sm text-ds-neutral-100 hover:text-ds-orange-60 font-semibold transition-colors"
-            aria-label="Zurück"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Zurück
-          </Link>
+        <div className="pt-4">
           <h1 className="sr-only">Kindersparplan</h1>
-        </header>
+        </div>
 
         {/* Hero: Deine monatliche Sparsumme + bei Sparziel Progress, bei Eigene Summe Endsumme prominent */}
         {!isInvalid && monatlich > 0 && (
@@ -217,7 +206,7 @@ export default function KindersparplanPage() {
                       const base = sparzielMonatlichOverride ?? computedMonatlichSparziel;
                       setSparzielMonatlichOverride(Math.max(1, base - 1));
                     }}
-                    className="justify-self-end w-8 h-8 flex items-center justify-center text-ds-seagreen text-2xl font-light hover:opacity-80 transition-opacity"
+                    className="justify-self-end w-8 h-8 flex items-center justify-center text-ds-seagreen text-3xl font-bold hover:opacity-80 transition-opacity"
                   >
                     −
                   </button>
@@ -235,7 +224,7 @@ export default function KindersparplanPage() {
                       const base = sparzielMonatlichOverride ?? computedMonatlichSparziel;
                       setSparzielMonatlichOverride(Math.min(2000, base + 1));
                     }}
-                    className={`justify-self-start w-8 h-8 flex items-center justify-center text-ds-seagreen text-2xl font-light transition-opacity ${
+                    className={`justify-self-start w-8 h-8 flex items-center justify-center text-ds-seagreen text-3xl font-bold transition-opacity ${
                       progressProzent >= 100 ? "invisible pointer-events-none" : "hover:opacity-80"
                     }`}
                   >
@@ -376,7 +365,7 @@ export default function KindersparplanPage() {
                       setCustomMonatlich((v) => Math.max(CUSTOM_MONATLICH_MIN, v - CUSTOM_MONATLICH_STEP));
                       if (sparzielId !== EIGENE_SUMME_ID) setSparzielId(EIGENE_SUMME_ID);
                     }}
-                    className="w-8 h-8 rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 text-ds-neutral-100 font-bold text-lg leading-none hover:bg-ds-orange-60/20 hover:border-ds-orange-60/50"
+                    className="w-8 h-8 rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 text-ds-neutral-100 font-black text-xl leading-none hover:bg-ds-orange-60/20 hover:border-ds-orange-60/50"
                   >
                     −
                   </button>
@@ -404,7 +393,7 @@ export default function KindersparplanPage() {
                       setCustomMonatlich((v) => Math.min(CUSTOM_MONATLICH_MAX, v + CUSTOM_MONATLICH_STEP));
                       if (sparzielId !== EIGENE_SUMME_ID) setSparzielId(EIGENE_SUMME_ID);
                     }}
-                    className="w-8 h-8 rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 text-ds-neutral-100 font-bold text-lg leading-none hover:bg-ds-orange-60/20 hover:border-ds-orange-60/50"
+                    className="w-8 h-8 rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 text-ds-neutral-100 font-black text-xl leading-none hover:bg-ds-orange-60/20 hover:border-ds-orange-60/50"
                   >
                     +
                   </button>
