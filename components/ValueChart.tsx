@@ -19,10 +19,19 @@ interface ChartDataPoint {
   confRange?: number;
 }
 
+/** Chart-Spanne: Hellgrün (#10B981) oder Dunkelgrün (#008542) für parallelen A/B-Test */
+export type SpanVariant = "hellgruen" | "dunkelgruen";
+
+const SPAN_CONFIG: Record<SpanVariant, { color: string; opacity: [number, number] }> = {
+  hellgruen: { color: "#10B981", opacity: [0.42, 0.1] },
+  dunkelgruen: { color: "#008542", opacity: [0.35, 0.08] },
+};
+
 interface ValueChartProps {
   data: ChartDataPoint[];
   view?: "spanne" | "einzahlung_ertrag";
   fill?: boolean;
+  spanVariant?: SpanVariant;
 }
 
 const RISK_LINK_URL = "https://www.evergreen.de/download/fonds";
@@ -297,7 +306,7 @@ function CustomTooltip({
   );
 }
 
-export default function ValueChart({ data, view = "spanne", fill = false }: ValueChartProps) {
+export default function ValueChart({ data, view = "spanne", fill = false, spanVariant = "hellgruen" }: ValueChartProps) {
   const isMobile = useIsMobile();
   const chartData = data.map((d) => {
     const eingezahlt = d.einzahlungen ?? 0;
@@ -358,10 +367,10 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
             }}
           >
             <defs>
-              {/* Spanne (95%) */}
+              {/* Spanne (95%) – Variante per spanVariant für parallelen A/B-Test */}
               <linearGradient id="colorConf" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#008542" stopOpacity={0.35} />
-                <stop offset="100%" stopColor="#008542" stopOpacity={0.08} />
+                <stop offset="0%" stopColor={SPAN_CONFIG[spanVariant].color} stopOpacity={SPAN_CONFIG[spanVariant].opacity[0]} />
+                <stop offset="100%" stopColor={SPAN_CONFIG[spanVariant].color} stopOpacity={SPAN_CONFIG[spanVariant].opacity[1]} />
               </linearGradient>
               {/* Einzahlung + Ertrag */}
               <linearGradient id="colorEingezahlt" x1="0" y1="0" x2="0" y2="1">
@@ -435,7 +444,7 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
                   stackId="conf"
                   stroke="none"
                   fill="url(#colorConf)"
-                  fillOpacity={0.9}
+                  fillOpacity={1}
                   isAnimationActive={false}
                   legendType="none"
                   activeDot={false}
@@ -498,7 +507,9 @@ export default function ValueChart({ data, view = "spanne", fill = false }: Valu
                 Erwarteter Gesamtwert
               </div>
               <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-sm bg-[#008542]/20 border border-ds-neutral-20" />
+                <span
+                  className={`w-3 h-3 rounded-sm border border-ds-neutral-20 ${spanVariant === "hellgruen" ? "bg-[#10B981]/30" : "bg-[#008542]/20"}`}
+                />
                 Spanne (95%)
               </div>
             </div>

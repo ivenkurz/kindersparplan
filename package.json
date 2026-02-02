@@ -7,11 +7,11 @@
   },
   "scripts": {
     "dev": "next dev",
-    "dev:3001": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test:cds": "playwright test tests/cds-mobile.spec.ts"
+    "test:cds": "playwright test tests/cds-mobile.spec.ts",
+    "test:sparplan": "playwright test tests/sparplan-mock.spec.ts"
   },
   "dependencies": {
     "lodash": "^4.17.23",

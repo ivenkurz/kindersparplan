@@ -17,13 +17,14 @@ export default defineConfig({
       use: {
         ...devices["Pixel 5"],
         browserName: "chromium",
+        channel: "chrome", // System-Chrome (funktioniert auch in Cursor-Sandbox)
       },
     },
   ],
   webServer: {
-    command: "npm run start",
+    command: "npm run dev",
     url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
-    timeout: 60000,
+    reuseExistingServer: true,
+    timeout: 120000,
   },
 });

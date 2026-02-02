@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { Suspense, useState, useMemo, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import NumberInput from "@/components/NumberInput";
 import SliderInput from "@/components/SliderInput";
 import ResultCards from "@/components/ResultCards";
@@ -20,6 +21,11 @@ const ValueChart = dynamic(() => import("@/components/ValueChart"), {
 
 const MIN_EINZAHLUNG = 0;
 
+/** Rendite-Slider (Variante A): 4,5% bis 9%, Step 0,25% */
+const RENDITE_MIN = 4.5;
+const RENDITE_MAX = 9;
+const RENDITE_STEP = 0.25;
+
 /** Stufe-Name für Slider-Position 0, 5, 10 */
 const STUFE_NAMES: Record<number, string> = {
   0: "Niedrig",
@@ -35,15 +41,26 @@ function StepBadge({ number }: { number: number }) {
   );
 }
 
-export default function SparplanRechnerPage() {
+function SparplanRechnerContent() {
+  const searchParams = useSearchParams();
+  const varianteA = searchParams.get("variante") === "a";
+
   const [einmalig, setEinmalig] = useState(5000);
   const [monatlich, setMonatlich] = useState(150);
   const [laufzeit, setLaufzeit] = useState(25);
   const [strategieIndex, setStrategieIndex] = useState(7); // Evergreen Wachstum 70
+  const [renditePercent, setRenditePercent] = useState<number | null>(null);
   const [showEinzahlungen, setShowEinzahlungen] = useState(false);
 
   const selectedStrategy = strategies[strategieIndex];
-  const rendite = selectedStrategy.return;
+  const rendite =
+    varianteA && renditePercent != null
+      ? renditePercent / 100
+      : selectedStrategy.return;
+
+  useEffect(() => {
+    if (varianteA) setRenditePercent(null);
+  }, [strategieIndex, varianteA]);
   const schwankungenApi = selectedStrategy.volatility * 100;
   const isInvalid = einmalig < MIN_EINZAHLUNG || monatlich < MIN_EINZAHLUNG;
 
@@ -125,7 +142,7 @@ export default function SparplanRechnerPage() {
         schwankungen: Math.round(schwankungenApi * 10) / 10,
         twrPa,
       };
-    }, [einmalig, monatlich, laufzeit, isInvalid, rendite, schwankungenApi]);
+    }, [einmalig, monatlich, laufzeit, isInvalid, rendite, schwankungenApi, selectedStrategy.volatility]);
 
   return (
     <main className="min-h-screen bg-ds-app-bg font-saans">
@@ -248,6 +265,39 @@ export default function SparplanRechnerPage() {
                         </div>
                       </div>
                     </div>
+                    {varianteA && (
+                      <div className="md:col-span-2">
+                        <div className="pt-2 pb-0 md:py-0">
+                          <SliderInput
+                            label="Erwartete Rendite"
+                            value={renditePercent ?? selectedStrategy.return * 100}
+                            onChange={(v) => setRenditePercent(v)}
+                            min={RENDITE_MIN}
+                            max={RENDITE_MAX}
+                            step={RENDITE_STEP}
+                            unit="%"
+                            showValueRight
+                            valueClassName="text-lg sm:text-xl font-semibold text-ds-darkgreen font-saans tracking-tight"
+                            formatValue={(v) => `${v.toFixed(1)}% p.a.`}
+                          />
+                        </div>
+                        <div className="mt-1 text-xs">
+                          <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center text-ds-neutral-100 font-normal">
+                            <span className="justify-self-start inline-flex items-center justify-center min-w-[44px] min-h-[44px]">
+                              4,5%
+                            </span>
+                            <span className="text-ds-neutral-40 px-2">·</span>
+                            <span className="justify-self-center inline-flex items-center justify-center min-w-[44px] min-h-[44px]">
+                              ~6,9%
+                            </span>
+                            <span className="text-ds-neutral-40 px-2">·</span>
+                            <span className="justify-self-end inline-flex items-center justify-center min-w-[44px] min-h-[44px]">
+                              9%
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -410,5 +460,13 @@ export default function SparplanRechnerPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function SparplanRechnerPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-ds-app-bg flex items-center justify-center">Laden…</div>}>
+      <SparplanRechnerContent />
+    </Suspense>
   );
 }
