@@ -143,7 +143,7 @@ export default function DualRangeSlider({
       )}
       <div
         ref={trackRef}
-        className="relative pt-2 pb-2 select-none touch-none"
+        className="relative pt-4 pb-4 select-none touch-none"
         style={{ touchAction: "none" }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -170,7 +170,7 @@ export default function DualRangeSlider({
           aria-valuenow={valueLow}
           tabIndex={0}
           onKeyDown={handleKeyDownLow}
-          className="absolute top-1/2 z-10 w-11 h-11 md:w-6 md:h-6 -translate-y-1/2 -translate-x-1/2 rounded-full bg-ds-neutral-100 shadow-md cursor-grab active:cursor-grabbing border-0 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-ds-orange-60 focus:ring-offset-2 pointer-events-auto"
+          className="absolute top-1/2 z-10 w-9 h-9 md:w-6 md:h-6 -translate-y-1/2 -translate-x-1/2 rounded-full bg-ds-neutral-100 shadow-md cursor-grab active:cursor-grabbing border-0 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-ds-orange-60 focus:ring-offset-2 pointer-events-auto"
           style={{ left: `${lowPercent}%` }}
         />
         {/* Thumb High – nur div, Position aus valueHigh */}
@@ -183,7 +183,7 @@ export default function DualRangeSlider({
           aria-valuenow={valueHigh}
           tabIndex={0}
           onKeyDown={handleKeyDownHigh}
-          className="absolute top-1/2 z-10 w-11 h-11 md:w-6 md:h-6 -translate-y-1/2 -translate-x-1/2 rounded-full bg-ds-neutral-100 shadow-md cursor-grab active:cursor-grabbing border-0 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-ds-orange-60 focus:ring-offset-2 pointer-events-auto"
+          className="absolute top-1/2 z-10 w-9 h-9 md:w-6 md:h-6 -translate-y-1/2 -translate-x-1/2 rounded-full bg-ds-neutral-100 shadow-md cursor-grab active:cursor-grabbing border-0 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-ds-orange-60 focus:ring-offset-2 pointer-events-auto"
           style={{ left: `${highPercent}%` }}
         />
       </div>

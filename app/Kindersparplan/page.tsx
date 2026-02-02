@@ -269,23 +269,25 @@ export default function KindersparplanPage() {
               <p className="text-xs text-ds-neutral-70 mb-3">
                 Von 0 bis 30 Jahre. Beide Werte unabhängig einstellbar, um die Laufzeit optimal zu planen.
               </p>
-              <DualRangeSlider
-                min={AGE_MIN}
-                max={AGE_MAX}
-                valueLow={kindesalter}
-                valueHigh={zielalter}
-                onChangeLow={(v) => {
-                  saveForUndo();
-                  setKindesalter(v);
-                }}
-                onChangeHigh={(v) => {
-                  saveForUndo();
-                  setZielalter(v);
-                }}
-                step={1}
-                lowLabel="Startalter"
-                highLabel="Zielalter"
-              />
+              <div className="py-2">
+                <DualRangeSlider
+                  min={AGE_MIN}
+                  max={AGE_MAX}
+                  valueLow={kindesalter}
+                  valueHigh={zielalter}
+                  onChangeLow={(v) => {
+                    saveForUndo();
+                    setKindesalter(v);
+                  }}
+                  onChangeHigh={(v) => {
+                    saveForUndo();
+                    setZielalter(v);
+                  }}
+                  step={1}
+                  lowLabel="Startalter"
+                  highLabel="Zielalter"
+                />
+              </div>
               {/* Laufzeit: CDS-konform – kompakte Zeile mit Label + Wert, gleiche Optik wie Slider-Labels */}
               <div className="mt-3 pt-3 border-t border-ds-neutral-20 flex items-center justify-between">
                 <span className="text-xs font-semibold text-ds-neutral-70 uppercase tracking-wide">Laufzeit</span>
