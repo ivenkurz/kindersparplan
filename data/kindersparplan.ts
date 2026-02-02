@@ -46,6 +46,13 @@ export const SPARZIELE: Sparziel[] = [
     emoji: "✈️",
     motivierend: "Die Welt entdecken – Erfahrungen, die prägen",
   },
+  {
+    id: "wohnung",
+    label: "Erste Wohnung",
+    betrag: 20000,
+    emoji: "🏠",
+    motivierend: "Kaution, Möbel, Start in die Selbstständigkeit",
+  },
 ];
 
 export const RENDITE_KINDERSPARPLAN = 0.069; // ~6,9% p.a. (ausgewogen)
