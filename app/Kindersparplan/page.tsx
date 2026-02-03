@@ -41,11 +41,7 @@ import {
   berechneMonatlichFuerZiel,
   laufzeitBisZiel,
 } from "@/lib/kindersparplan";
-import {
-  SPARZIELE,
-  RENDITE_KINDERSPARPLAN,
-  BADGE_STUFE,
-} from "@/data/kindersparplan";
+import { SPARZIELE, RENDITE_KINDERSPARPLAN, RENDITE_STRATEGIE_NAME } from "@/data/kindersparplan";
 
 const ValueChart = dynamic(() => import("@/components/ValueChart"), {
   ssr: false,
@@ -60,53 +56,29 @@ const AGE_MAX = 30;
 const DEFAULT_START = 0;
 const DEFAULT_ZIEL = 18;
 
-/** Progress-Bar – CDS Grün (Ertrag/Positiv), für Hero zentriert */
-function ProgressBar({
-  prozent,
-  label,
-  centered = false,
-}: {
-  prozent: number;
-  label: string;
-  centered?: boolean;
-}) {
-  const capped = Math.min(100, Math.max(0, prozent));
-  return (
-    <div className={`space-y-1.5 ${centered ? "text-center" : ""}`}>
-      <div className={`flex justify-between text-xs font-semibold text-ds-neutral-100 ${centered ? "justify-center gap-2" : ""}`}>
-        <span>{label}</span>
-        <span className="text-ds-seagreen">{Math.round(capped)}%</span>
-      </div>
-      <div className="h-2 rounded-full bg-ds-neutral-20 overflow-hidden">
-        <div
-          className="h-full rounded-full bg-ds-seagreen transition-all duration-300"
-          style={{ width: `${capped}%` }}
-        />
-      </div>
-    </div>
-  );
-}
-
+/** Option „Eigenes Sparziel“: User gibt Zielbetrag ein, monatliche Sparsumme wird berechnet */
 const EIGENE_SUMME_ID = "eigene-summe";
-const CUSTOM_MONATLICH_STEP = 25;
-const CUSTOM_MONATLICH_MIN = 25;
-const CUSTOM_MONATLICH_MAX = 2000;
-const CUSTOM_MONATLICH_DEFAULT = 25;
+/** Kein Sparziel aktiv (nach Modifikation der monatlichen Sparsumme bei zuvor aktivem Eigenem Sparziel) */
+const KEIN_SPARZIEL_ID = "keins";
+const CUSTOM_ZIEL_STEP = 500;
+const CUSTOM_ZIEL_MIN = 1000;
+const CUSTOM_ZIEL_MAX = 9_000_000;
+const CUSTOM_ZIEL_DEFAULT = 23500;
+/** Bei „kein Sparziel“: Default-Sparsumme (€/Monat); Voraussichtlicher Endwert entspricht dieser Rate. */
+const DEFAULT_MONATLICH_OHNE_SPARZIEL = 50;
 
 export default function KindersparplanPage() {
   const [kindesalter, setKindesalter] = useState(DEFAULT_START);
   const [zielalter, setZielalter] = useState(DEFAULT_ZIEL);
-  const [sparzielId, setSparzielId] = useState<string>(() => SPARZIELE[0]?.id ?? "studium");
-  /** Bei „Eigene Summe“: monatliche Sparsumme in € (Default 25). */
-  const [customMonatlich, setCustomMonatlich] = useState(CUSTOM_MONATLICH_DEFAULT);
-  /** Bei Sparziel (5 Ziele): manueller Übersteuerungswert; null = berechneter Betrag. Für +/- neben dem Monatsbetrag. */
-  const [sparzielMonatlichOverride, setSparzielMonatlichOverride] = useState<number | null>(null);
+  const [sparzielId, setSparzielId] = useState<string>(KEIN_SPARZIEL_ID);
+  /** Bei „Eigenes Sparziel“: Zielbetrag in €; monatliche Sparsumme wird daraus berechnet. */
+  const [gewuenschterZielertrag, setGewuenschterZielertrag] = useState(CUSTOM_ZIEL_DEFAULT);
 
   const [lastState, setLastState] = useState<{
     kindesalter: number;
     zielalter: number;
     sparzielId: string;
-    customMonatlich: number;
+    gewuenschterZielertrag: number;
   } | null>(null);
 
   const handleUndo = useCallback(() => {
@@ -114,33 +86,36 @@ export default function KindersparplanPage() {
       setKindesalter(lastState.kindesalter);
       setZielalter(lastState.zielalter);
       setSparzielId(lastState.sparzielId);
-      setCustomMonatlich(lastState.customMonatlich);
+      setGewuenschterZielertrag(lastState.gewuenschterZielertrag);
       setLastState(null);
     }
   }, [lastState]);
 
   const saveForUndo = useCallback(() => {
-    setLastState({ kindesalter, zielalter, sparzielId, customMonatlich });
-  }, [kindesalter, zielalter, sparzielId, customMonatlich]);
+    setLastState({ kindesalter, zielalter, sparzielId, gewuenschterZielertrag });
+  }, [kindesalter, zielalter, sparzielId, gewuenschterZielertrag]);
 
   const laufzeit = laufzeitBisZiel(kindesalter, zielalter);
   const sparziel = SPARZIELE.find((z) => z.id === sparzielId);
-  const zielBetrag = sparziel?.betrag ?? 0;
-  const sparzielLabel = sparzielId === EIGENE_SUMME_ID ? "Eigene Summe" : (sparziel?.label ?? "");
+  /** Zielbetrag: bei festem Sparziel aus Daten, bei „Eigenes Sparziel“ der eingegebene Betrag, bei „keins“ 0. */
+  const zielBetrag =
+    sparzielId === EIGENE_SUMME_ID ? gewuenschterZielertrag : sparzielId === KEIN_SPARZIEL_ID ? 0 : (sparziel?.betrag ?? 0);
+  const sparzielLabel = sparzielId === EIGENE_SUMME_ID ? "Eigenes Sparziel" : sparzielId === KEIN_SPARZIEL_ID ? "" : (sparziel?.label ?? "");
 
   const computedMonatlichSparziel = useMemo(() => {
     if (laufzeit <= 0 || zielBetrag <= 0) return 0;
     return berechneMonatlichFuerZiel(zielBetrag, laufzeit, RENDITE_KINDERSPARPLAN);
   }, [laufzeit, zielBetrag]);
 
-  /** Bei Sparziel: Override oder berechnet; bei Eigene Summe: Wert aus der Karte (€/Monat). */
+  /** Monatliche Sparsumme: aus gewähltem Sparziel; bei „keins“ = 50 € (Voraussichtlicher Endwert entspricht dieser Default-Sparsumme). */
   const monatlich = useMemo(() => {
-    if (sparzielId === EIGENE_SUMME_ID) return customMonatlich;
-    if (sparzielId !== EIGENE_SUMME_ID && sparzielMonatlichOverride !== null) return sparzielMonatlichOverride;
+    if (sparzielId === KEIN_SPARZIEL_ID) return laufzeit <= 0 ? 0 : DEFAULT_MONATLICH_OHNE_SPARZIEL;
     return computedMonatlichSparziel;
-  }, [sparzielId, customMonatlich, sparzielMonatlichOverride, computedMonatlichSparziel]);
+  }, [sparzielId, laufzeit, computedMonatlichSparziel]);
 
-  const isInvalid = laufzeit <= 0 || (sparzielId === EIGENE_SUMME_ID ? customMonatlich <= 0 : !sparziel);
+  const isInvalid =
+    laufzeit <= 0 ||
+    (sparzielId === EIGENE_SUMME_ID ? gewuenschterZielertrag <= 0 : sparzielId === KEIN_SPARZIEL_ID ? false : !sparziel);
 
   const result = useMemo(() => {
     if (isInvalid || monatlich <= 0)
@@ -160,13 +135,6 @@ export default function KindersparplanPage() {
     });
   }, [kindesalter, zielalter, monatlich, isInvalid]);
 
-  const progressProzent =
-    zielBetrag > 0 && result.endwert > 0
-      ? Math.min(100, (result.endwert / zielBetrag) * 100)
-      : 100;
-
-  const currentBadge = BADGE_STUFE.filter((b) => progressProzent >= b.minProzent).pop();
-
   const formatEuro = (v: number) =>
     new Intl.NumberFormat("de-DE", {
       style: "currency",
@@ -174,70 +142,22 @@ export default function KindersparplanPage() {
       maximumFractionDigits: 0,
     }).format(v);
 
-  const badgeText =
-    currentBadge?.minProzent === 100
-      ? "Ziel erreicht! 🎉 Du bist auf dem Weg!"
-      : currentBadge
-        ? `${currentBadge.emoji} ${currentBadge.label}`
-        : null;
+  /** Zahl mit 1000er-Trennpunkt (de-DE: Punkt) für direkte Eingabe Zielertrag */
+  const formatZielertrag = (v: number) =>
+    new Intl.NumberFormat("de-DE", { maximumFractionDigits: 0, minimumFractionDigits: 0 }).format(v);
 
-  const hasSparziel = sparzielId !== EIGENE_SUMME_ID;
-
-  /** Hero-Block: Monatsbetrag + Progress/Endwert – wiederverwendet für Mobile (sticky) und Desktop (Sidebar) */
+  /** Hero-Block: Monatsbetrag + Endwert (zweitrangig) – wiederverwendet für Mobile (sticky) und Desktop (Sidebar) */
   const heroBlock = !isInvalid && monatlich > 0 && (
     <>
       <p className="text-sm font-semibold text-ds-neutral-70 mb-1">
         Deine monatliche Sparsumme
       </p>
-      <div className="grid grid-cols-[auto_1fr_auto] items-center justify-items-center gap-4 sm:gap-6 w-full max-w-md mx-auto min-w-0">
-        {hasSparziel ? (
-          <button
-            type="button"
-            aria-label="Sparbetrag um 1 Euro verringern"
-            onClick={() => {
-              const base = sparzielMonatlichOverride ?? computedMonatlichSparziel;
-              setSparzielMonatlichOverride(Math.max(1, base - 1));
-            }}
-            className="justify-self-end w-9 h-9 shrink-0 rounded-full border border-ds-neutral-20 bg-ds-neutral-10/60 flex items-center justify-center text-ds-seagreen text-3xl font-bold hover:opacity-80 hover:border-ds-seagreen/30 transition-opacity"
-          >
-            −
-          </button>
-        ) : (
-          <div className="w-9 shrink-0" />
-        )}
-        <p className="text-3xl sm:text-4xl md:text-5xl font-bold text-ds-seagreen font-saans tracking-tight leading-none text-center min-w-0 px-2">
-          {formatEuro(monatlich)}
-        </p>
-        {hasSparziel ? (
-          <button
-            type="button"
-            aria-label="Sparbetrag um 1 Euro erhöhen"
-            onClick={() => {
-              const base = sparzielMonatlichOverride ?? computedMonatlichSparziel;
-              setSparzielMonatlichOverride(Math.min(2000, base + 1));
-            }}
-            className={`justify-self-start w-9 h-9 shrink-0 rounded-full border border-ds-neutral-20 bg-ds-neutral-10/60 flex items-center justify-center text-ds-seagreen text-3xl font-bold transition-opacity ${
-              progressProzent >= 100 ? "invisible pointer-events-none" : "hover:opacity-80 hover:border-ds-seagreen/30"
-            }`}
-          >
-            +
-          </button>
-        ) : (
-          <div className="w-9 shrink-0" />
-        )}
-      </div>
-      {hasSparziel ? (
-        <div className="mt-4 w-full px-0">
-          <ProgressBar prozent={progressProzent} label="Fortschritt zum Ziel" centered />
-          {badgeText && (
-            <p className="text-xs text-ds-neutral-70 mt-2">{badgeText}</p>
-          )}
-        </div>
-      ) : (
-        <p className="text-base sm:text-lg font-bold text-ds-neutral-100 mt-3 whitespace-nowrap">
-          Voraussichtlicher Endwert: {formatEuro(result.endwert)}
-        </p>
-      )}
+      <p className="text-3xl sm:text-4xl md:text-5xl font-bold text-ds-seagreen font-saans tracking-tight leading-none text-center min-w-0 px-2">
+        {formatEuro(monatlich)}
+      </p>
+      <p className="text-base font-semibold text-ds-neutral-90 mt-2 whitespace-nowrap">
+        Voraussichtlicher Endwert: {formatEuro(result.endwert)}
+      </p>
     </>
   );
 
@@ -248,9 +168,9 @@ export default function KindersparplanPage() {
           <h1 className="font-saans font-bold text-ds-neutral-100 text-xl lg:text-2xl">Kindersparplan</h1>
         </header>
 
-        {/* Mobile: Sticky Hero */}
+        {/* Mobile: Sticky Hero – Card mit weißem Hintergrund */}
         {!isInvalid && monatlich > 0 && (
-          <div className="lg:hidden sticky top-0 z-30 isolate -mx-4 px-4 pt-4 pb-4 bg-ds-app-bg border-b border-ds-neutral-20 shadow-sm">
+          <div className="lg:hidden sticky top-0 z-30 isolate -mx-4 px-4 pt-4 pb-4 bg-ds-neutral-0 border-b border-ds-neutral-20 shadow-sm">
             <div className="max-w-6xl mx-auto text-center">{heroBlock}</div>
           </div>
         )}
@@ -276,7 +196,6 @@ export default function KindersparplanPage() {
                         type="button"
                         onClick={() => {
                           saveForUndo();
-                          setSparzielMonatlichOverride(null);
                           setSparzielId(ziel.id);
                         }}
                         className={`relative text-left p-3 rounded-ds-16 border-2 transition-all bg-ds-neutral-0 ${
@@ -324,15 +243,15 @@ export default function KindersparplanPage() {
                       className="w-full text-left"
                     >
                       <span className="text-xl block mb-1.5 text-center">✏️</span>
-                      <span className="font-bold text-ds-neutral-100 text-sm block">Eigene Summe</span>
+                      <span className="font-bold text-ds-neutral-100 text-sm block">Eigenes Sparziel</span>
                     </button>
                     <div className="mt-2 flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
                       <button
                         type="button"
-                        aria-label="25 Euro weniger"
+                        aria-label="500 Euro weniger"
                         onClick={() => {
                           saveForUndo();
-                          setCustomMonatlich((v) => Math.max(CUSTOM_MONATLICH_MIN, v - CUSTOM_MONATLICH_STEP));
+                          setGewuenschterZielertrag((v) => Math.max(CUSTOM_ZIEL_MIN, v - CUSTOM_ZIEL_STEP));
                           if (sparzielId !== EIGENE_SUMME_ID) setSparzielId(EIGENE_SUMME_ID);
                         }}
                         className="w-9 h-9 shrink-0 rounded-full border border-ds-neutral-20 bg-ds-neutral-10/60 flex items-center justify-center text-ds-seagreen text-3xl font-bold hover:opacity-80 hover:border-ds-seagreen/30 transition-opacity"
@@ -340,27 +259,25 @@ export default function KindersparplanPage() {
                         −
                       </button>
                       <input
-                        type="number"
-                        min={CUSTOM_MONATLICH_MIN}
-                        max={CUSTOM_MONATLICH_MAX}
-                        step={CUSTOM_MONATLICH_STEP}
-                        value={customMonatlich}
+                        type="text"
+                        inputMode="numeric"
+                        aria-label="Zielertrag in Euro"
+                        value={formatZielertrag(gewuenschterZielertrag)}
                         onChange={(e) => {
-                          const v = Number(e.target.value);
-                          if (!Number.isNaN(v)) {
-                            saveForUndo();
-                            setCustomMonatlich(Math.max(CUSTOM_MONATLICH_MIN, Math.min(CUSTOM_MONATLICH_MAX, v)));
-                            setSparzielId(EIGENE_SUMME_ID);
-                          }
+                          const digits = e.target.value.replace(/\D/g, "");
+                          const v = digits === "" ? CUSTOM_ZIEL_MIN : Math.min(CUSTOM_ZIEL_MAX, Math.max(CUSTOM_ZIEL_MIN, Number(digits)));
+                          saveForUndo();
+                          setGewuenschterZielertrag(v);
+                          setSparzielId(EIGENE_SUMME_ID);
                         }}
-                        className="flex-1 min-w-0 h-9 rounded-ds-16 border border-ds-neutral-20 text-sm font-semibold text-ds-neutral-100 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        className="flex-1 min-w-0 h-9 rounded-ds-16 border border-ds-neutral-20 text-sm font-semibold text-ds-neutral-100 text-center [appearance:textfield]"
                       />
                       <button
                         type="button"
-                        aria-label="25 Euro mehr"
+                        aria-label="500 Euro mehr"
                         onClick={() => {
                           saveForUndo();
-                          setCustomMonatlich((v) => Math.min(CUSTOM_MONATLICH_MAX, v + CUSTOM_MONATLICH_STEP));
+                          setGewuenschterZielertrag((v) => Math.min(CUSTOM_ZIEL_MAX, v + CUSTOM_ZIEL_STEP));
                           if (sparzielId !== EIGENE_SUMME_ID) setSparzielId(EIGENE_SUMME_ID);
                         }}
                         className="w-9 h-9 shrink-0 rounded-full border border-ds-neutral-20 bg-ds-neutral-10/60 flex items-center justify-center text-ds-seagreen text-3xl font-bold hover:opacity-80 hover:border-ds-seagreen/30 transition-opacity"
@@ -368,9 +285,6 @@ export default function KindersparplanPage() {
                         +
                       </button>
                     </div>
-                    {sparzielId === EIGENE_SUMME_ID && (
-                      <p className="text-ds-neutral-70 text-xs mt-1">€ / Monat (25er-Schritte)</p>
-                    )}
                   </div>
                 </div>
               </div>
@@ -441,7 +355,6 @@ export default function KindersparplanPage() {
                     type="button"
                     onClick={() => {
                       saveForUndo();
-                      setSparzielMonatlichOverride(null);
                       setSparzielId(ziel.id);
                     }}
                     className={`relative text-left p-3 rounded-ds-16 border-2 transition-all bg-ds-neutral-0 ${
@@ -489,15 +402,15 @@ export default function KindersparplanPage() {
                   className="w-full text-left"
                 >
                   <span className="text-xl block mb-1.5 text-center">✏️</span>
-                  <span className="font-bold text-ds-neutral-100 text-sm block">Eigene Summe</span>
+                  <span className="font-bold text-ds-neutral-100 text-sm block">Eigenes Sparziel</span>
                 </button>
                 <div className="mt-2 flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
                   <button
                     type="button"
-                    aria-label="25 Euro weniger"
+                    aria-label="500 Euro weniger"
                     onClick={() => {
                       saveForUndo();
-                      setCustomMonatlich((v) => Math.max(CUSTOM_MONATLICH_MIN, v - CUSTOM_MONATLICH_STEP));
+                      setGewuenschterZielertrag((v) => Math.max(CUSTOM_ZIEL_MIN, v - CUSTOM_ZIEL_STEP));
                       if (sparzielId !== EIGENE_SUMME_ID) setSparzielId(EIGENE_SUMME_ID);
                     }}
                     className="w-9 h-9 shrink-0 rounded-full border border-ds-neutral-20 bg-ds-neutral-10/60 flex items-center justify-center text-ds-seagreen text-3xl font-bold hover:opacity-80 hover:border-ds-seagreen/30 transition-opacity"
@@ -505,27 +418,25 @@ export default function KindersparplanPage() {
                     −
                   </button>
                   <input
-                    type="number"
-                    min={CUSTOM_MONATLICH_MIN}
-                    max={CUSTOM_MONATLICH_MAX}
-                    step={CUSTOM_MONATLICH_STEP}
-                    value={customMonatlich}
+                    type="text"
+                    inputMode="numeric"
+                    aria-label="Zielertrag in Euro"
+                    value={formatZielertrag(gewuenschterZielertrag)}
                     onChange={(e) => {
-                      const v = Number(e.target.value);
-                      if (!Number.isNaN(v)) {
-                        saveForUndo();
-                        setCustomMonatlich(Math.max(CUSTOM_MONATLICH_MIN, Math.min(CUSTOM_MONATLICH_MAX, v)));
-                        setSparzielId(EIGENE_SUMME_ID);
-                      }
+                      const digits = e.target.value.replace(/\D/g, "");
+                      const v = digits === "" ? CUSTOM_ZIEL_MIN : Math.min(CUSTOM_ZIEL_MAX, Math.max(CUSTOM_ZIEL_MIN, Number(digits)));
+                      saveForUndo();
+                      setGewuenschterZielertrag(v);
+                      setSparzielId(EIGENE_SUMME_ID);
                     }}
-                    className="flex-1 min-w-0 h-9 rounded-ds-16 border border-ds-neutral-20 text-sm font-semibold text-ds-neutral-100 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="flex-1 min-w-0 h-9 rounded-ds-16 border border-ds-neutral-20 text-sm font-semibold text-ds-neutral-100 text-center [appearance:textfield]"
                   />
                   <button
                     type="button"
-                    aria-label="25 Euro mehr"
+                    aria-label="500 Euro mehr"
                     onClick={() => {
                       saveForUndo();
-                      setCustomMonatlich((v) => Math.min(CUSTOM_MONATLICH_MAX, v + CUSTOM_MONATLICH_STEP));
+                      setGewuenschterZielertrag((v) => Math.min(CUSTOM_ZIEL_MAX, v + CUSTOM_ZIEL_STEP));
                       if (sparzielId !== EIGENE_SUMME_ID) setSparzielId(EIGENE_SUMME_ID);
                     }}
                     className="w-9 h-9 shrink-0 rounded-full border border-ds-neutral-20 bg-ds-neutral-10/60 flex items-center justify-center text-ds-seagreen text-3xl font-bold hover:opacity-80 hover:border-ds-seagreen/30 transition-opacity"
@@ -533,9 +444,6 @@ export default function KindersparplanPage() {
                     +
                   </button>
                 </div>
-                {sparzielId === EIGENE_SUMME_ID && (
-                  <p className="text-ds-neutral-70 text-xs mt-1">€ / Monat (25er-Schritte)</p>
-                )}
               </div>
             </div>
           </section>
@@ -564,8 +472,16 @@ export default function KindersparplanPage() {
                   <p className="text-sm font-semibold text-ds-neutral-100">{formatEuro(result.gesamtEinzahlungen)}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] sm:text-xs text-ds-neutral-70">Rendite p.a.</p>
-                  <p className="text-sm font-semibold text-ds-neutral-100">~6,9%</p>
+                  <div className="text-[10px] sm:text-xs text-ds-neutral-70 inline-flex items-center gap-0.5">
+                    Rendite p.a.
+                    <InfoTooltip
+                      label="Renditeannahme und Hinweis"
+                      content={`Berechnung basiert auf der Renditeannahme der Strategie „${RENDITE_STRATEGIE_NAME}“. Die tatsächliche Wertentwicklung kann abweichen; sie unterliegt Schwankungen und ist nicht garantiert.`}
+                    />
+                  </div>
+                  <p className="text-sm font-semibold text-ds-neutral-100">
+                    ~{(RENDITE_KINDERSPARPLAN * 100).toFixed(1).replace(".", ",")}%
+                  </p>
                 </div>
               </div>
               <div className="h-[220px] sm:h-[260px] lg:flex-1 lg:min-h-[200px] lg:h-full">
@@ -597,10 +513,10 @@ export default function KindersparplanPage() {
             <div className="max-w-6xl mx-auto px-4 py-4">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs sm:text-sm text-ds-neutral-70">
-                  {hasSparziel ? "Gesamtes Sparziel" : "Voraussichtlicher Endwert"}
+                  Voraussichtlicher Endwert
                 </span>
-                <span className="text-xl sm:text-2xl font-bold text-ds-neutral-100 font-saans">
-                  {hasSparziel ? `Ziel: ${formatEuro(zielBetrag)}` : formatEuro(result.endwert)}
+                <span className="text-lg sm:text-xl font-semibold text-ds-neutral-90 font-saans">
+                  {formatEuro(result.endwert)}
                 </span>
               </div>
               <Link

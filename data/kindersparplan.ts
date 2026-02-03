@@ -55,7 +55,12 @@ export const SPARZIELE: Sparziel[] = [
   },
 ];
 
-export const RENDITE_KINDERSPARPLAN = 0.069; // ~6,9% p.a. (ausgewogen)
+import { strategies } from "./strategies";
+
+/** Renditeannahme: Strategie Evergreen Wachstum 80 (8,2 % p.a.) */
+const WACHSTUM_80 = strategies.find((s) => s.id === 80);
+export const RENDITE_KINDERSPARPLAN = WACHSTUM_80?.return ?? 0.082;
+export const RENDITE_STRATEGIE_NAME = WACHSTUM_80?.name ?? "Evergreen Wachstum 80";
 
 export const BADGE_STUFE = [
   { minProzent: 0, label: "Starter", emoji: "🌱", farbe: "ds-seagreen" },
