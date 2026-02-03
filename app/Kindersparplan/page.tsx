@@ -574,7 +574,7 @@ export default function KindersparplanPage() {
               <div className="h-[240px] sm:h-[280px] lg:flex-1 lg:min-h-[220px] lg:h-full border-t border-ds-figma-divider pt-2">
                 <ValueChart
                   data={result.chartData}
-                  view="einzahlung_ertrag"
+                  view="gesamtwert"
                   fill
                   spanVariant="hellgruen"
                   useFigmaColors
@@ -586,11 +586,7 @@ export default function KindersparplanPage() {
                 <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-ds-neutral-90">
                   <div className="flex items-center gap-1.5">
                     <span className="w-3.5 shrink-0 rounded-full bg-[#ACB100]" style={{ height: 3 }} />
-                    <span>Erwarteter Gesamtwert</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-3.5 shrink-0 rounded-full bg-[#616a65]" style={{ height: 3 }} />
-                    <span>Einzahlungen</span>
+                    <span>Entwicklung Gesamtwert</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5">

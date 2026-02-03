@@ -38,7 +38,7 @@ const FIGMA_CHART = {
 
 interface ValueChartProps {
   data: ChartDataPoint[];
-  view?: "spanne" | "einzahlung_ertrag";
+  view?: "spanne" | "einzahlung_ertrag" | "gesamtwert";
   fill?: boolean;
   spanVariant?: SpanVariant;
   /** Kindersparplan: Chart und „Erwarteter Gesamtwert“ in #ACB100, Punkte #022011 */
@@ -375,6 +375,24 @@ export default function ValueChart({ data, view = "spanne", fill = false, spanVa
                   activeDot={{ r: 6, stroke: "#008542", strokeWidth: 2, fill: "#fff" }}
                 />
               </>
+            ) : view === "gesamtwert" ? (
+              <>
+                {/* Nur Entwicklung des Gesamtwerts (eine Linie/Füllung) */}
+                <Area
+                  type="monotone"
+                  dataKey="wert"
+                  stroke={useFigmaColors ? FIGMA_CHART.stroke : "#008542"}
+                  strokeWidth={2}
+                  fill={useFigmaColors ? "url(#colorErtragFigma)" : "url(#colorErtrag)"}
+                  isAnimationActive={false}
+                  activeDot={{
+                    r: 6,
+                    stroke: useFigmaColors ? FIGMA_CHART.dotFill : "#008542",
+                    strokeWidth: 2,
+                    fill: useFigmaColors ? FIGMA_CHART.dotFill : "#fff",
+                  }}
+                />
+              </>
             ) : (
               <>
                 {/* Einzahlung + Ertrag (gestapelt); optional Kindersparplan #ACB100, Punkte #022011 */}
@@ -434,6 +452,21 @@ export default function ValueChart({ data, view = "spanne", fill = false, spanVa
             </div>
             <p className="mt-1 text-[10px] text-ds-neutral-70 text-center max-w-md mx-auto overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">
               Die Spanne zeigt den Bereich, in dem der Ertrag mit hoher Wahrscheinlichkeit liegen wird.
+            </p>
+          </>
+        ) : view === "gesamtwert" ? (
+          <>
+            <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ds-neutral-90">
+              <div className="flex items-center gap-2">
+                <span
+                  className="w-4 h-[3px] rounded-full"
+                  style={{ backgroundColor: useFigmaColors ? FIGMA_CHART.stroke : "#008542" }}
+                />
+                Entwicklung Gesamtwert
+              </div>
+            </div>
+            <p className="mt-1 text-[10px] text-ds-neutral-70 text-center max-w-md mx-auto opacity-0">
+              Platzhalter
             </p>
           </>
         ) : (
