@@ -63,7 +63,7 @@ const KEIN_SPARZIEL_ID = "keins";
 const CUSTOM_ZIEL_STEP = 500;
 const CUSTOM_ZIEL_MIN = 1000;
 const CUSTOM_ZIEL_MAX = 9_000_000;
-const CUSTOM_ZIEL_DEFAULT = 23500;
+const CUSTOM_ZIEL_DEFAULT = 10000;
 /** Bei „kein Sparziel“: Default-Sparsumme (€/Monat); Voraussichtlicher Endwert entspricht dieser Rate. */
 const DEFAULT_MONATLICH_OHNE_SPARZIEL = 50;
 
