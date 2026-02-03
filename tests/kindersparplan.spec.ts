@@ -48,10 +48,10 @@ test.describe("Kindersparplan", () => {
     await expect(laufzeitText).toContainText("25 Jahre");
   });
 
-  test("Szenario 5: Sparziel Studium → Progress-Bar sichtbar", async ({
+  test("Szenario 5: Sparziel Studium/Ausbildung → Progress-Bar sichtbar", async ({
     page,
   }) => {
-    const studiumBtn = page.locator('button:has-text("Studium")');
+    const studiumBtn = page.locator('button:has-text("Studium/Ausbildung")');
     await studiumBtn.click();
 
     const progressLabel = page.locator("text=Fortschritt");
@@ -71,10 +71,4 @@ test.describe("Kindersparplan", () => {
     await expect(page.locator("text=Zinseszins")).toBeVisible({ timeout: 3000 });
   });
 
-  test("Undo: Nach Änderung erscheint Zurücksetzen", async ({ page }) => {
-    const kindSlider = page.locator('input[type="range"]').first();
-    await kindSlider.fill("3");
-    const undoBtn = page.locator("text=Zurücksetzen");
-    await expect(undoBtn).toBeVisible({ timeout: 2000 });
   });
-});

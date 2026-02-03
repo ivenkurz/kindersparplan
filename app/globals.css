@@ -10,6 +10,27 @@
   --ds-crimson: #c20024;
 }
 
+html,
+body {
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
 body {
   @apply bg-ds-app-bg text-ds-neutral-100 antialiased font-saans;
+}
+
+/* Kindersparplan: Full-Bleed – Body-Padding (safe-area) ausgleichen */
+.kindersparplan-root {
+  box-sizing: border-box;
+  overflow-x: hidden;
+  margin-top: calc(-1 * env(safe-area-inset-top, 0px));
+  margin-left: calc(-1 * env(safe-area-inset-left, 0px));
+  margin-right: calc(-1 * env(safe-area-inset-right, 0px));
+  width: calc(100% + env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px));
+  min-width: 100%;
+}
+.kindersparplan-root > * {
+  box-sizing: border-box;
 }

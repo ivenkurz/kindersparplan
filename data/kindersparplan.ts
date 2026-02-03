@@ -12,46 +12,32 @@ export interface Sparziel {
 
 export const SPARZIELE: Sparziel[] = [
   {
-    id: "studium",
-    label: "Studium",
-    betrag: 30000,
-    emoji: "🎓",
-    motivierend: "Für den Traum vom Abschluss – Ausbildung oder Uni",
-  },
-  {
-    id: "ausbildung",
-    label: "Ausbildung",
-    betrag: 15000,
-    emoji: "🛠️",
-    motivierend: "Startkapital für die Lehre – Werkzeug, Umzug, erste Schritte",
-  },
-  {
     id: "fuehrerschein",
     label: "Führerschein",
-    betrag: 2500,
+    betrag: 4000,
     emoji: "🚗",
     motivierend: "Freiheit auf vier Rädern – ein Meilenstein fürs Leben",
   },
   {
-    id: "erstes-auto",
-    label: "Erstes Auto",
-    betrag: 5000,
-    emoji: "🚙",
-    motivierend: "Mobilität von Anfang an – für Ausbildung oder Studium",
-  },
-  {
-    id: "reise",
-    label: "Auslandsjahr / Reise",
-    betrag: 10000,
-    emoji: "✈️",
-    motivierend: "Die Welt entdecken – Erfahrungen, die prägen",
-  },
-  {
     id: "wohnung",
-    label: "Erste Wohnung",
-    betrag: 20000,
+    label: "Wohnung",
+    betrag: 7000,
     emoji: "🏠",
     motivierend: "Kaution, Möbel, Start in die Selbstständigkeit",
+  },
+  {
+    id: "studium-ausbildung",
+    label: "Ausbildung",
+    betrag: 15000,
+    emoji: "🎓",
+    motivierend: "Für den Traum vom Abschluss – Ausbildung oder Uni",
+  },
+  {
+    id: "auslandsjahr",
+    label: "Auslandsjahr",
+    betrag: 20000,
+    emoji: "✈️",
+    motivierend: "Die Welt entdecken – Erfahrungen, die prägen",
   },
 ];
 

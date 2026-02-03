@@ -15,6 +15,8 @@ interface DualRangeSliderProps {
   highLabel?: string;
   formatValue?: (v: number) => string;
   thumbSize?: "sm" | "md";
+  /** Legende unter dem Slider ausblenden (z. B. Kindersparplan) */
+  hideLegend?: boolean;
 }
 
 function percentToValue(percent: number, min: number, max: number, step: number): number {
@@ -40,6 +42,7 @@ export default function DualRangeSlider({
   lowLabel = "Von",
   highLabel = "Bis",
   formatValue = (v) => String(v),
+  hideLegend = false,
 }: DualRangeSliderProps) {
   const range = max - min;
   const lowPercent = range === 0 ? 0 : ((valueLow - min) / range) * 100;
@@ -186,10 +189,12 @@ export default function DualRangeSlider({
           style={{ left: `${highPercent}%` }}
         />
       </div>
-      <div className="flex justify-between text-xs text-[#9CA3AF]">
-        <span>{lowLabel} {formatValue(valueLow)} Jahre</span>
-        <span>{highLabel} {formatValue(valueHigh)} Jahre</span>
-      </div>
+      {!hideLegend && (
+        <div className="flex justify-between text-xs text-[#9CA3AF]">
+          <span>{lowLabel} {formatValue(valueLow)} Jahre</span>
+          <span>{highLabel} {formatValue(valueHigh)} Jahre</span>
+        </div>
+      )}
     </div>
   );
 }

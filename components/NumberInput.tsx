@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 interface NumberInputProps {
-  label: string;
+  /** Leer oder weglassen, um kein Label anzuzeigen */
+  label?: string;
   value: number;
   onChange: (value: number) => void;
   min?: number;
@@ -113,10 +114,12 @@ export default function NumberInput({
 
   return (
     <div className="space-y-2">
-      <label className="text-sm font-semibold text-ds-neutral-100 block">
-        {label}
-      </label>
-      <div className="flex items-center rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 overflow-hidden">
+      {label ? (
+        <label className="text-sm font-semibold text-ds-neutral-100 block">
+          {label}
+        </label>
+      ) : null}
+      <div className="flex items-center gap-0.5 rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 overflow-hidden">
         <button
           type="button"
           onClick={handleDecrement}
@@ -145,15 +148,18 @@ export default function NumberInput({
             {formatWithThousands(value)} {unit}
           </button>
         ) : (
-          <input
-            type="text"
-            inputMode="numeric"
-            value={displayValue}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            onFocus={handleFocus}
-            className="flex-1 min-w-0 px-4 py-3 bg-transparent text-ds-neutral-100 font-semibold text-center border-0 focus:ring-0 focus:outline-none"
-          />
+          <>
+            <input
+              type="text"
+              inputMode="numeric"
+              value={displayValue}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              onFocus={handleFocus}
+              className="flex-1 min-w-0 px-4 py-3 bg-transparent text-ds-neutral-100 font-semibold text-center border-0 focus:ring-0 focus:outline-none"
+            />
+            {unit ? <span className="pr-3 text-ds-neutral-100 font-semibold">{unit}</span> : null}
+          </>
         )}
         <button
           type="button"
@@ -182,7 +188,7 @@ export default function NumberInput({
           className="fixed inset-0 z-50 md:hidden font-saans"
           role="dialog"
           aria-modal="true"
-          aria-label={`${label} eingeben`}
+          aria-label={`${label ?? "Betrag"} eingeben`}
         >
           <div
             className="absolute inset-0 bg-ds-neutral-100/40"
@@ -190,7 +196,7 @@ export default function NumberInput({
             aria-hidden="true"
           />
           <div className="absolute bottom-0 left-0 right-0 rounded-t-ds-lg border-t border-x border-ds-neutral-20 bg-ds-neutral-0 p-6 pb-[env(safe-area-inset-bottom)] shadow-lg">
-            <p className="mb-4 text-sm font-semibold text-ds-neutral-100">{label}</p>
+            <p className="mb-4 text-sm font-semibold text-ds-neutral-100">{label ?? "Betrag"}</p>
             <input
               ref={mobileInputRef}
               type="text"
