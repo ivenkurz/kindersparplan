@@ -150,17 +150,17 @@ export default function DualRangeSlider({
         onPointerUp={handlePointerUp}
         onPointerLeave={handlePointerUp}
       >
-        {/* Track (Hintergrund) */}
-        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-2 md:h-1.5 rounded-full bg-ds-neutral-20 pointer-events-none z-0" />
-        {/* Füllung zwischen den Thumbs */}
+        {/* Track (SVG-Vorlage: 8px hoch, rx=4, #E5E7EB) */}
+        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-2 rounded bg-[#E5E7EB] pointer-events-none z-0" />
+        {/* Füllung zwischen den Thumbs (SVG: schwarze Linie stroke-width 9) */}
         <div
-          className="absolute top-1/2 -translate-y-1/2 h-2 md:h-1.5 rounded-full bg-ds-seagreen/40 pointer-events-none z-0"
+          className="absolute top-1/2 -translate-y-1/2 h-[9px] rounded bg-black pointer-events-none z-0"
           style={{
             left: `${lowPercent}%`,
             width: `${highPercent - lowPercent}%`,
           }}
         />
-        {/* Thumb Low – nur div, Position aus valueLow; data-thumb für Klick-Erkennung */}
+        {/* Thumbs (SVG: schwarz, 2px weißer Rand, drop-shadow dy=2 blur=2 opacity=0.2) */}
         <div
           data-thumb="low"
           role="slider"
@@ -170,10 +170,9 @@ export default function DualRangeSlider({
           aria-valuenow={valueLow}
           tabIndex={0}
           onKeyDown={handleKeyDownLow}
-          className="absolute top-1/2 z-10 w-9 h-9 md:w-6 md:h-6 -translate-y-1/2 -translate-x-1/2 rounded-full bg-ds-neutral-100 shadow-md cursor-grab active:cursor-grabbing border-0 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-ds-orange-60 focus:ring-offset-2 pointer-events-auto"
+          className="absolute top-1/2 z-10 w-6 h-6 -translate-y-1/2 -translate-x-1/2 rounded-full bg-black border-2 border-white shadow-[0_2px_4px_rgba(0,0,0,0.2)] cursor-grab active:cursor-grabbing hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-ds-orange-60 focus:ring-offset-2 pointer-events-auto"
           style={{ left: `${lowPercent}%` }}
         />
-        {/* Thumb High – nur div, Position aus valueHigh */}
         <div
           data-thumb="high"
           role="slider"
@@ -183,17 +182,13 @@ export default function DualRangeSlider({
           aria-valuenow={valueHigh}
           tabIndex={0}
           onKeyDown={handleKeyDownHigh}
-          className="absolute top-1/2 z-10 w-9 h-9 md:w-6 md:h-6 -translate-y-1/2 -translate-x-1/2 rounded-full bg-ds-neutral-100 shadow-md cursor-grab active:cursor-grabbing border-0 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-ds-orange-60 focus:ring-offset-2 pointer-events-auto"
+          className="absolute top-1/2 z-10 w-6 h-6 -translate-y-1/2 -translate-x-1/2 rounded-full bg-black border-2 border-white shadow-[0_2px_4px_rgba(0,0,0,0.2)] cursor-grab active:cursor-grabbing hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-ds-orange-60 focus:ring-offset-2 pointer-events-auto"
           style={{ left: `${highPercent}%` }}
         />
       </div>
-      <div className="flex justify-between text-sm">
-        <span className="font-semibold text-ds-seagreen">
-          {lowLabel} {formatValue(valueLow)} Jahre
-        </span>
-        <span className="font-semibold text-ds-seagreen">
-          {highLabel} {formatValue(valueHigh)} Jahre
-        </span>
+      <div className="flex justify-between text-xs text-[#9CA3AF]">
+        <span>{lowLabel} {formatValue(valueLow)} Jahre</span>
+        <span>{highLabel} {formatValue(valueHigh)} Jahre</span>
       </div>
     </div>
   );

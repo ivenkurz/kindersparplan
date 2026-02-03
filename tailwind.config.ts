@@ -57,6 +57,19 @@ const config: Config = {
         "pocket-investment": "#9ACD32",
         "evergreen-dark": "#0f3d2e",
         "ds-crimson": "#c20024",
+        // Figma Kindersparplan – aus exportiertem CSS
+        "ds-figma-page": "#FDFBF7",
+        "ds-step-icon": "#FFDB7C",
+        "ds-figma-gray-800": "#1F2937",
+        "ds-figma-teal": "#004D40",
+        "ds-figma-track": "#E5E7EB",
+        "ds-figma-input-bg": "#F9FAFB",
+        "ds-figma-border-light": "#F0F1F1",
+        "ds-figma-divider": "#F3F4F6",
+        "ds-figma-label": "#6B7280",
+        "ds-figma-info-border": "#6B746F",
+        "ds-hero-icon-bg": "#10201B",
+        "ds-figma-blur-green": "#F0FDF4",
         // Legacy evergreen (alias) – behalte für Kompatibilität
         evergreen: {
           DEFAULT: "#10b981",
@@ -80,6 +93,9 @@ const config: Config = {
       },
       boxShadow: {
         "ds-orange-glow": "0 0 12px 4px rgba(253, 143, 24, 0.4)",
+        "ds-figma-card": "0px 4px 4px rgba(0, 0, 0, 0.25)",
+        "ds-figma-tooltip": "0px 1px 2px rgba(0, 0, 0, 0.25)",
+        "ds-figma-input": "0px 1px 2px rgba(0, 0, 0, 0.05)",
       },
       backgroundImage: {
         "pocket-gradient": "linear-gradient(to right, #10b981, #059669)",

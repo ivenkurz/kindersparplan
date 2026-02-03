@@ -27,11 +27,22 @@ const SPAN_CONFIG: Record<SpanVariant, { color: string; opacity: [number, number
   dunkelgruen: { color: "#008542", opacity: [0.35, 0.08] },
 };
 
+/** Farben aus Figma-SVG: Linie #ACB100, Füllung #DCE05C, Punkte #022011 */
+const FIGMA_CHART = {
+  stroke: "#ACB100",
+  fillFrom: "#DCE05C",
+  fillToOpacity: 1,
+  fillFromOpacity: 0,
+  dotFill: "#022011",
+};
+
 interface ValueChartProps {
   data: ChartDataPoint[];
   view?: "spanne" | "einzahlung_ertrag";
   fill?: boolean;
   spanVariant?: SpanVariant;
+  /** Kindersparplan: Chart und „Erwarteter Gesamtwert“ in Figma-Farben (#ACB100, #DCE05C, #022011) */
+  useFigmaColors?: boolean;
 }
 
 const RISK_LINK_URL = "https://www.evergreen.de/download/fonds";
@@ -306,7 +317,7 @@ function CustomTooltip({
   );
 }
 
-export default function ValueChart({ data, view = "spanne", fill = false, spanVariant = "hellgruen" }: ValueChartProps) {
+export default function ValueChart({ data, view = "spanne", fill = false, spanVariant = "hellgruen", useFigmaColors = false }: ValueChartProps) {
   const isMobile = useIsMobile();
   const chartData = data.map((d) => {
     const eingezahlt = d.einzahlungen ?? 0;
@@ -380,6 +391,11 @@ export default function ValueChart({ data, view = "spanne", fill = false, spanVa
               <linearGradient id="colorErtrag" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#008542" stopOpacity={0.45} />
                 <stop offset="100%" stopColor="#008542" stopOpacity={0.12} />
+              </linearGradient>
+              {/* Figma-SVG: Gradient #DCE05C (transparent → solid) */}
+              <linearGradient id="colorErtragFigma" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0%" stopColor={FIGMA_CHART.fillFrom} stopOpacity={FIGMA_CHART.fillFromOpacity} />
+                <stop offset="100%" stopColor={FIGMA_CHART.fillFrom} stopOpacity={FIGMA_CHART.fillToOpacity} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#d1d4d2" vertical={false} />
@@ -464,7 +480,7 @@ export default function ValueChart({ data, view = "spanne", fill = false, spanVa
               </>
             ) : (
               <>
-                {/* Einzahlung + Ertrag (gestapelt) */}
+                {/* Einzahlung + Ertrag (gestapelt); optional Figma-Farben (#ACB100, #DCE05C, #022011) */}
                 <Area
                   type="monotone"
                   dataKey="eingezahlt"
@@ -479,11 +495,16 @@ export default function ValueChart({ data, view = "spanne", fill = false, spanVa
                   type="monotone"
                   dataKey="ertrag"
                   stackId="a"
-                  stroke="#008542"
-                  strokeWidth={3}
-                  fill="url(#colorErtrag)"
+                  stroke={useFigmaColors ? FIGMA_CHART.stroke : "#008542"}
+                  strokeWidth={2}
+                  fill={useFigmaColors ? "url(#colorErtragFigma)" : "url(#colorErtrag)"}
                   isAnimationActive={false}
-                  activeDot={{ r: 6, stroke: "#008542", strokeWidth: 2, fill: "#fff" }}
+                  activeDot={{
+                    r: 6,
+                    stroke: useFigmaColors ? FIGMA_CHART.dotFill : "#008542",
+                    strokeWidth: 2,
+                    fill: useFigmaColors ? FIGMA_CHART.dotFill : "#fff",
+                  }}
                 />
               </>
             )}
@@ -521,7 +542,10 @@ export default function ValueChart({ data, view = "spanne", fill = false, spanVa
           <>
             <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ds-neutral-90">
               <div className="flex items-center gap-2">
-                <span className="w-4 h-[3px] rounded-full bg-[#008542]" />
+                <span
+                  className="w-4 h-[3px] rounded-full"
+                  style={{ backgroundColor: useFigmaColors ? FIGMA_CHART.stroke : "#008542" }}
+                />
                 Erwarteter Gesamtwert
               </div>
               <div className="flex items-center gap-2">
