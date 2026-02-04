@@ -1,5 +1,8 @@
 "use client";
 
+import Box from "@mui/material/Box";
+import Slider from "@mui/material/Slider";
+
 interface DualRangeSliderProps {
   min: number;
   max: number;
@@ -12,26 +15,13 @@ interface DualRangeSliderProps {
   lowLabel?: string;
   highLabel?: string;
   formatValue?: (v: number) => string;
-  /** Legende unter dem Slider ausblenden (z. B. Kindersparplan) */
   hideLegend?: boolean;
 }
 
 /**
- * Dual-Range-Slider mit zwei nativen <input type="range">.
- * Wie SliderInput (SparplanRechner): zuverlässiges Touch/Drag auf iOS, gleiche Thumb-Größe auf Mobile.
+ * Dual-Range-Slider mit MUI Slider: zwei Thumbs, valueLabelDisplay, disableSwap.
+ * Evergreen-Farben (Track gefüllt: #022011, Thumb: #022011).
  */
-const RANGE_INPUT_CLASS =
-  "absolute inset-x-0 top-1/2 -translate-y-1/2 z-10 w-full h-4 md:h-2.5 bg-transparent appearance-none cursor-pointer touch-manipulation " +
-  "[&::-webkit-slider-runnable-track]:h-full [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-runnable-track]:rounded-full " +
-  "[&::-moz-range-track]:h-full [&::-moz-range-track]:bg-transparent [&::-moz-range-track]:rounded-full " +
-  "[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-11 [&::-webkit-slider-thumb]:h-11 md:[&::-webkit-slider-thumb]:w-5 md:[&::-webkit-slider-thumb]:h-5 " +
-  "[&::-webkit-slider-thumb]:mt-[-14px] md:[&::-webkit-slider-thumb]:mt-[-5px] " +
-  "[&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#022011] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white " +
-  "[&::-webkit-slider-thumb]:shadow-[0_2px_4px_rgba(0,0,0,0.2)] [&::-webkit-slider-thumb]:cursor-pointer " +
-  "[&::-moz-range-thumb]:w-11 [&::-moz-range-thumb]:h-11 md:[&::-moz-range-thumb]:w-5 md:[&::-moz-range-thumb]:h-5 " +
-  "[&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#022011] [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-[0_2px_4px_rgba(0,0,0,0.2)] [&::-moz-range-thumb]:cursor-pointer " +
-  "focus:outline-none focus-visible:ring-2 focus-visible:ring-ds-orange-60 focus-visible:ring-offset-2";
-
 export default function DualRangeSlider({
   min,
   max,
@@ -43,75 +33,59 @@ export default function DualRangeSlider({
   label,
   lowLabel = "Von",
   highLabel = "Bis",
-  formatValue = (v) => String(v),
+  formatValue = (v) => String(Math.round(v)),
   hideLegend = false,
 }: DualRangeSliderProps) {
-  const range = max - min;
-  const lowPercent = range === 0 ? 0 : ((valueLow - min) / range) * 100;
-  const highPercent = range === 0 ? 100 : ((valueHigh - min) / range) * 100;
+  const value: number[] =
+    step >= 1 ? [Math.round(valueLow), Math.round(valueHigh)] : [valueLow, valueHigh];
 
-  const handleLowChange = (v: number) => {
-    const clamped = Math.min(valueHigh - step, Math.max(min, v));
-    onChangeLow(clamped);
-  };
-
-  const handleHighChange = (v: number) => {
-    const clamped = Math.max(valueLow + step, Math.min(max, v));
-    onChangeHigh(clamped);
+  const handleChange = (_event: Event, newValue: number | number[]) => {
+    const [low, high] = (newValue as number[]).map((v) => (step >= 1 ? Math.round(v) : v));
+    onChangeLow(low);
+    onChangeHigh(high);
   };
 
   return (
-    <div className="space-y-3">
+    <Box className="w-full">
       {label && (
-        <p className="text-sm font-semibold text-ds-neutral-100">{label}</p>
+        <p className="text-sm font-semibold text-ds-neutral-100 mb-1">{label}</p>
       )}
-      {/* Wie SliderInput: h-14 md:h-11, zwei native Range-Inputs für zuverlässiges iOS-Touch */}
-      <div className="relative h-14 md:h-11">
-        {/* Track (Hintergrund) */}
-        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-2 rounded bg-[#E5E7EB] pointer-events-none z-0" />
-        {/* Füllung zwischen den Thumbs */}
-        <div
-          className="absolute top-1/2 -translate-y-1/2 h-[9px] rounded bg-[#022011] pointer-events-none z-0"
-          style={{
-            left: `${lowPercent}%`,
-            width: `${highPercent - lowPercent}%`,
-          }}
-        />
-        {/* Low: natives Range-Input, z-10 */}
-        <input
-          type="range"
-          min={min}
-          max={max}
-          step={step}
-          value={valueLow}
-          onChange={(e) => handleLowChange(Number(e.target.value))}
-          aria-label={`${lowLabel} ${formatValue(valueLow)} Jahre`}
-          aria-valuemin={min}
-          aria-valuemax={valueHigh - step}
-          aria-valuenow={valueLow}
-          className={RANGE_INPUT_CLASS}
-        />
-        {/* High: natives Range-Input, z-20 damit Thumb bei Überlappung greifbar */}
-        <input
-          type="range"
-          min={min}
-          max={max}
-          step={step}
-          value={valueHigh}
-          onChange={(e) => handleHighChange(Number(e.target.value))}
-          aria-label={`${highLabel} ${formatValue(valueHigh)} Jahre`}
-          aria-valuemin={valueLow + step}
-          aria-valuemax={max}
-          aria-valuenow={valueHigh}
-          className={RANGE_INPUT_CLASS + " z-20"}
-        />
-      </div>
+      <Slider
+        getAriaLabel={() => `${lowLabel} – ${highLabel}`}
+        value={value}
+        onChange={handleChange}
+        valueLabelDisplay="auto"
+        valueLabelFormat={(v) => `${formatValue(v)} Jahre`}
+        min={min}
+        max={max}
+        step={step}
+        disableSwap
+        sx={{
+          color: "#022011",
+          height: 8,
+          "& .MuiSlider-thumb": {
+            width: 20,
+            height: 20,
+            border: "2px solid #fff",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+            "&:hover, &.Mui-focusVisible": {
+              boxShadow: "0 0 0 8px rgba(2, 32, 17, 0.16)",
+            },
+          },
+          "& .MuiSlider-track": {
+            backgroundColor: "#022011",
+          },
+          "& .MuiSlider-rail": {
+            backgroundColor: "#E5E7EB",
+          },
+        }}
+      />
       {!hideLegend && (
-        <div className="flex justify-between text-xs text-[#9CA3AF]">
+        <div className="flex justify-between text-xs text-[#9CA3AF] mt-1">
           <span>{lowLabel} {formatValue(valueLow)} Jahre</span>
           <span>{highLabel} {formatValue(valueHigh)} Jahre</span>
         </div>
       )}
-    </div>
+    </Box>
   );
 }

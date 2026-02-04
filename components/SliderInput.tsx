@@ -1,5 +1,9 @@
 "use client";
 
+import Box from "@mui/material/Box";
+import Slider from "@mui/material/Slider";
+import Typography from "@mui/material/Typography";
+
 interface SliderInputProps {
   label: string;
   value: number;
@@ -36,86 +40,113 @@ export default function SliderInput({
   valueClassName,
   thumbLabel,
   thumbLabelClassName,
-  snapTickValues,
   id,
 }: SliderInputProps) {
   const displayValue = formatValue ? formatValue(value) : `${value}${unit}`;
-  const thumbPercent =
-    max === min ? 0 : ((value - min) / (max - min)) * 100;
-  const thumbLeft = Math.min(98, Math.max(2, thumbPercent));
+  const roundedValue = step >= 1 ? Math.round(value) : value;
 
   return (
-    <div className="space-y-2">
+    <Box className="space-y-2">
       {(label || showValueRight) && (
-        <div className="flex justify-between items-center">
+        <Box className="flex justify-between items-center">
           {label && (
-            <label className="text-sm font-semibold text-ds-neutral-100 font-saans">
+            <Typography
+              component="label"
+              variant="body2"
+              sx={{ fontWeight: 600, color: "#022011", fontFamily: "var(--font-saans), sans-serif" }}
+            >
               {label}
-            </label>
+            </Typography>
           )}
           {showValueRight && (
-            <span
-              className={
-                valueClassName ?? "text-sm font-semibold text-ds-orange-60 font-saans"
-              }
+            <Typography
+              component="span"
+              variant="body2"
+              sx={{
+                fontWeight: 600,
+                color: "#fd8f18",
+                fontFamily: "var(--font-saans), sans-serif",
+                ...(valueClassName ? {} : {}),
+              }}
+              className={valueClassName}
             >
               {displayValue}
-            </span>
+            </Typography>
           )}
-        </div>
+        </Box>
       )}
-      <div className="flex items-center gap-2 sm:gap-3 group/slider">
+      <Box className="flex items-center gap-2 sm:gap-3" sx={{ width: "100%" }}>
         {leftLabel && (
-          <span className="text-xs text-ds-neutral-70 whitespace-nowrap shrink-0">
+          <Typography variant="caption" sx={{ color: "#616a65", whiteSpace: "nowrap", flexShrink: 0 }}>
             {leftLabel}
-          </span>
+          </Typography>
         )}
-        <div className="relative flex-1 h-14 md:h-11">
-          {!!thumbLabel && (
-            <div
-              className={
-                thumbLabelClassName ??
-                "absolute -top-7 px-2 py-0.5 rounded-ds-16 bg-ds-neutral-0 border border-ds-neutral-10 text-xs font-semibold text-ds-neutral-100 shadow-sm whitespace-nowrap pointer-events-none"
-              }
-              style={{ left: `${thumbLeft}%`, transform: "translateX(-50%)" }}
+        <Box sx={{ flex: 1, position: "relative", py: thumbLabel ? 2 : 0 }}>
+          {thumbLabel && (
+            <Box
+              className={thumbLabelClassName}
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: `${max === min ? 0 : Math.min(98, Math.max(2, ((value - min) / (max - min)) * 100))}%`,
+                transform: "translateX(-50%)",
+                px: 1,
+                py: 0.5,
+                borderRadius: "16px",
+                bgcolor: "#fff",
+                border: "1px solid #f0f1f1",
+                fontSize: 12,
+                fontWeight: 600,
+                color: "#022011",
+                whiteSpace: "nowrap",
+                pointerEvents: "none",
+                boxShadow: 1,
+              }}
             >
               {thumbLabel}
-            </div>
+            </Box>
           )}
-          <input
+          <Slider
             id={id}
-            type="range"
+            value={roundedValue}
+            onChange={(_e, v) => onChange(Array.isArray(v) ? v[0] : v)}
             min={min}
             max={max}
             step={step}
-            value={value}
-            onChange={(e) => onChange(Number(e.target.value))}
-            className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-10 w-full h-4 md:h-2.5 bg-transparent appearance-none cursor-pointer
-              [&::-webkit-slider-runnable-track]:h-full [&::-webkit-slider-runnable-track]:bg-ds-neutral-20 [&::-webkit-slider-runnable-track]:rounded-full
-              [&::-moz-range-track]:h-full [&::-moz-range-track]:bg-ds-neutral-20 [&::-moz-range-track]:rounded-full
-              [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-11 [&::-webkit-slider-thumb]:h-11 md:[&::-webkit-slider-thumb]:w-5 md:[&::-webkit-slider-thumb]:h-5
-              [&::-webkit-slider-thumb]:mt-[-14px] md:[&::-webkit-slider-thumb]:mt-[-5px]
-              [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-ds-neutral-100
-              [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-0
-              [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:duration-150
-              active:[&::-webkit-slider-thumb]:shadow-md [&:hover::-webkit-slider-thumb]:shadow-md
-              [&::-moz-range-thumb]:w-11 [&::-moz-range-thumb]:h-11 md:[&::-moz-range-thumb]:w-5 md:[&::-moz-range-thumb]:h-5
-              [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-ds-neutral-100 [&::-moz-range-thumb]:border-0
-              [&::-moz-range-thumb]:transition-transform [&::-moz-range-thumb]:duration-150
-              active:[&::-moz-range-thumb]:shadow-md"
+            valueLabelDisplay="auto"
+            sx={{
+              color: "#022011",
+              height: 8,
+              "& .MuiSlider-thumb": {
+                width: 20,
+                height: 20,
+                border: "2px solid #fff",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                "&:hover, &.Mui-focusVisible": {
+                  boxShadow: "0 0 0 8px rgba(2, 32, 17, 0.16)",
+                },
+              },
+              "& .MuiSlider-track": { backgroundColor: "#022011" },
+              "& .MuiSlider-rail": { backgroundColor: "#d1d4d2" },
+            }}
           />
-        </div>
+        </Box>
         {rightLabel && (
-          <span className="text-xs text-ds-neutral-70 whitespace-nowrap shrink-0">
+          <Typography variant="caption" sx={{ color: "#616a65", whiteSpace: "nowrap", flexShrink: 0 }}>
             {rightLabel}
-          </span>
+          </Typography>
         )}
-      </div>
+      </Box>
       {!showValueRight && !hideValue && (
-        <span className={valueClassName ?? "text-sm font-semibold text-ds-orange-60 font-saans"}>
+        <Typography
+          component="span"
+          variant="body2"
+          sx={{ fontWeight: 600, color: "#fd8f18", fontFamily: "var(--font-saans), sans-serif" }}
+          className={valueClassName}
+        >
           {displayValue}
-        </span>
+        </Typography>
       )}
-    </div>
+    </Box>
   );
 }

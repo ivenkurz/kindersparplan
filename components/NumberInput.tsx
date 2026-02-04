@@ -1,9 +1,18 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 interface NumberInputProps {
-  /** Leer oder weglassen, um kein Label anzuzeigen */
   label?: string;
   value: number;
   onChange: (value: number) => void;
@@ -61,8 +70,7 @@ export default function NumberInput({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const s = e.target.value;
     setDisplay(s);
-    const n = parseInput(s);
-    onChange(n);
+    onChange(parseInput(s));
   };
 
   const handleBlur = () => {
@@ -97,139 +105,122 @@ export default function NumberInput({
     setDisplay(formatWithThousands(value));
   };
 
-  useEffect(() => {
-    if (mobileModalOpen) {
-      document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = "";
-      };
-    }
-  }, [mobileModalOpen]);
-
   const confirmMobileModal = () => {
-    const n = parseInput(display);
-    onChange(n);
+    onChange(parseInput(display));
     closeMobileModal();
   };
 
+  const everGreenSx = {
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "16px",
+      backgroundColor: "#f0f1f1",
+      borderColor: "#d1d4d2",
+      fontFamily: "var(--font-saans), sans-serif",
+      fontWeight: 600,
+      "&.Mui-focused fieldset": { borderColor: "#008542", borderWidth: 2 },
+    },
+  };
+
   return (
-    <div className="space-y-2">
+    <Box className="space-y-2">
       {label ? (
-        <label className="text-sm font-semibold text-ds-neutral-100 block">
+        <Typography component="label" variant="body2" sx={{ fontWeight: 600, color: "#022011", display: "block", fontFamily: "var(--font-saans), sans-serif" }}>
           {label}
-        </label>
+        </Typography>
       ) : null}
-      <div className="flex items-center gap-0.5 rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 overflow-hidden">
-        <button
-          type="button"
+      <Box sx={{ display: "flex", alignItems: "stretch", borderRadius: "16px", border: "1px solid #d1d4d2", backgroundColor: "#f0f1f1", overflow: "hidden" }}>
+        <IconButton
           onClick={handleDecrement}
           disabled={value <= min}
-          className="flex items-center justify-center w-14 h-14 sm:w-12 sm:h-12 bg-ds-neutral-100 text-ds-neutral-0 hover:bg-ds-neutral-90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-ds-neutral-100"
           aria-label="Verringern"
+          sx={{
+            borderRadius: 0,
+            bgcolor: "#022011",
+            color: "#fff",
+            "&:hover": { bgcolor: "#3b403d" },
+            "&.Mui-disabled": { bgcolor: "#022011", color: "rgba(255,255,255,0.5)" },
+          }}
         >
-          <svg
-            className="w-5 h-5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M4.459 11.978L19.541 11.979" />
-          </svg>
-        </button>
+          <span style={{ fontSize: 20 }}>−</span>
+        </IconButton>
         {isMobile ? (
-          <button
-            type="button"
+          <Button
+            fullWidth
             onClick={openMobileModal}
-            className="flex-1 min-w-0 px-4 py-3 bg-transparent text-ds-neutral-100 font-semibold text-center border-0 cursor-pointer focus:ring-0 focus:outline-none"
+            sx={{
+              py: 1.5,
+              color: "#022011",
+              fontWeight: 600,
+              fontFamily: "var(--font-saans), sans-serif",
+              textTransform: "none",
+            }}
           >
             {formatWithThousands(value)} {unit}
-          </button>
+          </Button>
         ) : (
-          <>
-            <input
-              type="text"
-              inputMode="numeric"
-              value={displayValue}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              onFocus={handleFocus}
-              className="flex-1 min-w-0 px-4 py-3 bg-transparent text-ds-neutral-100 font-semibold text-center border-0 focus:ring-0 focus:outline-none"
-            />
-            {unit ? <span className="pr-3 text-ds-neutral-100 font-semibold">{unit}</span> : null}
-          </>
+          <TextField
+            variant="outlined"
+            value={displayValue}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            onFocus={handleFocus}
+            inputProps={{
+              inputMode: "numeric",
+              style: { textAlign: "center", fontWeight: 600 },
+            }}
+            InputProps={{
+              endAdornment: unit ? (
+                <InputAdornment position="end" sx={{ pr: 1.5, color: "#022011", fontWeight: 600 }}>
+                  {unit}
+                </InputAdornment>
+              ) : null,
+              sx: { bgcolor: "transparent", "& fieldset": { border: "none" } },
+            }}
+            sx={{ flex: 1, "& .MuiOutlinedInput-root": { "& fieldset": { border: "none" } }, ...everGreenSx }}
+          />
         )}
-        <button
-          type="button"
+        <IconButton
           onClick={handleIncrement}
           disabled={value >= max}
-          className="flex items-center justify-center w-14 h-14 sm:w-12 sm:h-12 bg-ds-neutral-100 text-ds-neutral-0 hover:bg-ds-neutral-90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-ds-neutral-100"
           aria-label="Erhöhen"
+          sx={{
+            borderRadius: 0,
+            bgcolor: "#022011",
+            color: "#fff",
+            "&:hover": { bgcolor: "#3b403d" },
+            "&.Mui-disabled": { bgcolor: "#022011", color: "rgba(255,255,255,0.5)" },
+          }}
         >
-          <svg
-            className="w-5 h-5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M12 5v14M5 12h14" />
-          </svg>
-        </button>
-      </div>
+          <span style={{ fontSize: 20 }}>+</span>
+        </IconButton>
+      </Box>
 
-      {/* Mobile: Modal mit Zahlen-Eingabefeld (CDS-konform) */}
-      {mobileModalOpen && (
-        <div
-          className="fixed inset-0 z-50 md:hidden font-saans"
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${label ?? "Betrag"} eingeben`}
-        >
-          <div
-            className="absolute inset-0 bg-ds-neutral-100/40"
-            onClick={closeMobileModal}
-            aria-hidden="true"
+      <Dialog open={mobileModalOpen} onClose={closeMobileModal} fullWidth maxWidth="xs" PaperProps={{ sx: { borderRadius: "16px", m: 2 } }}>
+        <DialogTitle sx={{ fontFamily: "var(--font-saans), sans-serif", fontWeight: 600, color: "#022011" }}>
+          {label ?? "Betrag"}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            inputRef={mobileInputRef}
+            fullWidth
+            value={display}
+            onChange={(e) => setDisplay(e.target.value)}
+            inputProps={{ inputMode: "numeric", pattern: "[0-9]*", style: { textAlign: "center", fontSize: "1.5rem", fontWeight: 600 } }}
+            onKeyDown={(e) => { if (e.key === "Enter") confirmMobileModal(); }}
+            placeholder="0"
+            autoComplete="off"
+            sx={{ mt: 1, ...everGreenSx }}
           />
-          <div className="absolute bottom-0 left-0 right-0 rounded-t-ds-lg border-t border-x border-ds-neutral-20 bg-ds-neutral-0 p-6 pb-[env(safe-area-inset-bottom)] shadow-lg">
-            <p className="mb-4 text-sm font-semibold text-ds-neutral-100">{label ?? "Betrag"}</p>
-            <input
-              ref={mobileInputRef}
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              value={display}
-              onChange={(e) => setDisplay(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") confirmMobileModal();
-              }}
-              className="mb-6 w-full rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 px-6 py-4 text-2xl font-semibold text-ds-neutral-100 text-center tabular-nums placeholder:text-ds-neutral-40 focus:border-ds-seagreen focus:outline-none focus:ring-2 focus:ring-ds-seagreen/30"
-              placeholder="0"
-              autoComplete="off"
-            />
-            <div className="flex gap-3">
-              <button
-                type="button"
-                onClick={closeMobileModal}
-                className="flex-1 rounded-ds-16 border border-ds-neutral-20 bg-ds-neutral-10 py-3 font-semibold text-ds-neutral-100 transition-colors hover:bg-ds-neutral-20"
-              >
-                Abbrechen
-              </button>
-              <button
-                type="button"
-                onClick={confirmMobileModal}
-                className="flex-1 rounded-ds-16 bg-ds-seagreen py-3 font-semibold text-ds-neutral-0 transition-colors hover:bg-ds-darkgreen"
-              >
-                Fertig
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
+          <Button onClick={closeMobileModal} variant="outlined" sx={{ borderRadius: "16px", fontFamily: "var(--font-saans), sans-serif" }}>
+            Abbrechen
+          </Button>
+          <Button onClick={confirmMobileModal} variant="contained" sx={{ borderRadius: "16px", bgcolor: "#008542", "&:hover": { bgcolor: "#054726" }, fontFamily: "var(--font-saans), sans-serif" }}>
+            Fertig
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 }

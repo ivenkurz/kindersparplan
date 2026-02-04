@@ -6,7 +6,7 @@
     "node": ">=18.17.0"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3010",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -14,12 +14,15 @@
     "test:sparplan": "playwright test tests/sparplan-mock.spec.ts"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^7.3.7",
     "lodash": "^4.17.23",
-    "react-tooltip": "^5.28.0",
     "lodash.range": "^3.2.0",
     "next": "14.2.18",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-tooltip": "^5.28.0",
     "recharts": "^2.13.3"
   },
   "devDependencies": {

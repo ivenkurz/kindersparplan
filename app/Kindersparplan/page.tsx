@@ -250,9 +250,8 @@ export default function KindersparplanPage() {
         <div
           className="relative z-20 flex-1 min-h-0 pt-4 lg:pt-2 lg:grid lg:grid-cols-2 lg:gap-6 lg:items-stretch"
         >
-          {/* Desktop: Linke Spalte = Step 1 + Step 2 + CTA (wie Screenshot) */}
-          {!isInvalid && monatlich > 0 && (
-            <aside className="hidden lg:flex lg:flex-col lg:h-full lg:gap-6">
+          {/* Desktop: Linke Spalte = Step 1 + Step 2 (immer sichtbar, damit Formular + Sparziel-Cards erkennbar sind) */}
+          <aside className="hidden lg:flex lg:flex-col lg:h-full lg:gap-6">
               {/* Step 1: Alter des Kindes & Zielalter – nur Desktop in Sidebar */}
               <section className="shrink-0">
                 <div className="bg-white border border-ds-neutral-20 rounded-ds-lg shadow-ds-figma-input p-4 lg:p-5">
@@ -279,11 +278,11 @@ export default function KindersparplanPage() {
                   <div className="mb-2 flex items-center justify-between">
                     <div className="flex items-baseline gap-2">
                       <span className="text-sm font-semibold text-ds-neutral-90 leading-5">Aktuelles Alter</span>
-                      <span className="text-lg font-bold text-ds-figma-teal leading-7">{kindesalter} Jahre</span>
+                      <span className="text-lg font-bold text-ds-figma-teal leading-7">{Math.round(kindesalter)} Jahre</span>
                     </div>
                     <div className="flex items-baseline gap-2">
                       <span className="text-sm font-semibold text-ds-neutral-90 leading-5">Zielalter</span>
-                      <span className="text-lg font-bold text-ds-figma-teal leading-7">{zielalter} Jahre</span>
+                      <span className="text-lg font-bold text-ds-figma-teal leading-7">{Math.round(zielalter)} Jahre</span>
                     </div>
                   </div>
                   <div className="py-2">
@@ -307,14 +306,14 @@ export default function KindersparplanPage() {
                   </div>
                   <div className="mt-3 pt-3 border-t border-ds-neutral-20 flex items-center justify-between">
                     <span className="text-sm font-semibold text-ds-neutral-90 leading-5">Laufzeit</span>
-                    <span className="text-lg font-bold text-ds-figma-teal leading-7">{laufzeit} Jahre</span>
+                    <span className="text-lg font-bold text-ds-figma-teal leading-7">{Math.round(laufzeit)} Jahre</span>
                   </div>
                 </div>
               </section>
-              {/* Step 2: Sparziel wählen – Eigenes Sparziel mittig zwischen Überschrift und 4 Cards, Rand um Card */}
+              {/* Step 2: Sparziel wählen – Header, Eigenes Sparziel, dann 4 Cards (Layout stabil, kein overflow-hidden) */}
               <section className="flex-1 min-h-0 flex flex-col">
-                <div className="bg-white border border-ds-neutral-20 rounded-ds-lg shadow-ds-figma-input p-5 lg:p-6 h-full flex flex-col min-h-0 overflow-hidden">
-                  <div className="flex items-center gap-3 shrink-0 mb-1">
+                <div className="bg-white border border-ds-neutral-20 rounded-ds-lg shadow-ds-figma-input p-5 lg:p-6 flex flex-col">
+                  <div className="flex items-center gap-3 mb-1">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 shrink-0 flex items-center justify-center" aria-hidden>
                         <svg width="46" height="48" viewBox="0 0 46 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full object-contain">
@@ -331,38 +330,33 @@ export default function KindersparplanPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
-                    <div className="flex-1 min-h-0 shrink-0" aria-hidden />
-                    <div className="flex shrink-0 flex-col items-center justify-center py-2">
-                      <div className="w-full space-y-1">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            saveForUndo();
-                            setSparzielId(EIGENE_SUMME_ID);
-                          }}
-                          className="w-full text-left"
-                        >
-                          <span className="font-semibold text-ds-figma-gray-800 text-[13px] block">Eigenes Sparziel</span>
-                        </button>
-                        <div onClick={(e) => e.stopPropagation()}>
-                          <NumberInput
-                            value={gewuenschterZielertrag}
-                            onChange={(v) => {
-                              saveForUndo();
-                              setGewuenschterZielertrag(v);
-                              setSparzielId(EIGENE_SUMME_ID);
-                            }}
-                            min={CUSTOM_ZIEL_MIN}
-                            max={CUSTOM_ZIEL_MAX}
-                            step={CUSTOM_ZIEL_STEP}
-                            unit="€"
-                          />
-                        </div>
-                      </div>
+                  <div className="w-full space-y-1 py-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        saveForUndo();
+                        setSparzielId(EIGENE_SUMME_ID);
+                      }}
+                      className="w-full text-left"
+                    >
+                      <span className="font-semibold text-ds-figma-gray-800 text-[13px] block">Eigenes Sparziel</span>
+                    </button>
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <NumberInput
+                        value={gewuenschterZielertrag}
+                        onChange={(v) => {
+                          saveForUndo();
+                          setGewuenschterZielertrag(v);
+                          setSparzielId(EIGENE_SUMME_ID);
+                        }}
+                        min={CUSTOM_ZIEL_MIN}
+                        max={CUSTOM_ZIEL_MAX}
+                        step={CUSTOM_ZIEL_STEP}
+                        unit="€"
+                      />
                     </div>
-                    <div className="flex-1 min-h-0 shrink-0" aria-hidden />
-                  <div className="grid grid-cols-2 gap-x-3 gap-y-4 shrink-0">
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-3 gap-y-4">
                   {SPARZIELE.map((ziel) => {
                     const isSelected = sparzielId === ziel.id;
                     return (
@@ -372,6 +366,7 @@ export default function KindersparplanPage() {
                         onClick={() => {
                           saveForUndo();
                           setSparzielId(ziel.id);
+                          setGewuenschterZielertrag(ziel.betrag);
                         }}
                         className={`box-border flex min-h-[92px] w-full min-w-0 flex-col items-center justify-center gap-1.5 rounded-[16px] border bg-[#F9FAFB] p-4 text-center shadow-[0px_1px_2px_rgba(0,0,0,0.05)] transition-all ${
                           isSelected
@@ -385,12 +380,10 @@ export default function KindersparplanPage() {
                       </button>
                     );
                   })}
-                </div>
                   </div>
                 </div>
               </section>
             </aside>
-          )}
 
           {/* Rechte Spalte: Desktop = Hero + Chart (wie Screenshot); Mobile = Step 1 + Step 2 + Chart */}
           <div className={`space-y-5 lg:flex lg:flex-col lg:gap-5 lg:h-full lg:min-h-0 lg:space-y-0`}>
@@ -424,11 +417,11 @@ export default function KindersparplanPage() {
               <div className="mb-2 flex items-center justify-between shrink-0">
                 <div className="flex items-baseline gap-2">
                   <span className="text-sm font-semibold text-ds-neutral-90 leading-5">Aktuelles Alter</span>
-                  <span className="text-lg font-bold text-ds-figma-teal leading-7">{kindesalter} Jahre</span>
+                  <span className="text-lg font-bold text-ds-figma-teal leading-7">{Math.round(kindesalter)} Jahre</span>
                 </div>
                 <div className="flex items-baseline gap-2">
                   <span className="text-sm font-semibold text-ds-neutral-90 leading-5">Zielalter</span>
-                  <span className="text-lg font-bold text-ds-figma-teal leading-7">{zielalter} Jahre</span>
+                  <span className="text-lg font-bold text-ds-figma-teal leading-7">{Math.round(zielalter)} Jahre</span>
                 </div>
               </div>
               <div className="py-2 lg:py-1 shrink-0">
@@ -458,7 +451,7 @@ export default function KindersparplanPage() {
               </div>
               <div className="mt-3 pt-3 border-t border-ds-neutral-20 flex items-center justify-between shrink-0">
                 <span className="text-sm font-semibold text-ds-neutral-90 leading-5">Laufzeit</span>
-                <span className="text-lg font-bold text-ds-figma-teal leading-7">{laufzeit} Jahre</span>
+                <span className="text-lg font-bold text-ds-figma-teal leading-7">{Math.round(laufzeit)} Jahre</span>
               </div>
             </div>
           </section>
@@ -520,6 +513,7 @@ export default function KindersparplanPage() {
                     onClick={() => {
                       saveForUndo();
                       setSparzielId(ziel.id);
+                      setGewuenschterZielertrag(ziel.betrag);
                     }}
                     className={`box-border flex min-h-[92px] w-full min-w-0 flex-col items-center justify-center gap-1.5 rounded-[16px] border bg-[#F9FAFB] p-4 text-center shadow-[0px_1px_2px_rgba(0,0,0,0.05)] transition-all ${
                       isSelected
@@ -549,7 +543,7 @@ export default function KindersparplanPage() {
               <h2 className="text-base font-semibold text-ds-neutral-90 leading-6 mb-2 shrink-0">Wertentwicklung</h2>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-3 shrink-0">
                 <div>
-                  <p className="text-xs sm:text-sm text-ds-figma-label leading-5">Endwert ({laufzeit} Jahre)</p>
+                  <p className="text-xs sm:text-sm text-ds-figma-label leading-5">Endwert ({Math.round(laufzeit)} Jahre)</p>
                   <p className="text-lg sm:text-xl font-semibold text-black leading-7">{formatEuro(result.endwert)}</p>
                 </div>
                 <div>
