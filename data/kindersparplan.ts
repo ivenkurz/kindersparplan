@@ -28,15 +28,15 @@ export const SPARZIELE: Sparziel[] = [
   {
     id: "studium-ausbildung",
     label: "Ausbildung",
-    betrag: 15000,
+    betrag: 25000,
     emoji: "🎓",
     motivierend: "Für den Traum vom Abschluss – Ausbildung oder Uni",
   },
   {
-    id: "auslandsjahr",
-    label: "Auslandsjahr",
-    betrag: 20000,
-    emoji: "✈️",
+    id: "weltreise",
+    label: "Weltreise",
+    betrag: 15000,
+    emoji: "🌐",
     motivierend: "Die Welt entdecken – Erfahrungen, die prägen",
   },
 ];

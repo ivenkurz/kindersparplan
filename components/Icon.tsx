@@ -1,11 +1,15 @@
 "use client";
 
-import type { SVGProps } from "react";
+import SvgIcon from "@mui/material/SvgIcon";
+import type { SvgIconProps } from "@mui/material/SvgIcon";
 
-type IconName = "plus" | "chart-up" | "building" | "lock";
+export type IconName = "plus" | "chart-up" | "building" | "lock";
 
 // Figma-Pfade aus Marketing Design System (UI-plus, Commerce-Finance-chart-growth-positive, UI-lock)
-const iconPaths: Record<IconName, { path: string; viewBox: string; stroke?: boolean; strokeWidth?: number }> = {
+const iconPaths: Record<
+  IconName,
+  { path: string; viewBox: string; stroke?: boolean; strokeWidth?: number }
+> = {
   plus: {
     path: "M11.999 4.43701L12 11.9785M12 11.9785L12.001 19.519M12 11.9785L4.459 11.978M12 11.9785L19.541 11.979",
     viewBox: "0 0 24 24",
@@ -19,7 +23,6 @@ const iconPaths: Record<IconName, { path: string; viewBox: string; stroke?: bool
     strokeWidth: 2.1,
   },
   building: {
-    // Kein Figma-SVG vorhanden, Heroicons beibehalten
     path: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4",
     viewBox: "0 0 24 24",
     stroke: true,
@@ -32,46 +35,46 @@ const iconPaths: Record<IconName, { path: string; viewBox: string; stroke?: bool
   },
 };
 
-export interface IconProps extends Omit<SVGProps<SVGSVGElement>, "children"> {
+const sizeToFontSize = { sm: "small", md: "medium", lg: "large" } as const;
+
+export interface IconProps extends Omit<SvgIconProps, "children"> {
   name: IconName;
   size?: "sm" | "md" | "lg";
-  className?: string;
   strokeWidth?: number;
 }
 
-const sizeMap = { sm: "w-4 h-4", md: "w-5 h-5", lg: "w-6 h-6" };
-
-export function Icon({ name, size = "md", className = "", strokeWidth = 2, ...props }: IconProps) {
+/**
+ * Icon mit MUI SvgIcon (Code-Review: Standard-Komponenten). Gleiche API wie zuvor.
+ */
+export function Icon({
+  name,
+  size = "md",
+  className = "",
+  strokeWidth: strokeWidthProp,
+  sx,
+  ...props
+}: IconProps) {
   const def = iconPaths[name];
-  const sizeClass = sizeMap[size];
-
-  if (def.stroke) {
-    return (
-      <svg
-        className={`${sizeClass} ${className}`}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={def.strokeWidth ?? strokeWidth}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        viewBox={def.viewBox ?? "0 0 24 24"}
-        aria-hidden
-        {...props}
-      >
-        <path d={def.path} />
-      </svg>
-    );
-  }
+  const fontSize = sizeToFontSize[size];
+  const strokeWidth = def.stroke ? (def.strokeWidth ?? strokeWidthProp ?? 2) : undefined;
 
   return (
-    <svg
-      className={`${sizeClass} ${className}`}
-      fill="currentColor"
-      viewBox={def.viewBox ?? "0 0 24 24"}
+    <SvgIcon
+      className={className}
+      viewBox={def.viewBox}
+      fontSize={fontSize}
       aria-hidden
+      sx={{
+        fill: def.stroke ? "none" : "currentColor",
+        stroke: def.stroke ? "currentColor" : undefined,
+        strokeWidth,
+        strokeLinecap: def.stroke ? "round" : undefined,
+        strokeLinejoin: def.stroke ? "round" : undefined,
+        ...sx,
+      }}
       {...props}
     >
       <path d={def.path} />
-    </svg>
+    </SvgIcon>
   );
 }

@@ -21,6 +21,15 @@ body {
   @apply bg-ds-app-bg text-ds-neutral-100 antialiased font-saans;
 }
 
+/* Evergreen Fokus: ds-orange-60 (prüfbar mit Tab / Fokus-Reihenfolge) */
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid var(--ds-orange-60);
+  outline-offset: 2px;
+}
+
 /* Kindersparplan: Full-Bleed – Body-Padding (safe-area) ausgleichen */
 .kindersparplan-root {
   box-sizing: border-box;

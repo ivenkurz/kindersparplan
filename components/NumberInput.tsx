@@ -229,7 +229,18 @@ export default function NumberInput({
           <Button onClick={closeMobileModal} variant="outlined" sx={{ borderRadius: "16px", fontFamily: "var(--font-saans), sans-serif" }}>
             Abbrechen
           </Button>
-          <Button onClick={confirmMobileModal} variant="contained" sx={{ borderRadius: "16px", bgcolor: "#008542", "&:hover": { bgcolor: "#054726" }, fontFamily: "var(--font-saans), sans-serif" }}>
+          <Button
+            onClick={confirmMobileModal}
+            variant="contained"
+            sx={{
+              borderRadius: "16px",
+              bgcolor: "#fd8f18",
+              color: "#022011",
+              fontFamily: "var(--font-saans), sans-serif",
+              "&:hover": { bgcolor: "#e67e0f" },
+              "&:focus-visible": { outline: "2px solid #fd8f18", outlineOffset: 2 },
+            }}
+          >
             Fertig
           </Button>
         </DialogActions>

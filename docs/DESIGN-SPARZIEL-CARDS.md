@@ -1,6 +1,24 @@
 # Design-Agent: Sparziel-Cards Redesign (Kindersparplan)
 
-## Ausgangslage
+## Auswahl-Zustand (Selected State) – Plan & Ideen
+
+**Problem:** Welche Sparziel-Card ausgewählt ist, ist aktuell schwer erkennbar (nur 2px vs 1px Rand in derselben Farbe #022011).
+
+**Evergreen-Tokens:** `--ds-orange-60: #fd8f18`, `--ds-yellow-10: #fff9eb`, `--ds-neutral-100: #022011`.
+
+| Idee | Beschreibung | Erkennbarkeit | Aufwand |
+|------|--------------|---------------|---------|
+| **A – Orange Rand + heller Hintergrund** | Ausgewählt: Rand `#fd8f18` (2px), Hintergrund `#fff9eb` (ds-yellow-10). Nicht ausgewählt: 1px `#022011`, `#F9FAFB`. | Sehr gut (Farbe + Fläche) | Gering |
+| **B – Nur Orange-Rand** | Ausgewählt: 2px `#fd8f18`; Rest unverändert. | Gut | Gering |
+| **C – Häkchen-Icon** | Ausgewählt: kleines Check-Icon (z. B. oben rechts) + evtl. Rand/Hintergrund. | Sehr gut (explizit) | Mittel (Icon, Platz) |
+| **D – Schatten („angehoben“)** | Ausgewählt: Orange-Rand + stärkerer Schatten (`shadow-md` / ds-orange-glow). | Gut | Gering |
+| **E – Nur Hintergrund** | Ausgewählt: Hintergrund `#fff9eb`, Rand weiter 2px `#022011`. | Mittel | Gering |
+
+**Empfehlung:** **A (Orange Rand + ds-yellow-10)** – zwei klare Signale, nutzt Primärfarbe und bestehendes Token, ohne zusätzliche Icons.
+
+---
+
+## Ausgangslage (Layout)
 - **Problem:** Auf Mobile bricht der Text in den Sparziel-Cards schnell um, weil das Emoji-Icon rechts **fest ~48px (pr-12)** reserviert und der nutzbare Textbereich dadurch stark schrumpft.
 - **Aktuelles Layout:** Flex mit `items-start`, Label + Betrag links, Emoji `absolute right-3 top-1/2`. Min-Höhe 92px, 2-spaltiges Grid.
 

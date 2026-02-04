@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { renditeQuerySchema } from "@/lib/api-schemas";
 
 /**
  * Mock-API: Rendite & Schwankungen basierend auf Risiko
@@ -8,8 +9,16 @@ import { NextRequest, NextResponse } from "next/server";
  */
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const risikoParam = searchParams.get("risiko");
-  const risiko = risikoParam ? Math.min(100, Math.max(0, Number(risikoParam))) : 50;
+  const parsed = renditeQuerySchema.safeParse({
+    risiko: searchParams.get("risiko") ?? undefined,
+  });
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Invalid query", details: parsed.error.flatten() },
+      { status: 400 }
+    );
+  }
+  const { risiko } = parsed.data;
 
   let rendite: number;
   let schwankungen: number;

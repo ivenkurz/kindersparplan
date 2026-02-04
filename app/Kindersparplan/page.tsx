@@ -1,69 +1,63 @@
 "use client";
 
 import { useState, useMemo, useCallback, useRef, useLayoutEffect } from "react";
-import { createPortal } from "react-dom";
 import dynamic from "next/dynamic";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
 import DualRangeSlider from "@/components/DualRangeSlider";
 import NumberInput from "@/components/NumberInput";
 
-/** Tooltip: ?-Button – Inhalt per Portal in document.body, oberhalb des Buttons, damit nicht abgeschnitten */
+/** Info-Tooltip mit MUI: Klick öffnet/schließt, Evergreen-Styling */
 function InfoTooltip({ label, content }: { label: string; content: string }) {
   const [open, setOpen] = useState(false);
-  const [tipRect, setTipRect] = useState<{ top: number; left: number } | null>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-
-  const handleToggle = useCallback(() => {
-    if (!open) {
-      const el = buttonRef.current;
-      if (el) {
-        const r = el.getBoundingClientRect();
-        setTipRect({ left: r.left, top: r.top - 8 });
-      }
-    } else {
-      setTipRect(null);
-    }
-    setOpen((o) => !o);
-  }, [open]);
-
-  const tooltipContent =
-    open &&
-    tipRect != null &&
-    typeof document !== "undefined" &&
-    createPortal(
-      <>
-        <div
-          className="fixed inset-0 z-[9998]"
-          aria-hidden
-          onClick={() => { setOpen(false); setTipRect(null); }}
-        />
-        <div
-          role="tooltip"
-          className="fixed z-[9999] min-w-[194px] max-w-[280px] p-3 rounded-ds-16 border border-ds-figma-border-light bg-white shadow-ds-figma-tooltip text-[10px] leading-[15px] text-ds-neutral-70"
-          style={{
-            left: tipRect.left,
-            top: tipRect.top,
-            transform: "translateY(-100%)",
-          }}
-        >
-          {content}
-        </div>
-      </>,
-      document.body
-    );
 
   return (
-    <div className="relative inline-block">
-      <button
-        ref={buttonRef}
-        type="button"
-        aria-label={label}
-        onClick={handleToggle}
-        className="ml-1.5 w-[21px] h-[21px] rounded-full border-2 border-ds-figma-info-border text-ds-figma-info-border hover:bg-ds-neutral-10 font-black text-[12px] inline-flex items-center justify-center transition-colors"
-      >
-        i
-      </button>
-      {tooltipContent}
-    </div>
+    <Tooltip
+      title={content}
+      placement="top"
+      arrow
+      open={open}
+      onClose={() => setOpen(false)}
+      disableHoverListener
+      slotProps={{
+        popper: { sx: { zIndex: 9999 } },
+        tooltip: {
+          sx: {
+            minWidth: 194,
+            maxWidth: 280,
+            p: 1.5,
+            borderRadius: "16px",
+            border: "1px solid #F0F1F1",
+            bgcolor: "#fff",
+            boxShadow: "0px 1px 2px rgba(0,0,0,0.25)",
+            fontSize: 10,
+            lineHeight: 1.5,
+            color: "#616a65",
+            fontFamily: "var(--font-saans), sans-serif",
+          },
+        },
+        arrow: { sx: { color: "#fff", "&::before": { border: "1px solid #F0F1F1" } } },
+      }}
+    >
+      <span className="inline-block ml-1.5">
+        <IconButton
+          size="small"
+          onClick={() => setOpen(!open)}
+          aria-label={label}
+          sx={{
+            width: 21,
+            height: 21,
+            border: "2px solid #6B746F",
+            color: "#6B746F",
+            fontSize: 12,
+            fontWeight: 900,
+            "&:hover": { bgcolor: "#f0f1f1", borderColor: "#6B746F", color: "#6B746F" },
+          }}
+        >
+          i
+        </IconButton>
+      </span>
+    </Tooltip>
   );
 }
 import {
@@ -72,6 +66,19 @@ import {
   laufzeitBisZiel,
 } from "@/lib/kindersparplan";
 import { SPARZIELE, RENDITE_KINDERSPARPLAN, RENDITE_STRATEGIE_NAME } from "@/data/kindersparplan";
+import {
+  AGE_MIN,
+  AGE_MAX,
+  DEFAULT_AGE_START,
+  DEFAULT_AGE_ZIEL,
+  CUSTOM_ZIEL_STEP,
+  CUSTOM_ZIEL_MIN,
+  CUSTOM_ZIEL_MAX,
+  CUSTOM_ZIEL_DEFAULT,
+  EIGENE_SUMME_ID,
+  KEIN_SPARZIEL_ID,
+  DEFAULT_MONATLICH_OHNE_SPARZIEL,
+} from "@/lib/constants";
 
 const ValueChart = dynamic(() => import("@/components/ValueChart"), {
   ssr: false,
@@ -80,23 +87,6 @@ const ValueChart = dynamic(() => import("@/components/ValueChart"), {
   ),
 });
 
-/** CDS: Alter 0–30 Jahre, Default Start 0 / Ziel 18 */
-const AGE_MIN = 0;
-const AGE_MAX = 30;
-const DEFAULT_START = 0;
-const DEFAULT_ZIEL = 18;
-
-/** Option „Eigenes Sparziel“: User gibt Zielbetrag ein, monatliche Sparsumme wird berechnet */
-const EIGENE_SUMME_ID = "eigene-summe";
-/** Kein Sparziel aktiv (nach Modifikation der monatlichen Sparsumme bei zuvor aktivem Eigenem Sparziel) */
-const KEIN_SPARZIEL_ID = "keins";
-const CUSTOM_ZIEL_STEP = 500;
-const CUSTOM_ZIEL_MIN = 1000;
-const CUSTOM_ZIEL_MAX = 9_000_000;
-const CUSTOM_ZIEL_DEFAULT = 24000;
-/** Bei „kein Sparziel“: Default-Sparsumme (€/Monat); Voraussichtlicher Endwert entspricht dieser Rate. */
-const DEFAULT_MONATLICH_OHNE_SPARZIEL = 50;
-
 const RISIKOHINWEIS_TEXT =
   "Die dargestellte Wertentwicklung bezieht sich auf die gewählte Beispielstrategie. Grundlage der Entwicklung sind die Evergreen Sustainable World Fonds. Vergangene Wertentwicklungen, einschließlich simulierten oder prognostizierten Renditen, sind kein verlässlicher Indikator für die Zukunft. Der Wert einer Anlage kann schwanken und Anlegende können Verluste bis hin zum Totalverlust erleiden. Diese Darstellung stellt keine Anlageberatung oder Kaufempfehlung dar. Sie dient ausschließlich der Information und berücksichtigt keine individuellen Anlageziele oder finanziellen Verhältnisse. Vor einer Investition sollten die gesetzlichen Verkaufsunterlagen auf https://www.evergreen.de/download/fonds sorgfältig gelesen werden. Die Evergreen GmbH ist ein von der BaFin zugelassenes Wertpapierinstitut gemäß § 15 WpIG.";
 
@@ -104,8 +94,8 @@ const RISIKOHINWEIS_TEXT =
 const MOBILE_HERO_SPACER_FALLBACK = 170;
 
 export default function KindersparplanPage() {
-  const [kindesalter, setKindesalter] = useState(DEFAULT_START);
-  const [zielalter, setZielalter] = useState(DEFAULT_ZIEL);
+  const [kindesalter, setKindesalter] = useState(DEFAULT_AGE_START);
+  const [zielalter, setZielalter] = useState(DEFAULT_AGE_ZIEL);
   const [sparzielId, setSparzielId] = useState<string>(KEIN_SPARZIEL_ID);
   /** Bei „Eigenes Sparziel“: Zielbetrag in €; monatliche Sparsumme wird daraus berechnet. */
   const [gewuenschterZielertrag, setGewuenschterZielertrag] = useState(CUSTOM_ZIEL_DEFAULT);
@@ -368,15 +358,11 @@ export default function KindersparplanPage() {
                           setSparzielId(ziel.id);
                           setGewuenschterZielertrag(ziel.betrag);
                         }}
-                        className={`box-border flex min-h-[92px] w-full min-w-0 flex-col items-center justify-center gap-1.5 rounded-[16px] border bg-[#F9FAFB] p-4 text-center shadow-[0px_1px_2px_rgba(0,0,0,0.05)] transition-all ${
-                          isSelected
-                            ? "border-2 border-[#022011]"
-                            : "border border-[#022011] hover:border-ds-orange-60/40"
-                        }`}
+                        className={`min-h-[92px] w-full rounded-lg border py-2 text-center shadow-sm transition-[border-color] transition-colors ${isSelected ? "border-2 border-ds-orange-60 bg-ds-yellow-10" : "border border-ds-neutral-100 bg-[#F9FAFB]"} hover:border-ds-orange-60/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#fd8f18] focus-visible:outline-offset-2`}
                       >
-                        <span className="text-2xl leading-8 text-[#1F2937]" aria-hidden>{ziel.emoji}</span>
-                        <span className="font-saans text-[13px] font-semibold leading-5 text-[#1F2937] w-full truncate">{ziel.label}</span>
-                        <span className="font-saans text-[13px] font-normal leading-5 text-[#616A65] w-full truncate">{formatEuro(ziel.betrag)}</span>
+                        <span className="block text-2xl leading-8" aria-hidden>{ziel.emoji}</span>
+                        <span className="block truncate font-semibold text-[#1F2937] text-sm">{ziel.label}</span>
+                        <span className="block truncate text-sm text-[#616A65]">{formatEuro(ziel.betrag)}</span>
                       </button>
                     );
                   })}
@@ -515,15 +501,11 @@ export default function KindersparplanPage() {
                       setSparzielId(ziel.id);
                       setGewuenschterZielertrag(ziel.betrag);
                     }}
-                    className={`box-border flex min-h-[92px] w-full min-w-0 flex-col items-center justify-center gap-1.5 rounded-[16px] border bg-[#F9FAFB] p-4 text-center shadow-[0px_1px_2px_rgba(0,0,0,0.05)] transition-all ${
-                      isSelected
-                        ? "border-2 border-[#022011]"
-                        : "border border-[#022011] hover:border-ds-orange-60/40"
-                    }`}
+                    className={`min-h-[92px] w-full rounded-lg border py-2 text-center shadow-sm transition-[border-color] transition-colors ${isSelected ? "border-2 border-ds-orange-60 bg-ds-yellow-10" : "border border-ds-neutral-100 bg-[#F9FAFB]"} hover:border-ds-orange-60/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#fd8f18] focus-visible:outline-offset-2`}
                   >
-                    <span className="text-2xl leading-8 text-[#1F2937]" aria-hidden>{ziel.emoji}</span>
-                    <span className="font-saans text-[13px] font-semibold leading-5 text-[#1F2937] w-full truncate">{ziel.label}</span>
-                    <span className="font-saans text-[13px] font-normal leading-5 text-[#616A65] w-full truncate">{formatEuro(ziel.betrag)}</span>
+                    <span className="block text-2xl leading-8" aria-hidden>{ziel.emoji}</span>
+                    <span className="block truncate font-semibold text-[#1F2937] text-sm">{ziel.label}</span>
+                    <span className="block truncate text-sm text-[#616A65]">{formatEuro(ziel.betrag)}</span>
                   </button>
                 );
               })}
