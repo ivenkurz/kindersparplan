@@ -1,0 +1,13 @@
+---
+description: Dev-Server – Port 3010, einmal starten, nicht neu starten
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Development-Server (wichtig)
+
+- **Port:** Development-Server auf **Port 3010** (nicht 3000). App: **http://localhost:3010**
+- **Einmal starten, laufen lassen:** `npm run dev` **einmal** in einem eigenen Terminal-Tab starten und **Tab offen lassen**. Der Server läuft dauerhaft; für Code-Änderungen reicht **Hot Reload** – **kein Neustart nötig**.
+- **Nicht neu starten:** Schlage **niemals** einen Neustart vor (außer der Nutzer fragt explizit danach). Weder nach Edits noch nach `npm install` – Hot Reload reicht.
+- **Optional – Auto-Neustart bei Absturz:** Wenn der Prozess ab und zu abstürzt: `npm run dev:watch` statt `npm run dev`. Startet den Server neu, sobald er beendet wird (ohne PM2, nur Node).
+- **Port 3000:** Ignorieren; nur 3010 verwenden.

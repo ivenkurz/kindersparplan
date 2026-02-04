@@ -6,7 +6,7 @@
 /** Kindersparplan: Alter 0–30 Jahre */
 export const AGE_MIN = 0;
 export const AGE_MAX = 30;
-export const DEFAULT_AGE_START = 0;
+export const DEFAULT_AGE_START = 6;
 export const DEFAULT_AGE_ZIEL = 18;
 
 /** Eigenes Sparziel: Zielbetrag in € */

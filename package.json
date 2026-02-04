@@ -7,6 +7,7 @@
   },
   "scripts": {
     "dev": "next dev -p 3010",
+    "dev:watch": "node scripts/dev-watch.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
