@@ -144,9 +144,10 @@ export default function DualRangeSlider({
       {label && (
         <p className="text-sm font-semibold text-ds-neutral-100">{label}</p>
       )}
+      {/* Wie SliderInput: auf Mobile hoher Track (h-14) und große Thumbs (w-11 h-11) für besseres Greifen */}
       <div
         ref={trackRef}
-        className="relative pt-4 pb-4 select-none touch-none"
+        className="relative h-14 md:h-10 select-none touch-none flex items-center"
         style={{ touchAction: "none" }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -163,7 +164,7 @@ export default function DualRangeSlider({
             width: `${highPercent - lowPercent}%`,
           }}
         />
-        {/* Thumbs (SVG: schwarz, 2px weißer Rand, drop-shadow dy=2 blur=2 opacity=0.2) */}
+        {/* Thumbs: Mobile 44px (wie SliderInput), Desktop 24px – gut greifbar auf Touch */}
         <div
           data-thumb="low"
           role="slider"
@@ -173,7 +174,7 @@ export default function DualRangeSlider({
           aria-valuenow={valueLow}
           tabIndex={0}
           onKeyDown={handleKeyDownLow}
-          className="absolute top-1/2 z-10 w-6 h-6 -translate-y-1/2 -translate-x-1/2 rounded-full bg-black border-2 border-white shadow-[0_2px_4px_rgba(0,0,0,0.2)] cursor-grab active:cursor-grabbing hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-ds-orange-60 focus:ring-offset-2 pointer-events-auto"
+          className="absolute top-1/2 z-10 w-11 h-11 md:w-6 md:h-6 -translate-y-1/2 -translate-x-1/2 rounded-full bg-black border-2 border-white shadow-[0_2px_4px_rgba(0,0,0,0.2)] cursor-grab active:cursor-grabbing hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-ds-orange-60 focus:ring-offset-2 pointer-events-auto touch-manipulation"
           style={{ left: `${lowPercent}%` }}
         />
         <div
@@ -185,7 +186,7 @@ export default function DualRangeSlider({
           aria-valuenow={valueHigh}
           tabIndex={0}
           onKeyDown={handleKeyDownHigh}
-          className="absolute top-1/2 z-10 w-6 h-6 -translate-y-1/2 -translate-x-1/2 rounded-full bg-black border-2 border-white shadow-[0_2px_4px_rgba(0,0,0,0.2)] cursor-grab active:cursor-grabbing hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-ds-orange-60 focus:ring-offset-2 pointer-events-auto"
+          className="absolute top-1/2 z-10 w-11 h-11 md:w-6 md:h-6 -translate-y-1/2 -translate-x-1/2 rounded-full bg-black border-2 border-white shadow-[0_2px_4px_rgba(0,0,0,0.2)] cursor-grab active:cursor-grabbing hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-ds-orange-60 focus:ring-offset-2 pointer-events-auto touch-manipulation"
           style={{ left: `${highPercent}%` }}
         />
       </div>
