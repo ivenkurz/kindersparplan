@@ -373,15 +373,15 @@ export default function KindersparplanPage() {
                           saveForUndo();
                           setSparzielId(ziel.id);
                         }}
-                        className={`relative box-border flex min-h-[92px] w-full min-w-0 flex-col items-start justify-center gap-1 rounded-[16px] border bg-[#F9FAFB] pt-4 pr-12 pb-4 pl-6 text-left shadow-[0px_1px_2px_rgba(0,0,0,0.05)] transition-all ${
+                        className={`box-border flex min-h-[92px] w-full min-w-0 flex-col items-center justify-center gap-1.5 rounded-[16px] border bg-[#F9FAFB] p-4 text-center shadow-[0px_1px_2px_rgba(0,0,0,0.05)] transition-all ${
                           isSelected
                             ? "border-2 border-[#022011]"
                             : "border border-[#022011] hover:border-ds-orange-60/40"
                         }`}
                       >
-                        <span className="font-saans text-[13px] font-semibold leading-7 text-[#1F2937]">{ziel.label}</span>
-                        <span className="font-saans text-[13px] font-normal leading-6 text-[#616A65]">{formatEuro(ziel.betrag)}</span>
-                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xl leading-7 text-[#1F2937]" aria-hidden>{ziel.emoji}</span>
+                        <span className="text-2xl leading-8 text-[#1F2937]" aria-hidden>{ziel.emoji}</span>
+                        <span className="font-saans text-[13px] font-semibold leading-5 text-[#1F2937] w-full truncate">{ziel.label}</span>
+                        <span className="font-saans text-[13px] font-normal leading-5 text-[#616A65] w-full truncate">{formatEuro(ziel.betrag)}</span>
                       </button>
                     );
                   })}
@@ -521,15 +521,15 @@ export default function KindersparplanPage() {
                       saveForUndo();
                       setSparzielId(ziel.id);
                     }}
-                    className={`relative box-border flex min-h-[92px] w-full min-w-0 flex-col items-start justify-center gap-1 rounded-[16px] border bg-[#F9FAFB] pt-4 pr-12 pb-4 pl-6 text-left shadow-[0px_1px_2px_rgba(0,0,0,0.05)] transition-all ${
+                    className={`box-border flex min-h-[92px] w-full min-w-0 flex-col items-center justify-center gap-1.5 rounded-[16px] border bg-[#F9FAFB] p-4 text-center shadow-[0px_1px_2px_rgba(0,0,0,0.05)] transition-all ${
                       isSelected
                         ? "border-2 border-[#022011]"
                         : "border border-[#022011] hover:border-ds-orange-60/40"
                     }`}
                   >
-                    <span className="font-saans text-[13px] font-semibold leading-7 text-[#1F2937] min-w-0 truncate block w-full">{ziel.label}</span>
-                    <span className="font-saans text-[13px] font-normal leading-6 text-[#616A65] min-w-0 truncate block w-full">{formatEuro(ziel.betrag)}</span>
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xl leading-7 text-[#1F2937]" aria-hidden>{ziel.emoji}</span>
+                    <span className="text-2xl leading-8 text-[#1F2937]" aria-hidden>{ziel.emoji}</span>
+                    <span className="font-saans text-[13px] font-semibold leading-5 text-[#1F2937] w-full truncate">{ziel.label}</span>
+                    <span className="font-saans text-[13px] font-normal leading-5 text-[#616A65] w-full truncate">{formatEuro(ziel.betrag)}</span>
                   </button>
                 );
               })}
