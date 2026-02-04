@@ -122,7 +122,7 @@ export default function NumberInput({
   };
 
   return (
-    <Box className="space-y-2">
+    <Box className="space-y-2" sx={{ my: { xs: 0, md: 2 } }}>
       {label ? (
         <Typography component="label" variant="body2" sx={{ fontWeight: 600, color: "#022011", display: "block", fontFamily: "var(--font-saans), sans-serif" }}>
           {label}
@@ -135,13 +135,15 @@ export default function NumberInput({
           aria-label="Verringern"
           sx={{
             borderRadius: 0,
+            minWidth: { xs: 56, md: 52 },
+            minHeight: { xs: 56, md: 52 },
             bgcolor: "#022011",
             color: "#fff",
             "&:hover": { bgcolor: "#3b403d" },
             "&.Mui-disabled": { bgcolor: "#022011", color: "rgba(255,255,255,0.5)" },
           }}
         >
-          <span style={{ fontSize: 20 }}>−</span>
+          <span style={{ fontSize: "1.5rem", lineHeight: 1 }}>−</span>
         </IconButton>
         {isMobile ? (
           <Button
@@ -174,9 +176,18 @@ export default function NumberInput({
                   {unit}
                 </InputAdornment>
               ) : null,
-              sx: { bgcolor: "transparent", "& fieldset": { border: "none" } },
             }}
-            sx={{ flex: 1, "& .MuiOutlinedInput-root": { "& fieldset": { border: "none" } }, ...everGreenSx }}
+            sx={{
+              flex: 1,
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "16px",
+                backgroundColor: "transparent",
+                fontFamily: "var(--font-saans), sans-serif",
+                fontWeight: 600,
+                "& fieldset": { border: "none" },
+                "&.Mui-focused fieldset": { borderColor: "#008542", borderWidth: 2 },
+              },
+            }}
           />
         )}
         <IconButton
@@ -185,13 +196,15 @@ export default function NumberInput({
           aria-label="Erhöhen"
           sx={{
             borderRadius: 0,
+            minWidth: { xs: 56, md: 52 },
+            minHeight: { xs: 56, md: 52 },
             bgcolor: "#022011",
             color: "#fff",
             "&:hover": { bgcolor: "#3b403d" },
             "&.Mui-disabled": { bgcolor: "#022011", color: "rgba(255,255,255,0.5)" },
           }}
         >
-          <span style={{ fontSize: 20 }}>+</span>
+          <span style={{ fontSize: "1.5rem", lineHeight: 1 }}>+</span>
         </IconButton>
       </Box>
 
